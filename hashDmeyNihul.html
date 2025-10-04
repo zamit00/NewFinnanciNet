@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <title>פיננסינט</title>
+    <style>
+        *{
+            box-sizing: border-box;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+	.containerD{max-width:600px;
+	margin-left:25px;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.1);
+	
+	}
+        body {
+            font-family: Arial, sans-serif;
+            margin: auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            padding: 0%;
+	    display:flex;
+	   flex-direction:row;
+	   justify-content:right;
+        
+        }
+        .container {
+	    width:clamp(300px,90vw,600px);
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            padding: 10px;
+        }
+
+        .amount{
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin: 10px 0px;
+        }
+         .inp{
+            width:100px !important;
+            text-align: center;
+        }
+        .fees{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .btn{display: flex;justify-content: center;}
+        .button{
+            width: 150px;
+            background-color: #007acc;
+            color: azure;
+            height: 30px;
+            border-radius: 10px;
+            
+        }
+        .divtozz{
+            display: flex;
+            justify-content: space-between;
+        }
+        h2{color: var(--main-color,rgb(0,154,255));text-align: center;}
+        #tbltoz, #tbltoz th, #tbltoz td {
+        border-collapse: collapse;
+        }
+
+.alltoz {
+  display: flex;
+  flex-direction: column;
+
+}
+.tdth {
+    background-color: blue;
+    color: white;
+    border: 1px solid green;
+    border-collapse: collapse;
+    line-height: 15px;
+    font-weight: bolder;
+    text-align: right;
+    padding-right: 2vw;
+    overflow-y: hidden;
+    font-size: 16px;
+  }
+  .numtd {
+            width: 25vw;
+            font-size: 16px;
+            color: #333;
+            border: 1px solid green;
+            text-align: center;
+            line-height: 15px;
+        }
+.numtdx {
+    color: white;
+    background-color: green;
+    border: 1px solid green;
+    border-collapse: collapse;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    width: 25vw;
+    line-height: 15px;
+    overflow-y: hidden;
+}
+    .tdts{
+        width: 15vw;
+        font-size: 16px;
+        text-align: center;
+        line-height: 15px;
+}
+
+ @media screen and (max-width:850px) {
+	  body{
+ 	  display:flex;
+	   flex-direction:column;
+	   align-items:center;
+	}
+	.containerD{display:none}
+	 }
+
+
+        @media screen and (max-width:480px) {
+         .kottoz,.lbltoz{font-size: 12px;} 
+         .numtd {
+            width: 25vw;
+            font-size: 10px;
+            color: #333;
+            border: 1px solid green;
+            text-align: center;
+        }
+        .numtdx {
+            color: white;
+            background-color: green;
+            border: 1px solid green;
+            border-collapse: collapse;
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+            width: 25vw;
+            overflow-y: hidden;
+        }
+        .tdts{
+            width: 15vw;
+            font-size: 10px;
+            text-align: center;
+        } 
+        .tdth{font-size: 10px;} 
+        .divtozz {
+            width: 100vw;
+            display: flex;
+            justify-content: right;
+            margin-top: 10px;
+        }
+        .divtozz div {
+            width: 100vw;
+        }
+        .lbltoz {
+            font-size: 12px;
+            color: blue;
+            font-weight: bold;
+        }
+        .alltoz {
+            display: none;
+            flex-direction: column;
+            font-size: 12px !important;
+        }
+        #tozaot {
+            margin-top: 2vh;
+        } 
+        .ribitother{display: flex;} 
+        #selecttoz{transform: scale(0.75);}
+
+        }
+        .closewindow{color:black;position: relative;right:20px;top:15px;}
+        .lbltoz{margin-right: 40px;}
+
+	.containerD {
+           width: clamp(300px,90vw,600px);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	    max-width:600px;
+	 box-sizing: border-box;
+	    
+        }
+        .containerD h2 {
+            color: #0056b3;
+        }
+        .containerD p {
+            text-align: justify;
+            line-height: 1.6;
+	    margin:5px 20px;
+	   width: clamp(280px,88vw,580px);
+        }
+        .containerD ul {
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        /* Navigation Styles */
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .logo { display: flex; align-items: center; }
+        .logoimg{ width: 200px; height: auto; }
+        .nav-menu { list-style: none; display: flex; gap: 2rem; align-items: center; margin: 0; padding: 0; }
+        .nav-menu a { text-decoration: none; color: #333; font-weight: 500; transition: color 0.3s ease; position: relative; padding: 0.5rem 0; }
+        .nav-menu a:hover { color: #667eea; }
+        .nav-menu a::after { content: ''; position: absolute; bottom: -5px; right: 0; width: 0; height: 2px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: width 0.3s ease; }
+        .nav-menu a:hover::after { width: 100%; }
+        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 4px; }
+        .hamburger span { width: 25px; height: 3px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: 0.3s; border-radius: 3px; }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+
+        @media (max-width: 768px) {
+            .nav-container { padding: 0 1rem; }
+            .logoimg{ width: 150px; height: auto; }
+            .nav-menu { display: none; position: fixed; top: 80px; right: -100%; width: 100%; height: calc(100vh); background: white; flex-direction: column; justify-content: flex-start; align-items: center; padding-top: 2rem; transition: right 0.3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+            .nav-menu.active { display: flex; right: 0; }
+            .hamburger { display: flex; }
+            .nav-menu li { margin: 1rem 0; }
+            .nav-menu a { font-size: 1.2rem; }
+        }
+
+    </style>
+   
+    <script src="dmeyNihulScript.js"></script>
+</head>
+<body dir="rtl">
+
+<div class="nav-container">
+        <nav class="nav-menu" id="navMenu">
+          <li><a href="index.html">בית</a></li>
+          <li><a href="index.html#services">שירותים</a></li>
+          <li class="nav-dropdown">
+            <a href="#" onclick="toggleCalculatorDropdown(event)">מחשבונים ▼</a>
+            <div class="dropdown-content" id="calculatorDropdown">
+              <a href="prisatMaanak.html">פריסת מענק פרישה</a>
+              <a href="ribitderibit.html">חישוב ערך עתידי</a>
+              <a href="loan.html">סימולטור הלוואה</a>
+              <a href="hafkada.html">מחשבון הפקדה לסכום מטרה</a>
+              <a href="hashDmeyNihul.html">השוואת דמי ניהול</a>
+            </div>
+          </li>
+          <li><a href="index.html#about">איזור אישי</a></li>
+          <li><a href="index.html#about">אודות</a></li>
+          <li><a href="index.html#contact">צור קשר</a></li>
+          <li><a href="index.html#consultation" class="cta-button" onclick="openConsultationForm()">ליעוץ אישי</a></li>
+        </nav>
+    <div class="logo"> <img class="logoimg" src="logoxnew.png"/></div>
+    <div class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+</div>
+
+<div class="nav-header" style="background: white; padding: 20px; margin-bottom: 20px; border-bottom: 2px solid #667eea;">
+    <div class="brand" style="display: flex; align-items: center; gap: 15px;">
+        <div>
+            <h1 style="font-size: 24px; font-weight: 700; color: #667eea; margin: 0; display: flex; align-items: center; gap: 10px;">
+                השוואת דמי ניהול
+                <i class="fas fa-home" style="font-size: 24px !important; color: #667eea !important; cursor: pointer; transition: transform 0.3s ease;" onclick="window.location.href='index.html'"></i>
+            </h1>
+            <div style="font-size: 14px; color: #777; margin-top: 4px;">השוואה בין דמי הניהול בגופים הפיננסיים השונים</div>
+            <div style="font-size: 12px; color: green; font-weight: 500; margin-top: 2px;">עדכני לנתוני מאגר נתונים פנסיוניים 2025</div>
+        </div>
+    </div>
+</div>
+
+<div class="containerD">
+        <h2 style="padding:5px 20px;">מהו מחשבון השוואת דמי ניהול?</h2>
+        <p style="padding:5px 20px;">מחשבון השוואת דמי ניהול הוא כלי מקוון המאפשר למשתמשים להשוות בין דמי הניהול הנגבים בגופים פיננסיים שונים, כמו קרנות פנסיה, קופות גמל וקרנות השתלמות. </p>
+        <p style="padding:5px 20px;">באמצעות המחשבון ניתן לבדוק כיצד דמי הניהול משפיעים על החיסכון העתידי ולבחור את הגוף הפיננסי המשתלם ביותר.</p>
+        <p style="padding:5px 20px;">תכונות עיקריות של המחשבון:</p>
+        <ul>
+             <li>- השוואה בין דמי ניהול שונים בקופות ובקרנות.</li>
+             <li>- הערכת השפעת דמי הניהול על החיסכון המצטבר לאורך זמן.</li>
+             <li>- כלי פשוט וידידותי המאפשר קבלת החלטות מושכלות.</li>
+        </ul><h2>כיצד מחושב גובה דמי הניהול?</h2>
+    <p style="padding:5px 20px;">דמי הניהול נגבים בדרך כלל בשתי צורות:</p>
+    <ul>
+         <li>- <strong>דמי ניהול מהפקדות:</strong> נגבים כאחוז מהסכום המופקד מדי חודש.</li>
+         <li>- <strong>דמי ניהול מצבירה:</strong> נגבים כאחוז מסך החיסכון המצטבר.</li>
+    </ul>
+    <p style="padding:5px 20px;">ההשפעה של דמי הניהול על החיסכון יכולה להיות משמעותית לאורך השנים. לדוגמה:</p>
+    <p style="padding:5px 20px;"><strong>חיסכון מצטבר = סכום ההפקדות + תשואה - דמי ניהול</strong></p>
+    <p style="padding:5px 20px;">באמצעות המחשבון ניתן להזין את דמי הניהול ולראות כיצד הם מצטברים עם הזמן ומשפיעים על סך החיסכון.</p>
+    
+    <h2 style="padding:5px 20px;">למי מיועד השימוש במחשבון?</h2>
+    <p style="padding:5px 20px;">המחשבון מיועד לכל מי שחוסך בקרנות פנסיה, קופות גמל או קרנות השתלמות ורוצה לוודא שהוא משלם דמי ניהול תחרותיים. הוא שימושי עבור:</p>
+    <ul>
+         <li>- <strong>שכירים ועצמאים:</strong> הבוחנים אפשרויות חיסכון שונות.</li>
+         <li>- <strong>משקיעים פרטיים:</strong> הרוצים למקסם את החיסכון הפנסיוני שלהם.</li>
+         <li>- <strong>יועצים פיננסיים:</strong> המשווים בין דמי הניהול עבור לקוחותיהם.</li>
+    </ul>
+    <p style="padding:5px 20px;">השוואת דמי ניהול היא צעד חשוב בתכנון פיננסי חכם, ועשויה לחסוך סכומי כסף משמעותיים בטווח הארוך.</p>
+</div>
+
+    
+    <div class="container">
+     <!--   <div class="baalrishayon" onclick="window.parent.yossi()"
+        style="width: 100%;
+        box-sizing: border-box;
+        margin: 0%;
+        padding: 10px;
+        height: 30px;
+        font-size: 16px;
+        text-align: center;
+        background-color: blue;
+        position: relative;
+        top: 0%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;overflow-y: hidden;">צור קשר עם סוכן פנסיוני
+		&nbsp;<i class="fa fa-phone"></i></div> -->
+        <div class='closewindow' onclick='window.parent.showMachshevonim();'>
+        </div>
+        <h2>השוואת דמי ניהול</h2><hr>
+        <form id="feeForm">
+            <label>בחר סוג חישוב:</label><br>
+            <div class="div_rd">
+                <input class="rdbutton" id="rd1" type="radio" name="calcType" value="saving" > 
+                <label for="rd1"> צבירה בלבד</label>
+            </div>
+            <div class="div_rd">
+                <input class="rdbutton" id="rd2" type="radio" name="calcType" value="deposit">
+                <label for="rd2">  חודשי בלבד</label>
+            </div>
+            <div class="div_rd">
+                <input class="rdbutton" id="rd3" type="radio" name="calcType" value="both" checked> 
+                <label for="rd3"> צבירה +  חודשי</label>
+            </div>
+            <hr>
+            <div id="amountInputs" >
+                <div id="saving" class="amount">
+                    <label for="savingAmount">סכום צבירה:</label>
+                    <input class="inp" onchange="onch()" type="text" id="savingAmount" oninput="formatNumber(this)">
+                </div>
+                <div id="deposit" class="amount">
+                    <label for="depositAmount">סכום חודשי:</label>
+                    <input class="inp" onchange="onch()" type="text" id="depositAmount" oninput="formatNumber(this)">
+                </div>
+            </div>
+            <div class="amount">
+                <label for="age">בחר גיל:</label>
+                <select  id="age" style="text-align: center;" onchange="onch()"></select>
+            </div>
+            <hr>
+            <div class="fees">
+                <div class="amount">
+                    <label for="feeSaving1">דמי ניהול מצבירה קיים</label>
+                    <input type="text"   onchange="onch()"  class="inp" id="feeSaving1"oninput="this.value = this.value.replace(/[^0-9.]/g, '')"></input>
+                </div>
+                <div class="amount" id="divfeeDeposit1">
+                    <label for="feeDeposit1">דמי ניהול מהפקדה קיים</label>
+                    <input type="text"   onchange="onch()"  class="inp" id="feeDeposit1"oninput="this.value = this.value.replace(/[^0-9.]/g, '')"></input>
+                </div>
+                <div class="amount">
+                    <label for="feeSaving2">דמי ניהול מצבירה חדש</label>
+                    <input type="text"   onchange="onch()"  class="inp" id="feeSaving2" oninput="this.value = this.value.replace(/[^0-9.]/g, '')"></input>
+                </div>
+                <div class="amount" id="divfeeDeposit2">
+                    <label for="feeDeposit2">דמי ניהול מהפקדה חדש</label>
+                    <input type="text"   onchange="onch()"  class="inp" id="feeDeposit2" oninput="this.value = this.value.replace(/[^0-9.]/g, '')"></input>
+                </div>
+            </div>
+            	<hr>
+		<div class="alltoz" id="alltoz" style="margin-top:10px;margin-bottom:10px;">
+        		<div class="divtozz">
+            			<div class="kottoz" id="kottoz"> לפי ריבית 4% שנתי:</div>
+            			<div class="ribitother">
+                		<label class="lbltoz">בחר ריבית אחרת</label>
+                		<select class="selecttoz" id="selecttoz" onchange="othribit()"> </select>
+    				
+    			</div>
+            	</div>
+		<div class="tozaot colComp12" id="tozaot" style="display: block;"></div>
+		
+        </form>
+	
+ </div>
+     <div class="btn">
+			<button class="button" type="submit" onclick="hashev(0.04)">חשב</button>
+        </div>
+    <script src="dmeyNihulScript.js"></script>
+</body>
+</html>
