@@ -7,50 +7,305 @@
     <title>פיננסי-נט</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #27ae60;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #27ae60;
+            --background: white;
+            --card-bg: #f8f9fa;
+            --text-dark: #333;
+            --text-light: #666;
             --error-color: #e74c3c;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            --border: rgba(0, 0, 0, 0.1);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             --border-radius: 8px;
         }
 
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
+        
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            color:#333;
+            color: var(--text-dark);
+            font-family: 'Heebo', sans-serif;
+        }
+
+        html {
+            overflow-x: hidden;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Heebo', sans-serif;
             line-height: 1.6;
-            color: var(--dark-color);
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text-dark);
+            background: var(--background);
             min-height: 100vh;
-            padding: 20px;
+            overflow-x: hidden;
         }
 
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 10px;
+                margin-top: 0;
+            }
+            
+            .nav-header {
+                margin-bottom: 10px;
+            }
+        }
+        
+        /* Navigation Styles */
+  .nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding:1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;   
+    width: 90%;
+    right: 5%;
+    left: 5%;
+    z-index: 1000;
+
+    
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .logoimg{
+    width: 200px;
+    height: auto;
+  }
+
+  .nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    
+  }
+
+  .nav-menu a {
+    text-decoration: none;
+    color:var(--text-primary);
+    font-weight: 500;
+    transition: color 0.3s ease;
+    position: relative;
+    padding: 0.5rem 0;
+  }
+
+  .nav-menu a:hover {
+    color: #667eea;
+  }
+
+  .nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    right: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.3s ease;
+  }
+
+  .nav-menu a:hover::after {
+    width: 100%;
+  }
+
+  /* Navigation Dropdown */
+  .nav-dropdown {
+    position: relative;
+  }
+
+   .nav-dropdown .dropdown-content {
+     display: none;
+     position: absolute;
+     top: calc(100% - 2px);
+     right: 0;
+     background: white;
+     border: 1px solid var(--border);
+     border-radius: 0 0 8px 8px;
+     box-shadow: none;
+     min-width: 220px;
+     z-index: 1001;
+     margin-top: 0;
+     border-top: none;
+     box-shadow: 0 0 0 0 transparent;
+   }
+
+  .nav-dropdown .dropdown-content a {
+    color: var(--text-primary);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-dropdown .dropdown-content a:hover {
+    background-color: var(--card);
+    color: var(--primary);
+  }
+
+  .nav-dropdown .dropdown-content a:last-child {
+    border-bottom: none;
+  }
+
+  .nav-dropdown:hover .dropdown-content,
+  .nav-dropdown .dropdown-content.show {
+    display: block;
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 4px;
+  }
+
+  .hamburger span {
+    width: 25px;
+    height: 3px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: 0.3s;
+    border-radius: 3px;
+  }
+
+  .hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .hamburger.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+  }
+
+   /* Mobile Navigation */
+   @media (max-width: 768px) {
+     .nav-container {
+       padding: 0 1rem;
+       margin-bottom: 0;
+       
+     }
+
+    .logoimg{
+      width: 150px;
+      height: auto;
+    }
+
+     .nav-menu {
+       display: none;
+       position: fixed;
+       top: 70px;
+       right: -100%;
+       width: 100%;
+       height: calc(100vh - 70px);
+       background: white;
+       flex-direction: column;
+       justify-content: flex-start;
+       align-items: center;
+       padding-top: 1rem;
+       transition: right 0.3s ease;
+       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+       margin-top: 0;
+     }
+     .nav-container{
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+       
+     }
+    .nav-menu.active {
+      display: flex;
+      right: 0;
+      margin-top: -30px;
+      z-index: 1000;  
+    }
+
+    .hamburger {
+      display: flex;
+    }
+
+    .nav-menu li {
+      margin: 1rem 0;
+    }
+
+    .nav-menu a {
+      font-size: 1.2rem;
+    }
+
+     /* Mobile dropdown adjustments */
+     .nav-dropdown .dropdown-content {
+       position: relative;
+       display: none;
+       min-width: auto;
+       width: 100%;
+       box-shadow: none;
+       border: none;
+       background: transparent;
+       margin-top: 0;
+       top: auto;
+       border-radius: 0;
+       padding: 0;
+     }
+
+    .nav-dropdown .dropdown-content a {
+      padding: 8px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: 1rem;
+    }
+
+    .nav-dropdown .dropdown-content.show {
+      display: block;
+    }
+  }
         .container {
             max-width: 800px;
             margin: 0 auto;
+            width: 100%;
         }
 
         .calculator {
-            background-color: white;
-            border-radius: var(--border-radius);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
             padding: 30px;
             box-shadow: var(--shadow);
             margin-bottom: 20px;
+            box-sizing: border-box;
         }
 
         h1 {
-            color: var(--primary-color);
+            color: var(--primary);
             text-align: center;
             margin-bottom: 30px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1.8rem;
         }
 
@@ -67,17 +322,18 @@
         }
 
         .input-group {
-            background-color: #f9f9f9;
-            padding: 5px 10px;
-            border-radius: var(--border-radius);
+            background-color: var(--background);
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         label {
             display: block;
             margin-bottom: 12px;
-            font-weight: 500;
-            color: var(--primary-color);
+            font-weight: 600;
+            color: var(--primary);
             font-size: 1.05rem;
         }
 
@@ -88,23 +344,27 @@
 
         input[type="number"] , input[type="text"] {
             width: 100%;
-            padding: 5px 10px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             font-size: 16px;
             transition: all 0.3s ease;
             outline: none;
+            background: var(--background);
+            color: var(--text-dark);
+            font-family: 'Heebo', sans-serif;
         }
 
-        input[type="number"]:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        input[type="number"]:focus, input[type="text"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
         }
 
         input[type="range"] {
             width: 100%;
             margin: 10px 0;
             -webkit-appearance: none;
+            appearance: none;
             height: 6px;
             background: #ddd;
             border-radius: 5px;
@@ -117,7 +377,7 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: var(--secondary-color);
+            background: var(--primary);
             cursor: pointer;
             transition: all 0.2s ease;
         }
@@ -126,19 +386,19 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: var(--secondary-color);
+            background: var(--primary);
             cursor: pointer;
             border: none;
             transition: all 0.2s ease;
         }
 
         input[type="range"]::-webkit-slider-thumb:hover {
-            background: var(--primary-color);
+            background: var(--secondary);
             transform: scale(1.1);
         }
 
         input[type="range"]::-moz-range-thumb:hover {
-            background: var(--primary-color);
+            background: var(--secondary);
             transform: scale(1.1);
         }
 
@@ -153,29 +413,30 @@
         .range-value {
             text-align: center;
             font-weight: 500;
-            color: var(--secondary-color);
+            color: var(--primary);
             font-size: 0.95rem;
             margin-top: 5px;
         }
 
         button {
-            background-color: var(--accent-color);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
             padding: 16px 24px;
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: 12px;
             cursor: pointer;
             font-size: 18px;
             font-weight: 600;
             width: 100%;
             transition: all 0.3s ease;
             margin-top: 20px;
+            font-family: 'Heebo', sans-serif;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
         button:hover {
-            background-color: #219653;
             transform: translateY(-2px);
-            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 7px 20px rgba(102, 126, 234, 0.4);
         }
 
         button:active {
@@ -185,23 +446,25 @@
         .error {
             color: var(--error-color);
             margin-top: 15px;
-            padding: 10px;
-            border-radius: var(--border-radius);
+            padding: 15px;
+            border-radius: 12px;
             background-color: rgba(231, 76, 60, 0.1);
             display: none;
             text-align: center;
             font-weight: 500;
+            border: 1px solid rgba(231, 76, 60, 0.2);
         }
 
         .result {
             margin-top: 30px;
             padding: 25px;
-            background: linear-gradient(to right, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.2));
-            border-radius: var(--border-radius);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 16px;
             text-align: center;
             display: none;
             animation: fadeIn 0.5s;
-            border-right: 4px solid var(--accent-color);
+            border-right: 4px solid var(--primary);
+            border: 1px solid var(--border);
         }
 
         @keyframes fadeIn {
@@ -211,21 +474,38 @@
 
         .result-title {
             font-size: 1.2rem;
-            color: var(--primary-color);
+            color: var(--primary);
             margin-bottom: 15px;
+            font-weight: 700;
         }
 
         .result-amount {
             font-size: 2.2rem;
             font-weight: 700;
-            color: var(--accent-color);
+            color: var(--primary);
             margin: 10px 0;
         }
 
         .result-details {
             font-size: 1rem;
-            color: var(--dark-color);
+            color: var(--text-dark);
         }
+
+       
+
+       
+        
+        
+       
+       
+
+
+        
+       
+
+       
+
+       
 
         .input-suffix {
             position: absolute;
@@ -287,53 +567,25 @@
             opacity: 1;
         }
         .closewindow{color:black;margin-top: 10px;margin-right: 30px;}
-
-        /* Navigation Styles */
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 1000;
-        }
-
-        .logo { display: flex; align-items: center; }
-        .logoimg{ width: 200px; height: auto; }
-        .nav-menu { list-style: none; display: flex; gap: 2rem; align-items: center; margin: 0; padding: 0; }
-        .nav-menu a { text-decoration: none; color: #333; font-weight: 500; transition: color 0.3s ease; position: relative; padding: 0.5rem 0; }
-        .nav-menu a:hover { color: #667eea; }
-        .nav-menu a::after { content: ''; position: absolute; bottom: -5px; right: 0; width: 0; height: 2px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: width 0.3s ease; }
-        .nav-menu a:hover::after { width: 100%; }
-        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 4px; }
-        .hamburger span { width: 25px; height: 3px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: 0.3s; border-radius: 3px; }
-        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-        .hamburger.active span:nth-child(2) { opacity: 0; }
-        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
-
-        @media (max-width: 768px) {
-            .nav-container { padding: 0 1rem; }
-            .logoimg{ width: 150px; height: auto; }
-            .nav-menu { display: none; position: fixed; top: 80px; right: -100%; width: 100%; height: calc(100vh); background: white; flex-direction: column; justify-content: flex-start; align-items: center; padding-top: 2rem; transition: right 0.3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-            .nav-menu.active { display: flex; right: 0; }
-            .hamburger { display: flex; }
-            .nav-menu li { margin: 1rem 0; }
-            .nav-menu a { font-size: 1.2rem; }
-        }
     </style>
 </head>
 <body>
     
     <div class="nav-container">
         <nav class="nav-menu" id="navMenu">
-          <li><a href="index.html">בית</a></li>
+          <li><a href="index.html"><i class="fa fa-home" style="font-size:2rem"></i></a></li>
           <li><a href="index.html#services">שירותים</a></li>
-          <li><a href="index.html#calculators">מחשבונים</a></li>
-          <li><a href="index.html#about">איזור אישי</a></li>
+          <li class="nav-dropdown">
+            <a href="#" onclick="toggleHafkadaCalculatorDropdown(event)">מחשבונים ▼</a>
+            <div class="dropdown-content" id="hafkadaCalculatorDropdown">
+              <a href="prisatMaanak.html">פריסת מענק פרישה</a>
+              <a href="ribitderibit.html">חישוב ערך עתידי</a>
+              <a href="loan.html">סימולטור הלוואה</a>
+              <a href="hafkada.html">מחשבון הפקדה לסכום מטרה</a>
+              <a href="hashDmeyNihul.html">השוואת דמי ניהול</a>
+            </div>
+          </li>
+          <li><a href="index.html#about">כלי השוואה</a></li>
           <li><a href="index.html#about">אודות</a></li>
           <li><a href="index.html#contact">צור קשר</a></li>
           <li><a href="index.html#consultation" class="cta-button" onclick="openConsultationForm()">ליעוץ אישי</a></li>
@@ -344,22 +596,21 @@
           <span></span>
           <span></span>
         </div>
-    </div>
+      </div>
 
-    <div class="nav-header" style="background: white; padding: 20px; margin-bottom: 20px; border-bottom: 2px solid #667eea;">
-        <div class="brand" style="display: flex; align-items: center; gap: 15px;">
-            <div>
-                <h1 style="font-size: 24px; font-weight: 700; color: #667eea; margin: 0; display: flex; align-items: center; gap: 10px;">
-                    מחשבון הפקדה נדרשת לסכום מטרה
-                    <i class="fas fa-home" style="font-size: 24px !important; color: #667eea !important; cursor: pointer; transition: transform 0.3s ease;" onclick="window.location.href='index.html'"></i>
-                </h1>
-                <div style="font-size: 14px; color: #777; margin-top: 4px;">חישוב כמה צריך להפקיד חודשית כדי להגיע לסכום יעד מסוים</div>
-                <div style="font-size: 12px; color: green; font-weight: 500; margin-top: 2px;">עדכני לנתוני רשות המיסים לשנת 2025</div>
+    <div class="main-container">
+        <div class="nav-header" style=" background: white; padding: 20px; margin-bottom: 20px; border-bottom: 2px solid #667eea; border-radius: 16px;">
+            <div class="brand" style="display: flex; align-items: center; gap: 15px;">
+                <div style="margin-left: auto;margin-right: auto;">
+                    <h1 style="font-size: 24px; font-weight: 700; color: #667eea; margin-top: 15%; display: flex; align-items: center; gap: 10px;">
+                        מחשבון הפקדה נדרשת לסכום מטרה
+                    </h1>
+                    <div style="font-size: 14px; color: #777; margin-top: 4px;">חישוב כמה צריך להפקיד חודשית כדי להגיע לסכום יעד מסוים</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="container">
+        <div class="container">
         <div class="calculator">
             <div class='closewindow' onclick='window.parent.showMachshevonim();'>
             </div>
@@ -480,6 +731,7 @@
         
         <div class="credits">
             מחשבון חיסכון והשקעות © 2025
+        </div>
         </div>
     </div>
 
@@ -616,21 +868,29 @@
         }
 
         // Hamburger menu functionality
+        function toggleNav() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (hamburger && navMenu) {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const hamburger = document.getElementById('hamburger');
             const navMenu = document.getElementById('navMenu');
             
             if (hamburger && navMenu) {
-                hamburger.addEventListener('click', function() {
-                    this.classList.toggle('active');
-                    navMenu.classList.toggle('active');
-                });
-
-                // Close menu when clicking on a link
+                // Close menu when clicking on a link (but allow navigation)
                 document.querySelectorAll('.nav-menu a').forEach(link => {
-                    link.addEventListener('click', function() {
-                        hamburger.classList.remove('active');
-                        navMenu.classList.remove('active');
+                    link.addEventListener('click', function(e) {
+                        // Only close menu for mobile, not for desktop links
+                        if (window.innerWidth <= 768) {
+                            hamburger.classList.remove('active');
+                            navMenu.classList.remove('active');
+                        }
                     });
                 });
 
@@ -641,8 +901,135 @@
                         navMenu.classList.remove('active');
                     }
                 });
+
+                // Handle dropdown clicks
+                const dropdown = document.querySelector('.nav-dropdown');
+                if (dropdown) {
+                    dropdown.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const dropdownContent = this.querySelector('.dropdown-content');
+                        dropdownContent.classList.toggle('show');
+                    });
+                }
             }
         });
+        
+        // Ensure navigation links work properly
+        document.querySelectorAll('.nav-menu a[href]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Allow normal navigation for all links except dropdown toggle
+                if (!this.hasAttribute('onclick') && this.getAttribute('href') !== '#') {
+                    // Let the browser handle the navigation
+                    return true;
+                }
+            });
+        });
+        
+        // Add click handler for hamburger
+        const hamburger = document.getElementById('hamburger');
+        if (hamburger) {
+            hamburger.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const navMenu = document.getElementById('navMenu');
+                if (navMenu) {
+                    navMenu.classList.toggle('active');
+                }
+            });
+        }
+        
+        // Calculator dropdown functionality
+function toggleHafkadaCalculatorDropdown(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const dropdown = document.getElementById('hafkadaCalculatorDropdown');
+    const link = event.target;
+    
+    // Close other dropdowns first
+    document.querySelectorAll('.dropdown-content.show').forEach(d => {
+        if (d !== dropdown) {
+            d.classList.remove('show');
+        }
+    });
+    
+    if (dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+        link.innerHTML = 'מחשבונים ▼';
+    } else {
+        dropdown.classList.add('show');
+        link.innerHTML = 'מחשבונים ▲';
+    }
+    
+    // Prevent any default behavior
+    return false;
+}
+
+// Close calculator dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('hafkadaCalculatorDropdown');
+    const dropdownLink = document.querySelector('.nav-dropdown a');
+    
+    // Don't close if clicking on dropdown links
+    if (dropdown && dropdownLink && !dropdownLink.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('show');
+        dropdownLink.innerHTML = 'מחשבונים ▼';
+    }
+});
+
+// Ensure dropdown links work properly
+document.querySelectorAll('#hafkadaCalculatorDropdown a').forEach(link => {
+    link.addEventListener('click', function(e) {
+        // Don't prevent default - let the link work normally
+        e.stopPropagation();
+        
+        // Close dropdown after a short delay to allow navigation
+        setTimeout(() => {
+            const dropdown = document.getElementById('hafkadaCalculatorDropdown');
+            const dropdownLink = document.querySelector('.nav-dropdown a');
+            
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+            if (dropdownLink) {
+                dropdownLink.innerHTML = 'מחשבונים ▼';
+            }
+            
+            // Close mobile menu after navigation
+            if (window.innerWidth <= 768) {
+                const hamburger = document.getElementById('hamburger');
+                const navMenu = document.getElementById('navMenu');
+                if (hamburger && navMenu) {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            }
+        }, 100);
+    });
+});
+
+// Additional fix for dropdown links
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownLinks = document.querySelectorAll('.dropdown-content a');
+    dropdownLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Don't prevent default - let the link work normally
+            e.stopPropagation();
+            
+            // Close dropdown after a short delay to allow navigation
+            setTimeout(() => {
+                const dropdown = document.getElementById('calculatorDropdown');
+                const dropdownLink = document.querySelector('.nav-dropdown a');
+                
+                if (dropdown) {
+                    dropdown.classList.remove('show');
+                }
+                if (dropdownLink) {
+                    dropdownLink.innerHTML = 'מחשבונים ▼';
+                }
+            }, 100);
+        });
+    });
+});
     </script>
 </body>
 </html>
