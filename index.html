@@ -118,7 +118,6 @@
 	.calculator-dropdown button:hover {
 		transform: translateY(-2px);
 		box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        
 	}
 
 	.calculator-dropdown button.active {
@@ -130,14 +129,15 @@
 		display: none;
 		position: absolute;
 		min-width: 100%;
-		top: 100%;
+		top: calc(100% - 2px);
 		left: 0;
 		background: white;
-		border-radius: 0 0 20px 20px;
-		box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+		border: 1px solid rgba(102, 126, 234, 0.2);
+		border-radius: 0 0 8px 8px;
+		box-shadow: none;
 		z-index: 1000;
-		overflow: hidden;
-		border-top: 1px solid rgba(102, 126, 234, 0.2);
+		margin-top: 0;
+		border-top: none;
 	}
 
 	.dropdown-content.show {
@@ -147,13 +147,13 @@
 
 	.dropdown-content a {
 		color: #333;
-		padding: 15px 20px;
+		padding: 12px 16px;
 		text-decoration: none;
 		display: block;
-		transition: all 0.3s ease;
-		font-size: 15px;
+		transition: background-color 0.3s ease;
+		font-size: 14px;
 		font-weight: 500;
-		border-bottom: 1px solid #f1f5f9;
+		border-bottom: 1px solid rgba(102, 126, 234, 0.1);
 	}
 
 	.dropdown-content a:last-child {
@@ -161,17 +161,8 @@
 	}
 
 	.dropdown-content a:hover {
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-		color: white;
-		transform: translateX(-3px);
-	}
-
-	.dropdown-content a:hover:first-child {
-		border-radius: 0;
-	}
-
-	.dropdown-content a:hover:last-child {
-		border-radius: 0 0 20px 20px;
+		background-color: #f8f9fa;
+		color: #667eea;
 	}
 
 	@keyframes dropdownFadeIn {
@@ -224,14 +215,15 @@
 		display: none;
 		position: absolute;
 		min-width: 100%;
-		top: 100%;
+		top: calc(100% - 2px);
 		left: 0;
 		background: white;
-		border-radius: 0 0 20px 20px;
-		box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+		border: 1px solid rgba(102, 126, 234, 0.2);
+		border-radius: 0 0 8px 8px;
+		box-shadow: none;
 		z-index: 1000;
-		overflow: hidden;
-		border-top: 1px solid rgba(102, 126, 234, 0.2);
+		margin-top: 0;
+		border-top: none;
 	}
 
 	.tools-dropdown .dropdown-content.show {
@@ -241,13 +233,13 @@
 
 	.tools-dropdown .dropdown-content a {
 		color: #333;
-		padding: 15px 20px;
+		padding: 12px 16px;
 		text-decoration: none;
 		display: block;
-		transition: all 0.3s ease;
-		font-size: 15px;
+		transition: background-color 0.3s ease;
+		font-size: 14px;
 		font-weight: 500;
-		border-bottom: 1px solid #f1f5f9;
+		border-bottom: 1px solid rgba(102, 126, 234, 0.1);
 	}
 
 	.tools-dropdown .dropdown-content a:last-child {
@@ -255,17 +247,8 @@
 	}
 
 	.tools-dropdown .dropdown-content a:hover {
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-		color: white;
-		transform: translateX(-3px);
-	}
-
-	.tools-dropdown .dropdown-content a:hover:first-child {
-		border-radius: 0;
-	}
-
-	.tools-dropdown .dropdown-content a:hover:last-child {
-		border-radius: 0 0 20px 20px;
+		background-color: #f8f9fa;
+		color: #667eea;
 	}
     
 
@@ -391,6 +374,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            
         }
 
         .logo {
@@ -407,6 +391,7 @@
             display: flex;
             gap: 2rem;
             align-items: center;
+            
         }
 
         .nav-menu a {
@@ -435,6 +420,7 @@
             height: 2px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             transition: width 0.3s ease;
+            
         }
 
         /* Navigation Dropdown */
@@ -445,14 +431,16 @@
         .nav-dropdown .dropdown-content {
             display: none;
             position: absolute;
-            top: 100%;
+            top: calc(100% - 2px);
             right: 0;
             background: white;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 0 0 8px 8px;
+            box-shadow: none;
             min-width: 220px;
             z-index: 1001;
+            margin-top: 0;
+            border-top: none;
         }
 
         .nav-dropdown .dropdown-content a {
@@ -467,16 +455,22 @@
 
         .nav-dropdown .dropdown-content a:hover {
             background-color: #f5f5f5;
-            color: white;
+            color: #667eea;
         }
 
         .nav-dropdown .dropdown-content a:last-child {
             border-bottom: none;
         }
 
-        .nav-dropdown:hover .dropdown-content,
         .nav-dropdown .dropdown-content.show {
             display: block;
+        }
+        
+        /* Desktop hover behavior - only when not using JavaScript */
+        @media (min-width: 769px) {
+            .nav-dropdown:hover .dropdown-content:not(.show) {
+                display: block;
+            }
         }
 
         .cta-button {
@@ -883,12 +877,23 @@
                  padding: 12px 18px !important;
                  font-size: 14px !important;
              }
+             
+             /* תיקון תצוגת קישורים ארוכים במסכים קטנים - מחשבונים */
+             .calculator-dropdown .dropdown-content a {
+                 white-space: normal !important;
+                 overflow: visible !important;
+                 text-overflow: unset !important;
+                 line-height: 1.4 !important;
+                 text-align: center !important;
+             }
 
-             /* השוואת משפטים ארוכים בלינקהנרי */
+             /* תיקון תצוגת קישורים ארוכים במסכים קטנים */
              .tools-dropdown .dropdown-content a {
-                 white-space: nowrap !important;
-                 overflow: hidden !important;
-                 text-overflow: ellipsis !important;
+                 white-space: normal !important;
+                 overflow: visible !important;
+                 text-overflow: unset !important;
+                 line-height: 1.4 !important;
+                 text-align: center !important;
              }
              
                  /* עיצוב רספונסיבי לתצוגת הנתונים */
@@ -1043,7 +1048,7 @@
 			}
 
 			.nav-container {
-				padding: 0 1rem;
+				padding: 1rem 1rem;
 			}
 
 			.nav-menu {
@@ -1056,6 +1061,7 @@
 
 			.nav-menu.active {
 				display: flex;
+                margin-top: -30px;
 			}
             .nav-menu {
                 position: fixed;
@@ -1085,21 +1091,26 @@
                 box-shadow: none;
                 border: none;
                 background: transparent;
-                margin-top: 10px;
-            }
+                margin-top: 0;
+                top: auto;
+                border-radius: 0;
+                padding: 0;
+                }
 
-            .nav-dropdown .dropdown-content a {
+                .nav-dropdown .dropdown-content a {
                 padding: 8px 16px;
                 border-bottom: 1px solid rgba(255,255,255,0.1);
                 font-size: 1rem;
-            }
+                }
 
-            .nav-dropdown .dropdown-content.show {
+                .nav-dropdown .dropdown-content.show {
                 display: block;
-            }
+                margin-top: 15px;
+                }
 
             .hamburger {
                 display: flex;
+                padding-left: 5%;
             }
 
             .hero-content {
@@ -1917,6 +1928,23 @@
                 padding: 2rem 1rem;
             }
             
+            /* תיקון נוסף למובייל קטן - תפריטים נפתחים */
+            .calculator-dropdown .dropdown-content a,
+            .tools-dropdown .dropdown-content a {
+                padding: 15px 10px !important;
+                font-size: 13px !important;
+                line-height: 1.5 !important;
+                text-align: center !important;
+                white-space: normal !important;
+                word-wrap: break-word !important;
+            }
+            
+            .calculator-dropdown button,
+            .tools-dropdown button {
+                font-size: 13px !important;
+                padding: 10px 15px !important;
+            }
+            
             /* תיקון נוסף למובייל קטן */
             .analysis-grid,
             .summary-grid {
@@ -1952,14 +1980,12 @@
 
 <body dir="rtl">
     <header class="header" dir="rtl">
-        <div class="nav-container">
-            
+        <div class="nav-container">   
             <nav class="nav-menu" id="navMenu">
-                <li><a href="#">בית</a></li>
                 <li><a href="#services">שירותים</a></li>
                 <li class="nav-dropdown">
-                    <a href="#" onclick="toggleCalculatorDropdown(1)">מחשבונים ▼</a>
-                    <div class="dropdown-content" id="calculatorDropdown1">
+                    <a href="#" onclick="toggleNavCalculatorDropdown(event)">מחשבונים ▼</a>
+                    <div class="dropdown-content" id="navCalculatorDropdown">
                         <a href="prisatMaanak.html">פריסת מענק פרישה</a>
                         <a href="ribitderibit.html">חישוב ערך עתידי</a>
                         <a href="loan.html">סימולטור הלוואה</a>
@@ -1967,9 +1993,9 @@
                         <a href="hashDmeyNihul.html">השוואת דמי ניהול</a>
                     </div>
                 </li>
-                <li><a href="#about">איזור אישי</a></li>
+                <li><a href="#about">כלי השוואה</a></li>
                 <li><a href="#about">אודות</a></li>
-                <li><a href="#contact" onclick="openConsultationForm()">צור קשר</a></li>
+                <li><a href="#contact">צור קשר</a></li>
                 <li><a href="#consultation" class="cta-button" onclick="openConsultationForm()">ליעוץ אישי</a></li>
             </nav>
             <div class="logo"> <img class="logoimg" src="logoxnew.png"/></div>
@@ -2358,8 +2384,8 @@
                     <h3 class="feature-title">מחשבונים  מגוונים</h3>
                     <p class="feature-description">במחשבונים שלנו תוכל לחשב ערך עתידי, הפקדה נדרשת לסכום מטרה והחזרי הלוואה חודשיים</p>
                     <div class="calculator-dropdown">
-                        <button class="cta-button" id="calculatorDropdownBtn" onclick="toggleCalculatorDropdown(2)">בחר מחשבון ▼</button>
-                        <div class="dropdown-content" id="calculatorDropdown2">
+                        <button class="cta-button" id="calculatorDropdownBtn" onclick="toggleCalculatorDropdown()">בחר מחשבון ▼</button>
+                        <div class="dropdown-content" id="calculatorDropdown">
                             <a href="prisatMaanak.html">פריסת מענק פרישה</a>
                             <a href="ribitderibit.html">חישוב ערך עתידי</a>
                             <a href="loan.html">סימולטור הלוואה</a>
@@ -2444,10 +2470,37 @@
             document.getElementById('sectionHeader').style.display = 'flex';    
         }
 
+        // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט
+        function toggleNavCalculatorDropdown(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (window.innerWidth > 768) {return;}
+            const dropdown = document.getElementById('navCalculatorDropdown');
+            const link = event.target;
+            
+            // Close other dropdowns first
+            document.querySelectorAll('.dropdown-content.show').forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                    
+                }
+            });
+            
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                link.innerHTML = 'מחשבונים ▼';
+            } else {
+                dropdown.classList.add('show');
+                link.innerHTML = 'מחשבונים ▲';
+            }
+            
+            // Prevent any default behavior
+            return false;
+        }
+
         // פונקציה לפתיחה/סגירה של הרשימה הנפתחת
-        function toggleCalculatorDropdown(ind) {
-           const drpd=`calculatorDropdown${ind}`;           
-            const dropdown = document.getElementById(drpd);
+        function toggleCalculatorDropdown() {
+            const dropdown = document.getElementById('calculatorDropdown');
             const button = document.getElementById('calculatorDropdownBtn');
             
             if (dropdown.classList.contains('show')) {
@@ -2463,16 +2516,22 @@
 
         // סגירת הרשימה הנפתחת כשלוחצים מחוץ לה
         document.addEventListener('click', function(event) {
-            const dropdown1 = document.getElementById('calculatorDropdown1');
-            const dropdown2 = document.getElementById('calculatorDropdown2');
-
+            const dropdown = document.getElementById('calculatorDropdown');
             const button = document.getElementById('calculatorDropdownBtn');
             
             if (!dropdown.contains(event.target) && !button.contains(event.target)) {
-                dropdown1.classList.remove('show');
-                dropdown2.classList.remove('show');
+                dropdown.classList.remove('show');
                 button.classList.remove('active');
                 button.innerHTML = 'בחר מחשבון ▼';
+            }
+            
+            // Close nav dropdown when clicking outside
+            const navDropdown = document.getElementById('navCalculatorDropdown');
+            const navLink = document.querySelector('.nav-dropdown a');
+            
+            if (navDropdown && navLink && !navDropdown.contains(event.target) && !navLink.contains(event.target)) {
+                navDropdown.classList.remove('show');
+                navLink.innerHTML = 'מחשבונים ▼';
             }
         });
 
@@ -2486,7 +2545,39 @@
                 button.classList.remove('active');
                 button.innerHTML = 'בחר מחשבון ▼';
             }
+            
+            // Close nav dropdown when clicking on links
+            if (event.target.closest('#navCalculatorDropdown a')) {
+                const navDropdown = document.getElementById('navCalculatorDropdown');
+                const navLink = document.querySelector('.nav-dropdown a');
+                
+                navDropdown.classList.remove('show');
+                navLink.innerHTML = 'מחשבונים ▼';
+            }
         });
+
+        // Ensure nav dropdown links work properly
+        document.querySelectorAll('#navCalculatorDropdown a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Don't prevent default - let the link work normally
+                e.stopPropagation();
+                
+                // Close dropdown after a short delay to allow navigation
+                setTimeout(() => {
+                    const dropdown = document.getElementById('navCalculatorDropdown');
+                    const dropdownLink = document.querySelector('.nav-dropdown a');
+                    
+                    if (dropdown) {
+                        dropdown.classList.remove('show');
+                    }
+                    if (dropdownLink) {
+                        dropdownLink.innerHTML = 'מחשבונים ▼';
+                    }
+                }, 100);
+            });
+        });
+        
+        
 
         // פונקציה לפתיחה/סגירה של רשימת הכלים
         function toggleToolsDropdown() {
