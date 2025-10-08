@@ -6173,7 +6173,7 @@
             }else{
                 totalDiv.style.cssText = `
                     position: absolute;
-                    top: 28%;
+                    top: 25%;
                     left: 50%;
                     transform: translate(-50%, -50%);
                     font-size: 9px !important;
@@ -6429,28 +6429,16 @@
 
             // יצירת אלמנט חדש לטבלה
             const pathwayTableDiv = document.createElement('div');
-            pathwayTableDiv.style.cssText = `
-                background: rgba(255,255,255,0.95);
-                padding: 25px;
-                border-radius: 15px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-                margin-top: 30px;
-            `;
+            pathwayTableDiv.className = 'data-card';
+            pathwayTableDiv.style.marginTop = '30px';
 
+            const isMobile = window.innerWidth <= 768;
             let tableHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h3 style="color: #333; margin: 0; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px; text-align: right;">📊 סיכום לפי מסלול ומוצר</h3>
-                    <button type="button" class="tbl-button" id="closePathwayTable" onclick="closePathwayTableDisplay()">סגור טבלה</button>
+                    <button type="button" class="tbl-button" id="closePathwayTable" onclick="closePathwayTableDisplay()">סגור</button>
                 </div>
-                <table id="pathwayTable" dir="rtl" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                    <thead>
-                        <tr style="background: linear-gradient(45deg, #667eea, #764ba2); color: white;">
-                            <th style="padding: 15px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">סוג מוצר</th>
-                            <th style="padding: 15px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">שם מסלול</th>
-                            <th style="padding: 15px; text-align: center; border: 1px solid #ddd; white-space: nowrap;">סכום צבירה</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div id="pathwayTableContent">
             `;
 
             // מיון הנתונים לפי סוג מוצר ואז לפי סכום צבירה
@@ -6461,43 +6449,107 @@
                 return b.totalSchumTzvira - a.totalSchumTzvira;
             });
 
-            let totalSum = 0; // משתנה לחישוב הסך הכל
-            
-            pathwaySummary.forEach(item => {
-                const formattedAmount = new Intl.NumberFormat('he-IL', {
+            let totalSum = 0;
+
+            if (isMobile) {
+                // תצוגת כרטיסיות למובייל
+                tableHTML += '<div class="cards-container-mobile">';
+                
+                pathwaySummary.forEach(item => {
+                    const formattedAmount = new Intl.NumberFormat('he-IL', {
+                        style: 'currency',
+                        currency: 'ILS'
+                    }).format(item.totalSchumTzvira).replace('₪', '₪ ').trim();
+                    
+                    totalSum += item.totalSchumTzvira;
+
+                    tableHTML += `
+                        <div class="product-card-mobile">
+                            <h4 style="color: #667eea; margin-bottom: 12px; font-size: 1rem; font-weight: bold; text-align: center; border-bottom: 2px solid #667eea; padding-bottom: 8px;">
+                                ${item.sugMutzar}
+                            </h4>
+                            <div class="card-row">
+                                <span class="card-label">שם מסלול:</span>
+                                <span class="card-value" style="color: #2c3e50;">${item.shemMaslulHashkaa}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="card-label">סכום צבירה:</span>
+                                <span class="card-value" style="color: #27ae60;">${formattedAmount}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                // הוספת כרטיס סך הכל
+                const formattedTotalSum = new Intl.NumberFormat('he-IL', {
                     style: 'currency',
                     currency: 'ILS'
-                }).format(item.totalSchumTzvira).replace('₪', '₪ ').trim();
+                }).format(totalSum).replace('₪', '₪ ').trim();
                 
-                totalSum += item.totalSchumTzvira; // הוספה לסך הכל
-
                 tableHTML += `
-                    <tr style="background: rgba(102, 126, 234, 0.1);">
-                        <td style="padding: 12px; border: 1px solid #ddd; font-weight: bold; white-space: nowrap;">${item.sugMutzar}</td>
-                        <td style="padding: 12px; border: 1px solid #ddd; white-space: nowrap;">${item.shemMaslulHashkaa}</td>
-                        <td style="padding: 12px; border: 1px solid #ddd; text-align: center; color: #2c3e50; white-space: nowrap;">${formattedAmount}</td>
+                    <div class="product-card-mobile" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)); border: 2px solid #667eea;">
+                        <div class="card-row" style="border-bottom: none;">
+                            <span class="card-label" style="font-size: 1.1rem; color: #667eea;">סך הכל:</span>
+                            <span class="card-value" style="font-size: 1.2rem; color: #667eea;">${formattedTotalSum}</span>
+                        </div>
+                    </div>
+                `;
+                
+                tableHTML += '</div>';
+            } else {
+                // תצוגת טבלה למסכים גדולים
+                tableHTML += `
+                    <table id="pathwayTable" dir="rtl" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                        <thead>
+                            <tr style="background: linear-gradient(45deg, #667eea, #764ba2); color: white;">
+                                <th style="padding: 15px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">סוג מוצר</th>
+                                <th style="padding: 15px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">שם מסלול</th>
+                                <th style="padding: 15px; text-align: center; border: 1px solid #ddd; white-space: nowrap;">סכום צבירה</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                pathwaySummary.forEach(item => {
+                    const formattedAmount = new Intl.NumberFormat('he-IL', {
+                        style: 'currency',
+                        currency: 'ILS'
+                    }).format(item.totalSchumTzvira).replace('₪', '₪ ').trim();
+                    
+                    totalSum += item.totalSchumTzvira;
+
+                    tableHTML += `
+                        <tr style="background: rgba(102, 126, 234, 0.1);">
+                            <td style="padding: 12px; border: 1px solid #ddd; font-weight: bold; white-space: nowrap;">${item.sugMutzar}</td>
+                            <td style="padding: 12px; border: 1px solid #ddd; white-space: nowrap;">${item.shemMaslulHashkaa}</td>
+                            <td style="padding: 12px; border: 1px solid #ddd; text-align: center; color: #2c3e50; white-space: nowrap;">${formattedAmount}</td>
+                        </tr>
+                    `;
+                });
+                
+                // הוספת שורת סך הכל
+                const formattedTotalSum = new Intl.NumberFormat('he-IL', {
+                    style: 'currency',
+                    currency: 'ILS'
+                }).format(totalSum).replace('₪', '₪ ').trim();
+                
+                tableHTML += `
+                    <tr style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; font-weight: bold;">
+                        <td style="padding: 15px; border: 1px solid #ddd; text-align: right; font-size: 1.1rem;" colspan="2">סך הכל</td>
+                        <td style="padding: 15px; border: 1px solid #ddd; text-align: center; font-size: 1.1rem;">${formattedTotalSum}</td>
                     </tr>
                 `;
-            });
-            
-            // הוספת שורת סך הכל מודגשת
-            const formattedTotalSum = new Intl.NumberFormat('he-IL', {
-                style: 'currency',
-                currency: 'ILS'
-            }).format(totalSum).replace('₪', '₪ ').trim();
-            
-            tableHTML += `
-                <tr style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; font-weight: bold;">
-                    <td style="padding: 15px; border: 1px solid #ddd; text-align: right; font-size: 1.1rem;" colspan="2">סך הכל</td>
-                    <td style="padding: 15px; border: 1px solid #ddd; text-align: center; font-size: 1.1rem;">${formattedTotalSum}</td>
-                </tr>
-            `;
+
+                tableHTML += `
+                        </tbody>
+                    </table>
+                `;
+            }
 
             tableHTML += `
-                    </tbody>
-                </table>
+                </div>
                 <div style="margin-top: 20px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; border-right: 4px solid #667eea;">
-                    <p id="pathwayTableNote" style="color: #555; font-size: 0.9rem; margin: 0; text-align: right; line-height: 1.5;">
+                    <p style="color: #555; font-size: 0.9rem; margin: 0; text-align: right; line-height: 1.5;">
                         <strong>הערה:</strong> טבלה זו מציגה את הסכומים המצטברים לפי מסלול השקעה בכל מוצר פיננסי (לא כולל קרן ותיקה)
                     </p>
                 </div>
@@ -6542,18 +6594,16 @@
         }
         
         function closePathwayTableDisplay() {
-            const table = document.getElementById('pathwayTable');
+            const content = document.getElementById('pathwayTableContent');
             const button = document.getElementById('closePathwayTable');
-            const note = document.getElementById('pathwayTableNote');
-            if (table && button && note) {
-                if (table.style.display === 'none') {
-                    table.style.display = 'table';
-                    button.textContent = 'סגור טבלה';
-                    note.style.display = 'block';
+            
+            if (content && button) {
+                if (content.style.display === 'none') {
+                    content.style.display = 'block';
+                    button.textContent = 'סגור';
                 } else {
-                    table.style.display = 'none';
-                    button.textContent = 'פתח טבלה';
-                    note.style.display = 'none';
+                    content.style.display = 'none';
+                    button.textContent = 'פתח';
                 }
             }
         }
