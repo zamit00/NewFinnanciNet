@@ -1470,26 +1470,34 @@
             opacity: 1;
             visibility: visible;
             transform: translateX(0);
-            margin-top: -30px;
+            margin-top: -30px; 
 		}
-
+        .nav-menu.active li,.nav-menu.active li a{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
             /* Mobile nav-dropdown adjustments */
             .nav-dropdown .dropdown-content {
                 position: relative;
                 display: flex;
                 flex-direction: column;
                 min-width: auto;
-                width: 100%;
+                width: clamp(200px, 100%, 270px);
                 max-height: 0;
                 opacity: 0;
                 visibility: hidden;
                 overflow: hidden;
-                box-shadow: none;
                 border: none;
-                background: transparent;
-                margin-top: 0;
+                background:white;
+                margin-top: 5px;
                 top: auto;
-                border-radius: 0;
+                border-radius: 15px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
                 padding: 0;
                 transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, padding-top 0.3s ease;
                 }
