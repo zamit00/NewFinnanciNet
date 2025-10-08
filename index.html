@@ -2785,6 +2785,11 @@
                     <div class="file-actions">
                         <button class="cta-button" id="processFiles" style="display: none;">קרא נתונים</button>
                         <button class="cta-button delete-btn" id="deleteFiles">🗑️ סגור תצוגה ומחק נתונים</button>
+                        <button class="cta-button" id="advancedAnalysisBtnMain2" onclick="document.getElementById('advancedAnalysis').style.display = 'block'; performAdvancedAnalysis();" 
+                         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                          color: white; border: none; padding: 15px 40px; border-radius: 25px;
+                          font-size: 1.1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                           transition: all 0.3s ease; max-width: 400px; width: 100%;">📊 ניתוח מתקדם</button>
                     </div>
                     <h3 dir="rtl" id="uploadedFilesTitle">קבצים שהועלו - מיד יוצגו נתונים:</h3>
                     <div class="files-list" id="filesList"></div>  
@@ -2829,16 +2834,7 @@
                           </div>
                     </div>
                     
-                    <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
-                        <button onclick="closeDataDisplay()" class="cta-button delete-btn" style="max-width: 400px; width: 100%; padding: 15px 30px; font-size: 1.1rem;">
-                            🗑️ סגור תצוגה ומחק נתונים
-                        </button>
-                        <button class="cta-button" id="advancedAnalysisBtnMain" onclick="document.getElementById('advancedAnalysis').style.display = 'block'; performAdvancedAnalysis();" 
-                         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                          color: white; border: none; padding: 15px 40px; border-radius: 25px;
-                          font-size: 1.1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                           transition: all 0.3s ease; max-width: 400px; width: 100%;">📊 ניתוח מתקדם</button>
-                    </div>
+                    
                 </div>
                 
                 <!-- תצוגת נתונים יפה -->
@@ -2872,10 +2868,7 @@
                         </div>
                     </div>
                     
-                    <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
-                        <button onclick="closeDataDisplay()" class="cta-button delete-btn" style="max-width: 400px; width: 100%; padding: 15px 30px; font-size: 1.1rem;">
-                            🗑️ סגור תצוגה ומחק נתונים
-                        </button>
+                    <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px;"> 
                         <button class="cta-button" id="advancedAnalysisBtnMain2" onclick="document.getElementById('advancedAnalysis').style.display = 'block'; performAdvancedAnalysis();" 
                          style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                           color: white; border: none; padding: 15px 40px; border-radius: 25px;
@@ -6175,7 +6168,7 @@
             }else{
                 totalDiv.style.cssText = `
                     position: absolute;
-                    top: 25%;
+                    top: 28%;
                     left: 50%;
                     transform: translate(-50%, -50%);
                     font-size: 9px !important;
@@ -6299,6 +6292,10 @@
                                     <span class="card-label">סכום כולל:</span>
                                     <span class="card-value" style="color: #2c3e50;">${sumSugMutzar[key][0]}</span>
                                 </div>
+                                <div class="card-row">
+                                    <span style="font-weight: bold;" class="card-label">יתרות לגיל פרישה:</span>
+                                </div>
+
                         `;
                         
                         if (sumSugMutzar[key][1] !== 'לא רלבנטי') {
@@ -6651,13 +6648,8 @@
             };
             
             const pitzuimTableDiv = document.createElement('div');
-            pitzuimTableDiv.style.cssText = `
-                background: rgba(255,255,255,0.95);
-                padding: 25px;
-                border-radius: 15px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-                margin-top: 30px;
-            `;
+            pitzuimTableDiv.className = 'data-card';
+            pitzuimTableDiv.style.marginTop = '30px';
 
             const shemTochnit = {
                 '1': 'פוליסת ביטוח חיים משולב חיסכון',
@@ -6673,33 +6665,30 @@
                 '9': 'קופת גמל להשקעה',
                 '10': 'חיסכון לכל ילד'
             };
+            
+            const fieldLabels = {
+                pitzuimPturimMaavidimKodmim: 'צבירת מעבידים קודמים',
+                erechPidionPitzuimLeKitzbaMaavidimKodmim: 'ערך פדיון לקצבה מעבידים קודמים',
+                tzviratPitzuimMaavidimKodmimBeretzefKitzba: 'צבירת פיצויים מעבידים קודמים לקצבה',
+                tzviratPitzuimMaavidimKodmimBeretzefZechuyot: 'צבירת פיצויים מעובדים קודמים לזכויות',
+                tzviratPitzuim31121999LeKitzba: 'צבירת פיצויים 31.12.1999 לקצבה',
+                erechPidionPitzuimMaasikNochechi: 'ערך פדיון מעביד נוכחי',
+                erechPidionMarkivPitzuimLemasNochechi: 'ערך פדיון מרכיב פיצויים למעביד נוכחי',
+                erechPidionPitzuimMaavidimKodmimRetzefZehuyut: 'ערך פדיון מעבידים קודמים רצף זהות',
+                erechPidionPitzuimLeHonMaavidimKodmim: 'ערך פדיון להון מעבידים קודמים',
+                yitratPitzuimLeLoHitchashbenot: 'יתרת פיצויים ללא התחשבות',
+                kayamRetzefPitzuimKitzba: 'רצף פיצויים קצבה',
+                kayamRetzefPitzuimZechuyot: 'רצף זכויות פיצויים'
+            };
+
+            const isMobile = window.innerWidth <= 768;
 
             let tableHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="color: #333; margin: 0; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px; text-align: right;">💰 ערכי פדיון פיצויים לפי מוצר וחשבון</h3>
-                    <button type="button" class="tbl-button" id="closePitzuimTable" onclick="closePitzuimTableDisplay()">סגור טבלה</button>
+                    <h3 style="color: #333; margin: 0; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px; text-align: right;">💰 ערכי פדיון פיצויים</h3>
+                    <button type="button" class="tbl-button" id="closePitzuimTable" onclick="closePitzuimTableDisplay()">סגור</button>
                 </div>
-                <div style="overflow-x: auto; margin-top: 20px;">
-                    <table id="pitzuimTable" dir="rtl" style="min-width: 1200px; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background: linear-gradient(45deg, #667eea, #764ba2); color: white;">
-                                <th style="padding: 5px; text-align: right; border: 1px solid #ddd; font-size: 0.8rem; min-width: 80px;">סוג מוצר</th>
-                                <th style="padding: 5px; text-align: right; border: 1px solid #ddd; font-size: 0.8rem; min-width: 100px;">מספר חשבון/פוליסה</th>
-                                ${hasData.pitzuimPturimMaavidimKodmim ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">צבירת מעבידים קודמים</th>' : ''}
-                                ${hasData.erechPidionPitzuimLeKitzbaMaavidimKodmim ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">ערך פדיון פיצויים לקצבה מעבידים קודמים</th>' : ''}
-                                ${hasData.tzviratPitzuimMaavidimKodmimBeretzefKitzba ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">צבירת פיצויים מעבידים קודמים לקצבה</th>' : ''}
-                                ${hasData.tzviratPitzuimMaavidimKodmimBeretzefZechuyot ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">צבירת פיצויים מעובדים קודמים לזכויות</th>' : ''}
-                                ${hasData.tzviratPitzuim31121999LeKitzba ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">צבירת פיצויים 31.12.1999 לקצבה</th>' : ''}
-                                ${hasData.erechPidionPitzuimMaasikNochechi ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">ערך פדיון פיצויים מעביד נוכחי</th>' : ''}
-                                ${hasData.erechPidionMarkivPitzuimLemasNochechi ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">ערך פדיון מרכיב פיצויים למעביד נוכחי</th>' : ''}
-                                ${hasData.erechPidionPitzuimMaavidimKodmimRetzefZehuyut ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">ערך פדיון פיצויים מעבידים קודמים רצף זהות</th>' : ''}
-                                ${hasData.erechPidionPitzuimLeHonMaavidimKodmim ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">ערך פדיון פיצויים להון מעבידים קודמים</th>' : ''}
-                                ${hasData.yitratPitzuimLeLoHitchashbenot ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">יתרת פיצויים ללא התחשבות</th>' : ''}
-                                ${hasData.kayamRetzefPitzuimKitzba ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 100px; line-height: 1.2;">קיים רצף פיצויים קצבה</th>' : ''}
-                                ${hasData.kayamRetzefPitzuimZechuyot ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 100px; line-height: 1.2;">קיים רצף זכויות פיצויים</th>' : ''}
-                            </tr>
-                        </thead>
-                    <tbody>
+                <div id="pitzuimTableContent">
             `;
 
             filteredData.sort((a, b) => {
@@ -6709,34 +6698,197 @@
                 return a.misparPolisaOHeshbon.localeCompare(b.misparPolisaOHeshbon);
             });
 
-            filteredData.forEach(item => {
-                const productName = shemTochnit[item.sugMutzar] ;
+            if (isMobile) {
+                // תצוגת כרטיסיות למובייל
+                tableHTML += '<div class="cards-container-mobile">';
+                
+                filteredData.forEach(item => {
+                    const productName = shemTochnit[item.sugMutzar];
+                    
+                    tableHTML += `
+                        <div class="product-card-mobile">
+                            <h4 style="color: #667eea; margin-bottom: 12px; font-size: 1rem; font-weight: bold; text-align: center; border-bottom: 2px solid #667eea; padding-bottom: 8px;">
+                                ${productName}
+                            </h4>
+                            <div class="card-row">
+                                <span class="card-label">מספר חשבון/פוליסה:</span>
+                                <span class="card-value" style="color: #2c3e50;">${item.misparPolisaOHeshbon}</span>
+                            </div>
+                    `;
+                    
+                    // הוספת שדות רק אם יש בהם ערכים
+                    if (item.pitzuimPturimMaavidimKodmim > 0) {
+                        tableHTML += `
+                            <div class="card-row">
+                                <span class="card-label">${fieldLabels.pitzuimPturimMaavidimKodmim}:</span>
+                                <span class="card-value" style="color: #2c3e50;">₪${item.pitzuimPturimMaavidimKodmim.toLocaleString('he-IL')}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (item.erechPidionPitzuimLeKitzbaMaavidimKodmim > 0) {
+                        tableHTML += `
+                            <div class="card-row">
+                                <span class="card-label">${fieldLabels.erechPidionPitzuimLeKitzbaMaavidimKodmim}:</span>
+                                <span class="card-value" style="color: #27ae60;">₪${item.erechPidionPitzuimLeKitzbaMaavidimKodmim.toLocaleString('he-IL')}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (item.tzviratPitzuimMaavidimKodmimBeretzefKitzba > 0) {
+                        tableHTML += `
+                            <div class="card-row">
+                                <span class="card-label">${fieldLabels.tzviratPitzuimMaavidimKodmimBeretzefKitzba}:</span>
+                                <span class="card-value" style="color: #3498db;">₪${item.tzviratPitzuimMaavidimKodmimBeretzefKitzba.toLocaleString('he-IL')}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (item.tzviratPitzuimMaavidimKodmimBeretzefZechuyot > 0) {
+                        tableHTML += `
+                            <div class="card-row">
+                                <span class="card-label">${fieldLabels.tzviratPitzuimMaavidimKodmimBeretzefZechuyot}:</span>
+                                <span class="card-value" style="color: #e74c3c;">₪${item.tzviratPitzuimMaavidimKodmimBeretzefZechuyot.toLocaleString('he-IL')}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (item.tzviratPitzuim31121999LeKitzba > 0) {
+                        tableHTML += `
+                            <div class="card-row">
+                                <span class="card-label">${fieldLabels.tzviratPitzuim31121999LeKitzba}:</span>
+                                <span class="card-value" style="color: #f39c12;">₪${item.tzviratPitzuim31121999LeKitzba.toLocaleString('he-IL')}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (item.erechPidionPitzuimMaasikNochechi > 0) {
+                        tableHTML += `
+                            <div class="card-row">
+                                <span class="card-label">${fieldLabels.erechPidionPitzuimMaasikNochechi}:</span>
+                                <span class="card-value" style="color: #9b59b6;">₪${item.erechPidionPitzuimMaasikNochechi.toLocaleString('he-IL')}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (item.erechPidionMarkivPitzuimLemasNochechi > 0) {
+                        tableHTML += `
+                            <div class="card-row">
+                                <span class="card-label">${fieldLabels.erechPidionMarkivPitzuimLemasNochechi}:</span>
+                                <span class="card-value" style="color: #1abc9c;">₪${item.erechPidionMarkivPitzuimLemasNochechi.toLocaleString('he-IL')}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (item.erechPidionPitzuimMaavidimKodmimRetzefZehuyut > 0) {
+                        tableHTML += `
+                            <div class="card-row">
+                                <span class="card-label">${fieldLabels.erechPidionPitzuimMaavidimKodmimRetzefZehuyut}:</span>
+                                <span class="card-value" style="color: #34495e;">₪${item.erechPidionPitzuimMaavidimKodmimRetzefZehuyut.toLocaleString('he-IL')}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (item.erechPidionPitzuimLeHonMaavidimKodmim > 0) {
+                        tableHTML += `
+                            <div class="card-row">
+                                <span class="card-label">${fieldLabels.erechPidionPitzuimLeHonMaavidimKodmim}:</span>
+                                <span class="card-value" style="color: #e67e22;">₪${item.erechPidionPitzuimLeHonMaavidimKodmim.toLocaleString('he-IL')}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (item.yitratPitzuimLeLoHitchashbenot > 0) {
+                        tableHTML += `
+                            <div class="card-row">
+                                <span class="card-label">${fieldLabels.yitratPitzuimLeLoHitchashbenot}:</span>
+                                <span class="card-value" style="color: #95a5a6;">₪${item.yitratPitzuimLeLoHitchashbenot.toLocaleString('he-IL')}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (item.kayamRetzefPitzuimKitzba && item.kayamRetzefPitzuimKitzba < 2) {
+                        tableHTML += `
+                            <div class="card-row">
+                                <span class="card-label">${fieldLabels.kayamRetzefPitzuimKitzba}:</span>
+                                <span class="card-value" style="color: #16a085;">${item.kayamRetzefPitzuimKitzba > 0 ? 'כן' : 'לא'}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (item.kayamRetzefPitzuimZechuyot && item.kayamRetzefPitzuimZechuyot < 2) {
+                        tableHTML += `
+                            <div class="card-row">
+                                <span class="card-label">${fieldLabels.kayamRetzefPitzuimZechuyot}:</span>
+                                <span class="card-value" style="color: #8e44ad;">${item.kayamRetzefPitzuimZechuyot > 0 ? 'כן' : 'לא'}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    tableHTML += '</div>';
+                });
+                
+                tableHTML += '</div>';
+            } else {
+                // תצוגת טבלה למסכים גדולים
                 tableHTML += `
-                    <tr style="background: rgba(102, 126, 234, 0.1);">
-                        <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;  font-size: 0.8rem;">${productName}</td>
-                        <td style="padding: 5px; border: 1px solid #ddd;  font-size: 0.8rem;">${item.misparPolisaOHeshbon}</td>
-                        ${hasData.pitzuimPturimMaavidimKodmim ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #2c3e50; white-space: nowrap; font-size: 0.85rem;">${item.pitzuimPturimMaavidimKodmim > 0 ? '₪' + item.pitzuimPturimMaavidimKodmim.toLocaleString('he-IL') : '-'}</td>` : ''}
-                        ${hasData.erechPidionPitzuimLeKitzbaMaavidimKodmim ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #27ae60; white-space: nowrap; font-size: 0.85rem;">${item.erechPidionPitzuimLeKitzbaMaavidimKodmim > 0 ? '₪' + item.erechPidionPitzuimLeKitzbaMaavidimKodmim.toLocaleString('he-IL') : '-'}</td>` : ''}
-                        ${hasData.tzviratPitzuimMaavidimKodmimBeretzefKitzba ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #3498db; white-space: nowrap; font-size: 0.85rem;">${item.tzviratPitzuimMaavidimKodmimBeretzefKitzba > 0 ? '₪' + item.tzviratPitzuimMaavidimKodmimBeretzefKitzba.toLocaleString('he-IL') : '-'}</td>` : ''}
-                        ${hasData.tzviratPitzuimMaavidimKodmimBeretzefZechuyot ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #e74c3c; white-space: nowrap; font-size: 0.85rem;">${item.tzviratPitzuimMaavidimKodmimBeretzefZechuyot > 0 ? '₪' + item.tzviratPitzuimMaavidimKodmimBeretzefZechuyot.toLocaleString('he-IL') : '-'}</td>` : ''}
-                        ${hasData.tzviratPitzuim31121999LeKitzba ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #f39c12; white-space: nowrap; font-size: 0.85rem;">${item.tzviratPitzuim31121999LeKitzba > 0 ? '₪' + item.tzviratPitzuim31121999LeKitzba.toLocaleString('he-IL') : '-'}</td>` : ''}
-                        ${hasData.erechPidionPitzuimMaasikNochechi ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #9b59b6; white-space: nowrap; font-size: 0.85rem;">${item.erechPidionPitzuimMaasikNochechi > 0 ? '₪' + item.erechPidionPitzuimMaasikNochechi.toLocaleString('he-IL') : '-'}</td>` : ''}
-                        ${hasData.erechPidionMarkivPitzuimLemasNochechi ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #1abc9c; white-space: nowrap; font-size: 0.85rem;">${item.erechPidionMarkivPitzuimLemasNochechi > 0 ? '₪' + item.erechPidionMarkivPitzuimLemasNochechi.toLocaleString('he-IL') : '-'}</td>` : ''}
-                        ${hasData.erechPidionPitzuimMaavidimKodmimRetzefZehuyut ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #34495e; white-space: nowrap; font-size: 0.85rem;">${item.erechPidionPitzuimMaavidimKodmimRetzefZehuyut > 0 ? '₪' + item.erechPidionPitzuimMaavidimKodmimRetzefZehuyut.toLocaleString('he-IL') : '-'}</td>` : ''}
-                        ${hasData.erechPidionPitzuimLeHonMaavidimKodmim ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #e67e22; white-space: nowrap; font-size: 0.85rem;">${item.erechPidionPitzuimLeHonMaavidimKodmim > 0 ? '₪' + item.erechPidionPitzuimLeHonMaavidimKodmim.toLocaleString('he-IL') : '-'}</td>` : ''}
-                        ${hasData.yitratPitzuimLeLoHitchashbenot ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #95a5a6; white-space: nowrap; font-size: 0.85rem;">${item.yitratPitzuimLeLoHitchashbenot > 0 ? '₪' + item.yitratPitzuimLeLoHitchashbenot.toLocaleString('he-IL') : '-'}</td>` : ''}
-                        ${hasData.kayamRetzefPitzuimKitzba ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #16a085; white-space: nowrap; font-size: 0.85rem;">${item.kayamRetzefPitzuimKitzba > 0 ? 'כן' : 'לא'}</td>` : ''}
-                        ${hasData.kayamRetzefPitzuimZechuyot ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #8e44ad; white-space: nowrap; font-size: 0.85rem;">${item.kayamRetzefPitzuimZechuyot > 0 ? 'כן' : 'לא'}</td>` : ''}
-                    </tr>
+                    <div style="overflow-x: auto; margin-top: 20px;">
+                        <table id="pitzuimTable" dir="rtl" style="min-width: 1200px; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: linear-gradient(45deg, #667eea, #764ba2); color: white;">
+                                    <th style="padding: 5px; text-align: right; border: 1px solid #ddd; font-size: 0.8rem; min-width: 80px;">סוג מוצר</th>
+                                    <th style="padding: 5px; text-align: right; border: 1px solid #ddd; font-size: 0.8rem; min-width: 100px;">מספר חשבון/פוליסה</th>
+                                    ${hasData.pitzuimPturimMaavidimKodmim ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">צבירת מעבידים קודמים</th>' : ''}
+                                    ${hasData.erechPidionPitzuimLeKitzbaMaavidimKodmim ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">ערך פדיון פיצויים לקצבה מעבידים קודמים</th>' : ''}
+                                    ${hasData.tzviratPitzuimMaavidimKodmimBeretzefKitzba ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">צבירת פיצויים מעבידים קודמים לקצבה</th>' : ''}
+                                    ${hasData.tzviratPitzuimMaavidimKodmimBeretzefZechuyot ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">צבירת פיצויים מעובדים קודמים לזכויות</th>' : ''}
+                                    ${hasData.tzviratPitzuim31121999LeKitzba ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">צבירת פיצויים 31.12.1999 לקצבה</th>' : ''}
+                                    ${hasData.erechPidionPitzuimMaasikNochechi ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">ערך פדיון פיצויים מעביד נוכחי</th>' : ''}
+                                    ${hasData.erechPidionMarkivPitzuimLemasNochechi ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">ערך פדיון מרכיב פיצויים למעביד נוכחי</th>' : ''}
+                                    ${hasData.erechPidionPitzuimMaavidimKodmimRetzefZehuyut ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">ערך פדיון פיצויים מעבידים קודמים רצף זהות</th>' : ''}
+                                    ${hasData.erechPidionPitzuimLeHonMaavidimKodmim ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">ערך פדיון פיצויים להון מעבידים קודמים</th>' : ''}
+                                    ${hasData.yitratPitzuimLeLoHitchashbenot ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 120px; line-height: 1.2;">יתרת פיצויים ללא התחשבות</th>' : ''}
+                                    ${hasData.kayamRetzefPitzuimKitzba ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 100px; line-height: 1.2;">קיים רצף פיצויים קצבה</th>' : ''}
+                                    ${hasData.kayamRetzefPitzuimZechuyot ? '<th style="padding: 5px; text-align: center; border: 1px solid #ddd; font-size: 0.85rem; min-width: 100px; line-height: 1.2;">קיים רצף זכויות פיצויים</th>' : ''}
+                                </tr>
+                            </thead>
+                        <tbody>
                 `;
-            });
+                
+                filteredData.forEach(item => {
+                    const productName = shemTochnit[item.sugMutzar];
+                    tableHTML += `
+                        <tr style="background: rgba(102, 126, 234, 0.1);">
+                            <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;  font-size: 0.8rem;">${productName}</td>
+                            <td style="padding: 5px; border: 1px solid #ddd;  font-size: 0.8rem;">${item.misparPolisaOHeshbon}</td>
+                            ${hasData.pitzuimPturimMaavidimKodmim ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #2c3e50; white-space: nowrap; font-size: 0.85rem;">${item.pitzuimPturimMaavidimKodmim > 0 ? '₪' + item.pitzuimPturimMaavidimKodmim.toLocaleString('he-IL') : '-'}</td>` : ''}
+                            ${hasData.erechPidionPitzuimLeKitzbaMaavidimKodmim ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #27ae60; white-space: nowrap; font-size: 0.85rem;">${item.erechPidionPitzuimLeKitzbaMaavidimKodmim > 0 ? '₪' + item.erechPidionPitzuimLeKitzbaMaavidimKodmim.toLocaleString('he-IL') : '-'}</td>` : ''}
+                            ${hasData.tzviratPitzuimMaavidimKodmimBeretzefKitzba ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #3498db; white-space: nowrap; font-size: 0.85rem;">${item.tzviratPitzuimMaavidimKodmimBeretzefKitzba > 0 ? '₪' + item.tzviratPitzuimMaavidimKodmimBeretzefKitzba.toLocaleString('he-IL') : '-'}</td>` : ''}
+                            ${hasData.tzviratPitzuimMaavidimKodmimBeretzefZechuyot ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #e74c3c; white-space: nowrap; font-size: 0.85rem;">${item.tzviratPitzuimMaavidimKodmimBeretzefZechuyot > 0 ? '₪' + item.tzviratPitzuimMaavidimKodmimBeretzefZechuyot.toLocaleString('he-IL') : '-'}</td>` : ''}
+                            ${hasData.tzviratPitzuim31121999LeKitzba ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #f39c12; white-space: nowrap; font-size: 0.85rem;">${item.tzviratPitzuim31121999LeKitzba > 0 ? '₪' + item.tzviratPitzuim31121999LeKitzba.toLocaleString('he-IL') : '-'}</td>` : ''}
+                            ${hasData.erechPidionPitzuimMaasikNochechi ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #9b59b6; white-space: nowrap; font-size: 0.85rem;">${item.erechPidionPitzuimMaasikNochechi > 0 ? '₪' + item.erechPidionPitzuimMaasikNochechi.toLocaleString('he-IL') : '-'}</td>` : ''}
+                            ${hasData.erechPidionMarkivPitzuimLemasNochechi ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #1abc9c; white-space: nowrap; font-size: 0.85rem;">${item.erechPidionMarkivPitzuimLemasNochechi > 0 ? '₪' + item.erechPidionMarkivPitzuimLemasNochechi.toLocaleString('he-IL') : '-'}</td>` : ''}
+                            ${hasData.erechPidionPitzuimMaavidimKodmimRetzefZehuyut ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #34495e; white-space: nowrap; font-size: 0.85rem;">${item.erechPidionPitzuimMaavidimKodmimRetzefZehuyut > 0 ? '₪' + item.erechPidionPitzuimMaavidimKodmimRetzefZehuyut.toLocaleString('he-IL') : '-'}</td>` : ''}
+                            ${hasData.erechPidionPitzuimLeHonMaavidimKodmim ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #e67e22; white-space: nowrap; font-size: 0.85rem;">${item.erechPidionPitzuimLeHonMaavidimKodmim > 0 ? '₪' + item.erechPidionPitzuimLeHonMaavidimKodmim.toLocaleString('he-IL') : '-'}</td>` : ''}
+                            ${hasData.yitratPitzuimLeLoHitchashbenot ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #95a5a6; white-space: nowrap; font-size: 0.85rem;">${item.yitratPitzuimLeLoHitchashbenot > 0 ? '₪' + item.yitratPitzuimLeLoHitchashbenot.toLocaleString('he-IL') : '-'}</td>` : ''}
+                            ${hasData.kayamRetzefPitzuimKitzba ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #16a085; white-space: nowrap; font-size: 0.85rem;">${item.kayamRetzefPitzuimKitzba > 0 ? 'כן' : 'לא'}</td>` : ''}
+                            ${hasData.kayamRetzefPitzuimZechuyot ? `<td style="padding: 5px; border: 1px solid #ddd; text-align: center; color: #8e44ad; white-space: nowrap; font-size: 0.85rem;">${item.kayamRetzefPitzuimZechuyot > 0 ? 'כן' : 'לא'}</td>` : ''}
+                        </tr>
+                    `;
+                });
+
+                tableHTML += `
+                        </tbody>
+                    </table>
+                    </div>
+                `;
+            }
 
             tableHTML += `
-                    </tbody>
-                </table>
+                </div>
                 <div style="margin-top: 20px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; border-right: 4px solid #667eea;">
-                    <p id="pitzuimTableNote" style="color: #555; font-size: 0.9rem; margin: 0; text-align: right; line-height: 1.5;">
-                        <strong>הערה:</strong> טבלה זו מציגה רק רשומות עם סכומי פיצויים גדולים מ-0. סכומים מוצגים בשקלים חדשים.
+                    <p style="color: #555; font-size: 0.9rem; margin: 0; text-align: right; line-height: 1.5;">
+                        <strong>הערה:</strong> מוצגות רק רשומות עם סכומי פיצויים גדולים מ-0. סכומים בשקלים חדשים.
                     </p>
                 </div>
             `;
@@ -6747,18 +6899,16 @@
         }
 
         function closePitzuimTableDisplay() {
-            const table = document.getElementById('pitzuimTable');
+            const content = document.getElementById('pitzuimTableContent');
             const button = document.getElementById('closePitzuimTable');
-            const note = document.getElementById('pitzuimTableNote');
-            if (table && button && note) {
-                if (table.style.display === 'none') {
-                    table.style.display = 'table';
-                    button.textContent = 'סגור טבלה';
-                    note.style.display = 'block';
+            
+            if (content && button) {
+                if (content.style.display === 'none') {
+                    content.style.display = 'block';
+                    button.textContent = 'סגור';
                 } else {
-                    table.style.display = 'none';
-                    button.textContent = 'פתח טבלה';
-                    note.style.display = 'none';
+                    content.style.display = 'none';
+                    button.textContent = 'פתח';
                 }
             }
         }
