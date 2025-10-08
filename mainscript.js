@@ -48,7 +48,7 @@ window.onload = async function() {
              fetchdataJasonM(),
             
         ]);
-        console.log('כל הנתונים נטענו בהצלחה',datanetunimKlaliXM,datanetunimKlaliXB,datanetunimKlaliXP);
+        //console.log('כל הנתונים נטענו בהצלחה',datanetunimKlaliXM,datanetunimKlaliXB,datanetunimKlaliXP);
        //indications(); 
         //backtop();     
        
