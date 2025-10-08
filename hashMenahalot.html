@@ -10,24 +10,35 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="kochavimscript.js" defer></script>
     <style>
-    *{
-      box-sizing: border-box;max-width: 100vw;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        max-width: 100%;
     }
-    td{text-align: center;}
-    #form2{display: none;}
-      body {
-     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f8fafc; 
-    direction: rtl;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-sizing: border-box;
-    padding:0; margin:0;
-    max-width:100%;    
+    
+    html {
+        scroll-behavior: smooth;
     }
-
+    
+    .tblmaxsize{
+        width: clamp(300px,90vw,1000px) !important;
+    }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f8fafc; 
+        direction: rtl;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+        max-width: 100%;
+        overflow-x: hidden;
+        line-height: 1.6;
+        color: #333;
+    }
     
 .logotext {
     position: relative;
@@ -45,6 +56,9 @@
 h1 {
     text-align: center;
 }
+    td{text-align: center;}
+    #form2{display: none;}
+
 .formDo{
     background-color: white; /* רקע לבן כמו כרטיסים ב-index */
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -57,7 +71,7 @@ h1 {
     width: clamp(300px,90vw,500px);
     padding-bottom: 30px;
     box-sizing: border-box;
-    margin-top:40px;
+    margin-top: 40px;
 }
 .formDo h1{
     font-size:25px;
@@ -139,58 +153,141 @@ h1 {
     justify-content: center;
 }
 table {
-    width: clamp(300px,100%,800px);
-    max-width: 100%;
+    width: 100%;
+    max-width: 1000px;
     border-collapse: collapse;
     direction: rtl;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 16px;
-    table-layout: fixed; /* חלוקת עמודות קבועה */
-    overflow-x:hidden;
+    table-layout: auto;
+    margin: 0 auto;
 }
+
+.tbltbody {
+    max-width: 1000px;
+    width: 100%;
+    margin: 20px auto;
+    overflow-x: hidden;
+    table-layout: fixed;
+}
+
+.tbltbody table {
+    width: 100%;
+    max-width: 1000px;
+    table-layout: fixed;
+}
+
 th, td {
-    padding: 10px;
-    text-align: right;
+    padding: 12px 10px;
+    text-align: center;
     border: 1px solid #ddd;
-    word-wrap: nowrap; /* גלישת טקסט */
+    word-wrap: break-word;
 }
+
 th {
-    background: linear-gradient(to bottom, #0073e6, #005bb5);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     text-align: center;
+    font-weight: 600;
 }
+
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+
 tr:hover {
-    background-color: #d0e4ff;
+    background-color: #f0f4ff;
 }
-/* גלילה אנכית לתוכן */
+
 tbody {
-    display: block;
-    margin-top: 30px;
+    display: table-row-group;
 }
-/* שמירה על מבנה רספונסיבי */
+
 tbody tr {
-    display: table;
-    width: clamp(300px,100%,800px);
-    max-width: 100%;
-    table-layout: fixed;
+    display: table-row;
 }
 /* קביעת רוחב לעמודות */
-th:nth-child(1), td:nth-child(1) { width: 12%; } /* עמודה ראשונה (חברה) */
-th:nth-child(2), td:nth-child(2) { width: 30%; } /* עמודה שנייה (שם המסלול) */
-th:nth-child(3), td:nth-child(3),
-th:nth-child(4), td:nth-child(4),
-th:nth-child(5), td:nth-child(5) { width: 12%; } /* יתר העמודות שוות בגודל */
-.chart-container {
-    margin-top: 20px;
-    max-width: 100vw;
-    height: 400px;
-    box-sizing: border-box;
+th:nth-child(1), td:nth-child(1) { width: 14%; } /* עמודה ראשונה (חברה) */
+th:nth-child(2), td:nth-child(2) { width: 24%; } /* עמודה שנייה (שם המסלול) - הקטנה */
+th:nth-child(3), td:nth-child(3) { width: 16%; } /* עמודה שלישית - הגדלה */
+th:nth-child(4), td:nth-child(4) { width: 15%; } /* עמודה רביעית */
+th:nth-child(5), td:nth-child(5) { width: 15%; } /* עמודה חמישית */
+/* Chart Container */
+.charts {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1000px;
+    width: 100%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    min-height: 600px;
 }
-.chart-container{
-    box-sizing:border-box;
+
+.charts.show-charts {
+    display: flex !important;
+    visibility: visible !important;
+}
+
+.chart-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.chart-btn {
+    background: white;
+    color: #667eea;
+    padding: 12px 24px;
+    border: 2px solid #e2e8f0;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.chart-btn:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.chart-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #667eea;
+}
+
+.chart-container {
+    width: 100%;
+    max-width: 900px;
+    height: 500px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.chart-wrapper {
+    display: none !important;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.chart-wrapper.active {
+    display: block !important;
+}
+
+.chart-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 500px !important;
 }
 #compare h3{ padding-right:10px;padding-left:10px;}
 #compare h4{text-decoration: underline;color: blue; padding-right: 10px;}
@@ -222,31 +319,330 @@ th:nth-child(5), td:nth-child(5) { width: 12%; } /* יתר העמודות שוו
     margin-top: 5px; box-sizing: border-box;}
 .sugsel{text-align: center;}
 .tbl{display: flex;justify-content: center;}
-@media (min-width: 1024px) {
-    .chart-container{ width:30vw;}
-    .charts{display: flex;flex-direction: row;
-        justify-content: space-between;}
+
+/* Header and Navigation */
+.header {
+    position: sticky;
+    top: 0;
+    width: 100% !important;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 1rem 0;
+    transition: all 0.3s ease;
+    max-width: 1400px;
+    margin-right: auto;
+    margin-left: auto;
 }
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.logoimg {
+    max-width: 200px;
+    height: auto;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    position: relative;
+    font-size: 16px;
+}
+
+.nav-menu a:hover {
+    color: #667eea;
+}
+
+.nav-menu a:hover::after {
+    width: 100%;
+}
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    right: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.3s ease;
+}
+
+/* Navigation Dropdown */
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-dropdown .dropdown-content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: calc(100% - 2px);
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+    box-shadow: none;
+    min-width: 220px;
+    z-index: 1001;
+    margin-top: 0;
+    border-top: none;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.nav-dropdown .dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+.nav-dropdown .dropdown-content a:hover {
+    background-color: #f5f5f5;
+    color: #667eea;
+}
+
+.nav-dropdown .dropdown-content a:last-child {
+    border-bottom: none;
+}
+
+.nav-dropdown .dropdown-content.show {
+    max-height: 500px;
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Desktop hover behavior */
+@media (min-width: 769px) {
+    .nav-dropdown:hover .dropdown-content:not(.show) {
+        max-height: 500px;
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 4px;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: 0.3s;
+    border-radius: 3px;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
 @media (max-width: 850px) {
     table,tr{font-size: 12px;
     max-width: 90vw;}
     }
-@media (max-width: 500px) {
-table, th, td {
-   font-size: 9px;
-   max-width: 100%;
- }
- .chart-container{ max-width:300px;}
- header{
-    width: 95vw;
-    margin:0 0 20px 0;
-    padding: 0%;
-    box-sizing: border-box;
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem 0;
+        width: 100%;
+        margin: 0;
+    }
+
+    .nav-container {
+        padding: 1rem 1rem;
+    }
+
+    .nav-menu {
+        position: fixed;
+        top: 80px;
+        right: 0;
+        width: 100%;
+        height: calc(100vh - 80px);
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding-top: 2rem;
+        display: flex;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(100%);
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    }
+
+    .hamburger {
+        display: flex;
+        padding-left: 5%;
+    }
+
+    .nav-menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+        margin-top: -30px; 
+    }
+    
+    .nav-menu.active li,
+    .nav-menu.active li a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+    }
+    
+    /* Mobile nav-dropdown adjustments */
+    .nav-dropdown .dropdown-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: auto;
+        width: clamp(200px, 100%, 270px);
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden;
+        border: none;
+        background: white;
+        margin-top: 5px;
+        top: auto;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 0;
+        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, padding-top 0.3s ease;
+    }
+
+    .nav-dropdown .dropdown-content a {
+        padding: 8px 16px;
+        border-bottom: 1px solid #eee;
+        font-size: 1rem;
+    }
+
+    .nav-dropdown .dropdown-content.show {
+        max-height: 500px;
+        opacity: 1;
+        visibility: visible;
+        padding-top: 15px;
+    }
+    
+    .logoimg {
+        width: 150px;
+        height: auto;
+    }
+    
+    .charts {
+        flex-direction: column;
+        max-width: 95vw;
+        gap: 1.5rem;
+    }
+    
+    .chart-container {
+        max-width: 100%;
+        width: 100%;
+        height: 350px;
+    }
+    
+    .charts {
+        padding: 1.5rem 1rem;
+    }
+    
+    .chart-controls {
+        gap: 0.5rem;
+    }
+    
+    .chart-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
 }
- #compare{font-size: 10px;
- }
- .rd{
-    font-size: 12px;}
+
+@media (max-width: 500px) {
+    table, th, td {
+        font-size: 9px;
+        max-width: 100%;
+    }
+    
+    .charts {
+        flex-direction: column;
+        max-width: 98vw;
+        gap: 1rem;
+        padding: 1rem 0.5rem;
+    }
+    
+    .chart-container { 
+        max-width: 100%;
+        width: 100%;
+        height: 280px;
+    }
+    
+    .chart-controls {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    
+    .chart-btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    #compare {
+        font-size: 10px;
+    }
+    
+    .rd {
+        font-size: 12px;
+    }
 }
 h1 {
     text-align: center;
@@ -258,7 +654,7 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: clamp(300px,90vw,500px);
+    width: clamp(300px,90vw,800px);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 77, 153, 0.2);
     padding-bottom: 30px;
@@ -362,7 +758,7 @@ th, td {
     word-wrap: nowrap; /* גלישת טקסט */
 }
 th {text-align:right ;
-    background: linear-gradient(to bottom, #0073e6, #005bb5);
+    background: linear-gradient(135deg, #650ba2 0%, #764ba2 100%);
     color: white;
     text-align: center;
     padding:0;
@@ -420,9 +816,15 @@ padding-right:10px; padding-left: 10px;
 .sugsel{text-align: center;}
 .tbl{display: flex;justify-content: center;}
 @media (min-width: 1024px) {
-    .chart-container{ width:30vw;}
-    .charts{display: flex;flex-direction: row;
-        justify-content: space-between;}
+    .chart-container { 
+        max-width: 900px;
+        height: 500px;
+    }
+    
+    .charts {
+        max-width: 1000px;
+        padding: 2.5rem;
+    }
 }
 .tblRashi{
             width: 100%;
@@ -441,7 +843,7 @@ padding-right:10px; padding-left: 10px;
             color: white;
         }
         .thkotrash {
-            background-color: #0056b3;
+            background-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             font-size: 14px;color: white;
         }
         tbody tr:nth-child(even) {
@@ -470,13 +872,36 @@ padding-right:10px; padding-left: 10px;
     <script src="data.js"></script>  
 
 </head>
-<!-- <header class="header">
-    <img src="logoax.png" class="logo" id="logo">
-   <h1 class="logotext" >כסף צומח</h1>
-</header> -->
 <body dir="rtl">
+    <header class="header" dir="rtl">
+        <div class="nav-container">   
+            <nav class="nav-menu" id="navMenu">
+                <li><a href="index.html"><i class="fa fa-home" style="font-size:2rem"></i></a></li>
+                <li><a href="index.html#services">שירותים</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" onclick="toggleHashMenahalotCalculatorDropdown(event)">מחשבונים ▼</a>
+                    <div class="dropdown-content" id="hashMenahalotCalculatorDropdown">
+                        <a href="prisatMaanak.html">פריסת מענק פרישה</a>
+                        <a href="ribitderibit.html">חישוב ערך עתידי</a>
+                        <a href="loan.html">סימולטור הלוואה</a>
+                        <a href="hafkada.html">מחשבון הפקדה לסכום מטרה</a>
+                        <a href="hashDmeyNihul.html">השוואת דמי ניהול</a>
+                    </div>
+                </li>
+                <li><a href="index.html#about">כלי השוואה</a></li>
+                <li><a href="index.html#about">אודות</a></li>
+                <li><a href="index.html" onclick="openConsultationForm(); return false;">צור קשר</a></li>
+            </nav>
+            <div class="logo"> <img class="logoimg" src="logoxnew.png"/></div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
     
-    <div class="formDo" id="formDo">
+    <div class="formDo" id="formDo" style="margin-top: 2rem;">
         <h1>השוואת חברות</h1>
         
     <div class="chooseopt">
@@ -525,25 +950,38 @@ padding-right:10px; padding-left: 10px;
         </div>
     </div>
     <div id="compare"></div>
-    <label class='tes' style="margin-top:20px;display:none;"> תשואות</label>
+    <label class='tes tblmaxsize' style="margin-top:20px;display:none;"> תשואות</label>
     <table class='tbltbody' id="comparisonTable">
         <tbody></tbody>
     </table>
-     <label class='has' style="margin-top:20px;display:none;"> חשיפות</label>
+     <label class='has tblmaxsize' style="margin-top:20px;display:none;"> חשיפות</label>
         <table class='tbltbody' id="comparisonTable2">
         <tbody></tbody>
     </table>
      
-      <label class='sik' style="margin-top:20px;display:none;"> מדדי סיכון</label>
+      <label class='sik tblmaxsize' style="margin-top:20px;display:none;"> מדדי סיכון</label>
         <table class='tbltbody' id="comparisonTable3">
         <tbody></tbody>
     </table>
     
      
-    <div class="charts" id="charts">
-        <div class="chart-container"><canvas id="yearChart"></canvas></div>
-        <div class="chart-container"><canvas id="threeYearChart"></canvas></div>
-        <div class="chart-container"><canvas id="fiveYearChart"></canvas></div>
+    <div class="charts" id="charts" style="display: none; visibility: hidden;">
+        <div class="chart-controls">
+            <button class="chart-btn active" onclick="switchChart('year')">תשואה שנתית</button>
+            <button class="chart-btn" onclick="switchChart('threeYear')">תשואה 3 שנים</button>
+            <button class="chart-btn" onclick="switchChart('fiveYear')">תשואה 5 שנים</button>
+        </div>
+        <div class="chart-container">
+            <div class="chart-wrapper active" id="yearChartWrapper">
+                <canvas id="yearChart"></canvas>
+            </div>
+            <div class="chart-wrapper" id="threeYearChartWrapper">
+                <canvas id="threeYearChart"></canvas>
+            </div>
+            <div class="chart-wrapper" id="fiveYearChartWrapper">
+                <canvas id="fiveYearChart"></canvas>
+            </div>
+        </div>
     </div>
     <script>
         /*eruda.init();*/
@@ -564,12 +1002,9 @@ const gufmosdi = gufmosdix.sort((a, b) => a.localeCompare(b, 'he'));
     const menu = document.querySelector('.dropdown-menu');
     const selmenu1 = document.getElementById('selmen1');
     const selmenu2 = document.getElementById('selmen2');
-    const tableBody = document.getElementById('comparisonTable')
-    const tableBody2 = document.getElementById('comparisonTable2')
-const tableBody3 = document.getElementById('comparisonTable3')
 
     const divCompare = document.getElementById('compare');
-    constbtnPdf = document.getElementById('compareButton3');
+    const btnPdf = document.getElementById('compareButton3');
     const form1 = document.getElementById('form1');
     const form2 = document.getElementById('form2');
     const radio1 = document.getElementById('radio1');
@@ -603,19 +1038,36 @@ const tableBody3 = document.getElementById('comparisonTable3')
         form2.style.display='none';
     };
        function selchange(){
-        if(radio1.checked){
+        // הסתרת כל הטבלאות והגרפים תמיד בתחילה
+        charts.style.display = 'none';
+        document.querySelector('.tes').style.display = 'none';
+        document.querySelector('.has').style.display = 'none';
+        document.querySelector('.sik').style.display = 'none';
+        document.getElementById('comparisonTable').style.display = 'none';
+        document.getElementById('comparisonTable2').style.display = 'none';
+        document.getElementById('comparisonTable3').style.display = 'none';
+        divCompare.innerHTML = '';
         
-            form1.style.display='flex';
-            form2.style.display='none';
-            charts.style.display='block';
+        // ניקוי תוכן הטבלאות
+        const tbody1 = document.querySelector('#comparisonTable tbody');
+        const tbody2 = document.querySelector('#comparisonTable2 tbody');
+        const tbody3 = document.querySelector('#comparisonTable3 tbody');
+        
+        if (tbody1) tbody1.innerHTML = '';
+        if (tbody2) tbody2.innerHTML = '';
+        if (tbody3) tbody3.innerHTML = '';
+        
+        if(radio1.checked){
+            form1.style.display = 'flex';
+            form2.style.display = 'none';
+           
+            
+            
         }
         else{
-            
-            form1.style.display='none';
-            form2.style.display='flex'
-            charts.style.display='none';
-            tableBody.style.display='none';
-            tableBody2.style.display='none';
+            form1.style.display = 'none';
+            form2.style.display = 'flex';
+            charts.classList.remove('show-charts');
         }
        } 
         function sfira(){
@@ -654,6 +1106,11 @@ function changmoz(){
         document.getElementById('yearChart').style.display='none';
         document.getElementById('threeYearChart').style.display='none';
         document.getElementById('fiveYearChart').style.display='none';
+        document.querySelector('.tblmaxsize').style.display='none';
+        document.querySelector('.tes').style.display='none';
+        document.querySelector('.has').style.display='none';
+        document.querySelector('.sik').style.display='none';
+        
     }
 function changeTheMuzar() {
         document.getElementById('comparisonTable').style.display='none';
@@ -710,30 +1167,26 @@ function changeTheMuzar() {
 // שינוי בפונקציה של הכפתור כדי להציג נתונים לכל החברות אם נבחר "כל החברות"
  async function dohash() {
     document.querySelector('.dropdown-menu').style.display='none';
-    document.querySelector('#comparisonTable tbody').style.display = 'block';
-    document.querySelector('.tes').style.display = 'block';
-    document.querySelector('.has').style.display = 'block';
-    
-    document.querySelector('.sik').style.display = 'block';
-    document.querySelector('#comparisonTable2 tbody').style.display = 'block';
-    document.querySelector('#comparisonTable3 tbody').style.display = 'block';
-    
     document.getElementById('compare').style.display = 'none';
+    
     const checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
     const selectedmoz=document.getElementById('sugMMen').value
+    
     if(checkedCount===0){
         hatraa('לא נבחרו חברות');return;
     }
     if(!selectedmoz){
         hatraa('לא נבחר מוצר');return;
     }
+    
+    // הצגת טבלאות ו-labels
+    document.querySelector('.tes').style.display = 'block';
+    document.querySelector('.has').style.display = 'block';
+    document.querySelector('.sik').style.display = 'block';
     document.getElementById('comparisonTable').style.display = 'block';
     document.getElementById('comparisonTable2').style.display = 'block';
     document.getElementById('comparisonTable3').style.display = 'block';
     
-    document.getElementById('yearChart').style.display = 'block';
-    document.getElementById('threeYearChart').style.display = 'block';
-    document.getElementById('fiveYearChart').style.display = 'block';
     //toggleDr();
     var selectedValues = [];
     document.querySelectorAll(".dropdown-menu input[type='checkbox']").forEach(checkbox => {
@@ -781,73 +1234,90 @@ function changeTheMuzar() {
 function updateTable(data) {
             const tableBody = document.querySelector('#comparisonTable tbody');
             
+            if (!tableBody) {
+                console.error('לא נמצא tbody עבור comparisonTable');
+                return;
+            }
+            
             tableBody.innerHTML = `
                 <thead>
                 <tr>
-                    <th style="width:17vw;">חברה</th>
-                    <th style="width:25vw;">שם המסלול</th>
-                    <th style="width:17vw;">תשואה שנה</th>
-                    <th style="width:17vw;">תשואה 3 שנים</th>
-                    <th style="width:17vw;">תשואה 5 שנים</th>
+                    <th style="width:16%;">חברה</th>
+                    <th style="width:25%;">שם המסלול</th>
+                    <th style="width:16%;">תשואה שנה</th>
+                    <th style="width:16%;">תשואה 3 שנים</th>
+                    <th style="width:16%;">תשואה 5 שנים</th>
                 </tr>
                 </thead>
             `;
             data.forEach(company => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td  style='text-align:right;paddin-right:5px;width:17vw;white-space:wrap;'>${company.shemkupa.split(" ")[0]}</td>
-                    <td class="tdnamekupa" style='text-align:right;paddin-right:5px;width:25vw;'>${company.shemkupa}</td>
-                    <td style="width:17vw;">${Number(company.tesuam).toFixed(2)}%</td>
-                    <td  style="width:17vw;">${Number(company.tesuam36).toFixed(2)}%</td>
-                    <td style="width:17vw;">${Number(company.tesuam60).toFixed(2)}%</td>
+                    <td  style='text-align:right;paddin-right:5px;width:16%;white-space:wrap;'>${company.shemkupa.split(" ")[0]}</td>
+                    <td class="tdnamekupa" style='text-align:right;paddin-right:5px;width:25%;'>${company.shemkupa}</td>
+                    <td style="width:16%;">${Number(company.tesuam).toFixed(2)}%</td>
+                    <td  style="width:16%;">${Number(company.tesuam36).toFixed(2)}%</td>
+                    <td style="width:16%;">${Number(company.tesuam60).toFixed(2)}%</td>
                 `;
                 tableBody.appendChild(row);
             });
  
  const tableBody2 = document.querySelector('#comparisonTable2 tbody');
+            
+            if (!tableBody2) {
+                console.error('לא נמצא tbody עבור comparisonTable2');
+                return;
+            }
+            
             tableBody2.innerHTML = `
                 <thead>
                 <tr>
-                    <th style="width:17vw;">חברה</th>
-                    <th style="width:25vw;">שם המסלול</th>
-                    <th style="width:17vw;">חשיפה למניות</th>
-                    <th style="width:17vw;">חשיפה לחול</th>
-                    <th style="width:17vw;">חשיפה למטח</th>
+                    <th style="width:14%;">חברה</th>
+                    <th style="width:22%;">שם המסלול</th>
+                    <th style="width:18%;">חשיפה למניות</th>
+                    <th style="width:18%;">חשיפה לחול</th>
+                    <th style="width:18%;">חשיפה למטח</th>
                 </tr>
                 </thead>
             `;
             data.forEach(company => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td  style='text-align:right;paddin-right:5px;width:17vw;white-space:wrap;'>${company.shemkupa.split(" ")[0]}</td>
-                    <td class="tdnamekupa" style='text-align:right;paddin-right:5px;width:25vw;'>${company.shemkupa}</td>
-                    <td style="width:17vw;">${Number(company.kvutzaAhuz4751).toFixed(2)}%</td>
-                    <td  style="width:17vw;">${Number(company.kvutzaAhuz4752).toFixed(2)}%</td>
-                    <td style="width:17vw;">${Number(company.kvutzaAhuz4761).toFixed(2)}%</td>
+                    <td style='text-align:right;padding-right:5px;width:14%;white-space:wrap;'>${company.shemkupa.split(" ")[0]}</td>
+                    <td class="tdnamekupa" style='text-align:right;padding-right:5px;width:22%;'>${company.shemkupa}</td>
+                    <td style="width:18%;">${Number(company.kvutzaAhuz4751).toFixed(2)}%</td>
+                    <td style="width:18%;">${Number(company.kvutzaAhuz4752).toFixed(2)}%</td>
+                    <td style="width:18%;">${Number(company.kvutzaAhuz4761).toFixed(2)}%</td>
                 `;
                 tableBody2.appendChild(row);
             });
        
 const tableBody3 = document.querySelector('#comparisonTable3 tbody');
+            
+            if (!tableBody3) {
+                console.error('לא נמצא tbody עבור comparisonTable3');
+                return;
+            }
+            
             tableBody3.innerHTML = `
                 <thead>
                 <tr>
-                    <th style="width:17vw;">חברה</th>
-                    <th style="width:25vw;">שם המסלול</th>
-                    <th style="width:17vw;">סטיית תקן 36 חודשים </th>
-                    <th style="width:17vw;">סטיית תקן 60 חודשים </th>
-                    <th style="width:17vw;">שארפ </th>
+                    <th style="width:14%;">חברה</th>
+                    <th style="width:22%;">שם המסלול</th>
+                    <th style="width:18%;">סטיית תקן 36 חודשים</th>
+                    <th style="width:18%;">סטיית תקן 60 חודשים</th>
+                    <th style="width:18%;">שארפ</th>
                 </tr>
                 </thead>
             `;
             data.forEach(company => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td  style='text-align:right;paddin-right:5px;width:17vw;white-space:wrap;'>${company.shemkupa.split(" ")[0]}</td>
-                    <td class="tdnamekupa" style='text-align:right;paddin-right:5px;width:25vw;'>${company.shemkupa}</td>
-                    <td style="width:17vw;">${Number(company.stiya36).toFixed(2)}%</td>
-                    <td  style="width:17vw;">${Number(company.stiya60).toFixed(2)}%</td>
-                    <td style="width:17vw;">${Number(company.sharp).toFixed(2)}%</td>
+                    <td style='text-align:right;padding-right:5px;width:14%;white-space:wrap;'>${company.shemkupa.split(" ")[0]}</td>
+                    <td class="tdnamekupa" style='text-align:right;padding-right:5px;width:22%;'>${company.shemkupa}</td>
+                    <td style="width:18%;">${Number(company.stiya36).toFixed(2)}%</td>
+                    <td style="width:18%;">${Number(company.stiya60).toFixed(2)}%</td>
+                    <td style="width:18%;">${Number(company.sharp).toFixed(2)}</td>
                 `;
                 tableBody3.appendChild(row);
             });
@@ -909,25 +1379,78 @@ function createChart(ctx, label, data) {
     }
 }
     });
+    
 }
 function updateCharts(selectedData,selectedProduct) {
+    console.log('updateCharts called with:', selectedData.length, 'items');
+    
+    // הצגת מכל הגרפים - שימוש במשתנה הגלובלי
+    if (!charts) {
+        console.error('charts container not found!');
+        return;
+    }
+    
+    // הסרת inline styles ושימוש ב-CSS
+    charts.style.removeProperty('display');
+    charts.style.removeProperty('visibility');
+    charts.classList.add('show-charts');
+    
+    console.log('Charts container should be visible now');
+    console.log('Current display:', window.getComputedStyle(charts).display);
+    console.log('Current visibility:', window.getComputedStyle(charts).visibility);
+    
     var labels;
     if(selectedProduct!=='פוליסות חסכון'){
-             labels = selectedData.map(item => item.menahelet);
+        labels = selectedData.map(item => item.menahelet);
     }
     else{
-         labels = selectedData.map(item => item.shemkupa.split(" ")[0]);
+        labels = selectedData.map(item => item.shemkupa.split(" ")[0]);
     }
-            const yearData = selectedData.map(item => item.tesuam);
-            const threeYearData = selectedData.map(item => item.tesuam36);
-            const fiveYearData = selectedData.map(item => item.tesuam60);
-            if (yearChart) yearChart.destroy();
-            if (threeYearChart) threeYearChart.destroy();
-            if (fiveYearChart) fiveYearChart.destroy();
-            yearChart = createChart(document.getElementById('yearChart').getContext('2d'), 'תשואה שנה', { labels, values: yearData });
-            threeYearChart = createChart(document.getElementById('threeYearChart').getContext('2d'), 'תשואה 3 שנים', { labels, values: threeYearData });
-            fiveYearChart = createChart(document.getElementById('fiveYearChart').getContext('2d'), 'תשואה 5 שנים', { labels, values: fiveYearData });
-        }
+    
+    const yearData = selectedData.map(item => item.tesuam);
+    const threeYearData = selectedData.map(item => item.tesuam36);
+    const fiveYearData = selectedData.map(item => item.tesuam60);
+    
+    console.log('Chart data prepared - Year:', yearData.length, 'items');
+    
+    // השמדת גרפים קודמים אם קיימים
+    if (yearChart) yearChart.destroy();
+    if (threeYearChart) threeYearChart.destroy();
+    if (fiveYearChart) fiveYearChart.destroy();
+    
+    // יצירת גרפים חדשים
+    const yearCanvas = document.getElementById('yearChart');
+    yearCanvas.style.display = 'block';
+    const threeYearCanvas = document.getElementById('threeYearChart');
+    const fiveYearCanvas = document.getElementById('fiveYearChart');
+    
+    if (!yearCanvas || !threeYearCanvas || !fiveYearCanvas) {
+        console.error('Canvas elements not found!');
+        return;
+    }
+    
+    yearChart = createChart(yearCanvas.getContext('2d'), 'תשואה שנתית (12 חודשים)', { labels, values: yearData });
+    threeYearChart = createChart(threeYearCanvas.getContext('2d'), 'תשואה 3 שנים', { labels, values: threeYearData });
+    fiveYearChart = createChart(fiveYearCanvas.getContext('2d'), 'תשואה 5 שנים', { labels, values: fiveYearData });
+    
+    console.log('Charts created successfully');
+    
+    // ודא שהגרף הראשון מוצג
+    document.querySelectorAll('.chart-wrapper').forEach(wrapper => wrapper.classList.remove('active'));
+    const yearWrapper = document.getElementById('yearChartWrapper');
+    if (yearWrapper) {
+        yearWrapper.classList.add('active');
+        console.log('yearChartWrapper set to active');
+    }
+    
+    // ודא שהכפתור הראשון פעיל
+    document.querySelectorAll('.chart-btn').forEach(btn => btn.classList.remove('active'));
+    const firstBtn = document.querySelectorAll('.chart-btn')[0];
+    if (firstBtn) {
+        firstBtn.classList.add('active');
+        console.log('First button set to active');
+    }
+}
 async function filterMaslulXa(mas, moza){
     var data;var dataforfilter;
    if(moza==="פוליסות חסכון"){dataforfilter=datanetunimKlaliXb}
@@ -1150,7 +1673,7 @@ async function filterMaslulXa(mas, moza){
 }
 function clearCompare(){
     divCompare.innerHTML='';
-    constbtnPdf.style.display='none';
+    btnPdf.style.display='none';
 }
 function hatraa(x){
     Swal.fire({
@@ -1169,7 +1692,7 @@ function hatraa(x){
     });
 }
 async function compare2() {
-    constbtnPdf.style.display='block';
+    btnPdf.style.display='block';
     divCompare.style.display='block';
     if(selmenu1.value===selmenu2.value){
         hatraa("נדרש לבחור חברות שונות");return;
@@ -1325,7 +1848,122 @@ function pdfDo() {
         window.print();
         element.style.display = originalDisplay;
         document.getElementById('formDo').style.display='flex';
+
 }
+        // פונקציה להחלפת גרפים
+        function switchChart(chartType) {
+            // הסרת active מכל הכפתורים
+            document.querySelectorAll('.chart-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // הסתרת כל הגרפים
+            document.querySelectorAll('.chart-wrapper').forEach(wrapper => {
+                wrapper.classList.remove('active');
+            });
+            
+            // הצגת הגרף המבוקש והפעלת הכפתור
+            if (chartType === 'year') {
+                document.getElementById('yearChartWrapper').classList.add('active');
+                document.querySelectorAll('.chart-btn')[0].classList.add('active');
+                document.getElementById('yearChart').style.display = 'block';
+                document.getElementById('threeYearChart').style.display = 'none';
+                document.getElementById('fiveYearChart').style.display = 'none';
+            } else if (chartType === 'threeYear') {
+                document.getElementById('threeYearChartWrapper').classList.add('active');
+                document.querySelectorAll('.chart-btn')[1].classList.add('active');
+                document.getElementById('threeYearChart').style.display = 'block';
+                document.getElementById('yearChart').style.display = 'none';
+                document.getElementById('fiveYearChart').style.display = 'none';
+            } else if (chartType === 'fiveYear') {
+                document.getElementById('fiveYearChartWrapper').classList.add('active');
+                document.querySelectorAll('.chart-btn')[2].classList.add('active');
+                document.getElementById('fiveYearChart').style.display = 'block';
+                document.getElementById('yearChart').style.display = 'none';
+                document.getElementById('threeYearChart').style.display = 'none';
+            }
+        }
+
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+
+        if (hamburger && navMenu) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+
+            // Close menu when clicking on a link
+            navMenu.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A' && !e.target.onclick) {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            });
+        }
+        
+        // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט
+        function toggleHashMenahalotCalculatorDropdown(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (window.innerWidth > 768) {return;}
+            const dropdown = document.getElementById('hashMenahalotCalculatorDropdown');
+            const link = event.target;
+            
+            // Close other dropdowns first
+            document.querySelectorAll('.dropdown-content.show').forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                }
+            });
+            
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                link.innerHTML = 'מחשבונים ▼';
+            } else {
+                dropdown.classList.add('show');
+                link.innerHTML = 'מחשבונים ▲';
+            }
+        }
+
+        // Close calculator dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('hashMenahalotCalculatorDropdown');
+            const dropdownLink = document.querySelector('.nav-dropdown a');
+            
+            if (dropdown && dropdownLink && !dropdownLink.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+                dropdownLink.innerHTML = 'מחשבונים ▼';
+            }
+        });
+
+        // Ensure dropdown links work properly
+        document.querySelectorAll('#hashMenahalotCalculatorDropdown a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                setTimeout(() => {
+                    const dropdown = document.getElementById('hashMenahalotCalculatorDropdown');
+                    const dropdownLink = document.querySelector('.nav-dropdown a');
+                    
+                    if (dropdown) {
+                        dropdown.classList.remove('show');
+                    }
+                    if (dropdownLink) {
+                        dropdownLink.innerHTML = 'מחשבונים ▼';
+                    }
+                    
+                    // Close mobile menu after navigation
+                    if (window.innerWidth <= 768) {
+                        const navMenu = document.getElementById('navMenu');
+                        const hamburger = document.getElementById('hamburger');
+                        if (navMenu) navMenu.classList.remove('active');
+                        if (hamburger) hamburger.classList.remove('active');
+                    }
+                }, 100);
+            });
+        });
     </script>
 </body>
 </html>
