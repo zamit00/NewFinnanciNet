@@ -620,7 +620,17 @@
           <a href="hashDmeyNihul.html">השוואת דמי ניהול</a>
         </div>
       </li>
-      <li><a href="index.html#about">כלי השוואה</a></li>
+      <li class="nav-dropdown">
+        <a href="#" onclick="toggleLoanToolsDropdown(event)">כלי השוואה ▼</a>
+        <div class="dropdown-content" id="loanToolsDropdown">
+          <a href="hashMenahalot.html">השוואת חברות מנהלות</a>
+          <a href="hasifotMeshulav.html">מחולל חשיפות</a>
+          <a href="#">השוואת תיק משולב מסלולים</a>
+          <a href="#">מחולל כללי</a>
+          <a href="#">יחס תשואה סיכון - שארפ</a>
+          <a href="#">ציון משקל תשואה לשארפ</a>
+        </div>
+      </li>
       <li><a href="index.html#about">אודות</a></li>
       <li><a href="index.html#contact">צור קשר</a></li>
       <li><a href="index.html#consultation" class="cta-button" onclick="openConsultationForm()">ליעוץ אישי</a></li>
@@ -1078,38 +1088,7 @@
         });
 
         // Calculator dropdown functionality
-        function toggleLoanCalculatorDropdown(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            
-            // Only handle clicks on mobile screens
-            if (window.innerWidth > 768) {
-                return;
-            }
-            
-            const dropdown = document.getElementById('loanCalculatorDropdown');
-            const link = event.target;
-            
-            // Close other dropdowns first
-            document.querySelectorAll('.dropdown-content.show').forEach(d => {
-                if (d !== dropdown) {
-                    d.classList.remove('show');
-                }
-            });
-            
-            if (dropdown.classList.contains('show')) {
-                dropdown.classList.remove('show');
-                link.innerHTML = 'מחשבונים ▼';
-            } else {
-                dropdown.classList.add('show');
-                link.innerHTML = 'מחשבונים ▲';
-            }
-            
-            // Prevent any default behavior
-            return false;
-        }
-
-        // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט
+        // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט - מחשבונים
         function toggleLoanCalculatorDropdown(event) {
             event.preventDefault();
             event.stopPropagation();
@@ -1130,6 +1109,30 @@
             } else {
                 dropdown.classList.add('show');
                 link.innerHTML = 'מחשבונים ▲';
+            }
+        }
+        
+        // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט - כלי השוואה
+        function toggleLoanToolsDropdown(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (window.innerWidth > 768) {return;}
+            const dropdown = document.getElementById('loanToolsDropdown');
+            const link = event.target;
+            
+            // Close other dropdowns first
+            document.querySelectorAll('.dropdown-content.show').forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                }
+            });
+            
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                link.innerHTML = 'כלי השוואה ▼';
+            } else {
+                dropdown.classList.add('show');
+                link.innerHTML = 'כלי השוואה ▲';
             }
         }
 
