@@ -2784,7 +2784,7 @@
                 <div class="uploaded-files" id="uploadedFiles" style="display: none;">
                     <div class="file-actions">
                         <button class="cta-button" id="processFiles" style="display: none;">קרא נתונים</button>
-                        <button class="cta-button delete-btn" id="deleteFiles">מחק קבצים</button>
+                        <button class="cta-button delete-btn" id="deleteFiles">🗑️ סגור תצוגה ומחק נתונים</button>
                     </div>
                     <h3 dir="rtl" id="uploadedFilesTitle">קבצים שהועלו - מיד יוצגו נתונים:</h3>
                     <div class="files-list" id="filesList"></div>  
@@ -2829,18 +2829,15 @@
                           </div>
                     </div>
                     
-                    <div style="text-align: right; margin-top: 30px;">
-                        <button onclick="closeDataDisplay()" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-                         color: white; border: none; padding: 15px 30px; border-radius: 25px;
-                          font-size: 1.1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: all 0.3s ease;">
-                             סגור תצוגה
+                    <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                        <button onclick="closeDataDisplay()" class="cta-button delete-btn" style="max-width: 400px; width: 100%; padding: 15px 30px; font-size: 1.1rem;">
+                            🗑️ סגור תצוגה ומחק נתונים
                         </button>
-                         <button class="cta-button chart-action-btn" id="advancedAnalysisBtn" 
+                        <button class="cta-button" id="advancedAnalysisBtnMain" onclick="document.getElementById('advancedAnalysis').style.display = 'block'; performAdvancedAnalysis();" 
                          style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                           color: white; border: none; padding: 15px 40px; border-radius: 25px;
                           font-size: 1.1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                           transition: all 0.3s ease; white-space: nowrap; min-width: 200px;">ניתוח מתקדם</button>
-
+                           transition: all 0.3s ease; max-width: 400px; width: 100%;">📊 ניתוח מתקדם</button>
                     </div>
                 </div>
                 
@@ -2875,10 +2872,15 @@
                         </div>
                     </div>
                     
-                    <div style="text-align: center; margin-top: 30px;">
-                        <button onclick="closeDataDisplay()" class="cta-button delete-btn" style="max-width: 300px;">
-                            ✨ סגור תצוגה
+                    <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                        <button onclick="closeDataDisplay()" class="cta-button delete-btn" style="max-width: 400px; width: 100%; padding: 15px 30px; font-size: 1.1rem;">
+                            🗑️ סגור תצוגה ומחק נתונים
                         </button>
+                        <button class="cta-button" id="advancedAnalysisBtnMain2" onclick="document.getElementById('advancedAnalysis').style.display = 'block'; performAdvancedAnalysis();" 
+                         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                          color: white; border: none; padding: 15px 40px; border-radius: 25px;
+                          font-size: 1.1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                           transition: all 0.3s ease; max-width: 400px; width: 100%;">📊 ניתוח מתקדם</button>
                     </div>
                 </div>
                 
