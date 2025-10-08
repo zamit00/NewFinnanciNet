@@ -38,6 +38,22 @@
             font-family: 'Heebo', sans-serif;
             overflow-x: hidden;
         }
+        
+        /* Header and Navigation */
+        .header {
+            position: sticky;
+            top: 0;
+            width: 100% !important;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+            max-width: 1400px;
+            margin-right: auto;
+            margin-left: auto;
+        }
 	.containerD{
 	width: 100%;
 	max-width: 600px;
@@ -363,21 +379,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 1000;
-            width: 100%;
-            overflow-x: hidden;
         }
 
         .logo {
-            display: flex;
-            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .logoimg{
-            width: 200px;
+        .logoimg {
+            max-width: 200px;
             height: auto;
         }
 
@@ -386,10 +400,6 @@
             display: flex;
             gap: 2rem;
             align-items: center;
-            margin: 0;
-            padding: 0;
-            flex-wrap: nowrap;
-            overflow-x: hidden;
         }
 
         .nav-menu a {
@@ -398,11 +408,15 @@
             font-weight: 500;
             transition: color 0.3s ease;
             position: relative;
-            padding: 0.5rem 0;
+            font-size: 16px;
         }
 
         .nav-menu a:hover {
             color: #667eea;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
         }
 
         .nav-menu a::after {
@@ -416,28 +430,30 @@
             transition: width 0.3s ease;
         }
 
-        .nav-menu a:hover::after {
-            width: 100%;
-        }
-
         /* Navigation Dropdown */
         .nav-dropdown {
             position: relative;
         }
 
         .nav-dropdown .dropdown-content {
-            display: none;
+            display: flex;
+            flex-direction: column;
             position: absolute;
             top: calc(100% - 2px);
             right: 0;
             background: white;
-            border: 1px solid var(--border);
+            border: 1px solid #ddd;
             border-radius: 0 0 8px 8px;
             box-shadow: none;
             min-width: 220px;
             z-index: 1001;
             margin-top: 0;
             border-top: none;
+            max-height: 0;
+            opacity: 0;
+            visibility: hidden;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
         }
 
         .nav-dropdown .dropdown-content a {
@@ -459,9 +475,19 @@
             border-bottom: none;
         }
 
-        .nav-dropdown:hover .dropdown-content,
         .nav-dropdown .dropdown-content.show {
-            display: block;
+            max-height: 500px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Desktop hover behavior */
+        @media (min-width: 769px) {
+            .nav-dropdown:hover .dropdown-content:not(.show) {
+                max-height: 500px;
+                opacity: 1;
+                visibility: visible;
+            }
         }
 
         .hamburger {
@@ -493,10 +519,14 @@
 
         /* Mobile Navigation */
         @media (max-width: 768px) {
+             
+            
+            .header {
+                padding: 0.5rem 0;
+            }
            
             .nav-container {
-                padding: 1rem 1rem;
-                overflow-x: hidden;
+                padding: 0.5rem 1rem;
             }
 
             .logoimg{
@@ -505,34 +535,44 @@
             }
 
             .nav-menu {
-                display: none;
                 position: fixed;
-                top: 80px;
-                right: -100%;
+                top: 70px;
+                right: 0;
                 width: 100%;
-                height: calc(100vh - 80px);
-                background: white;
+                height: calc(100vh - 70px);
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
                 flex-direction: column;
                 justify-content: flex-start;
                 align-items: center;
                 padding-top: 2rem;
-                transition: right 0.3s ease;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-                overflow-x: hidden;
-                overflow-y: auto;
-            }
-
-            .nav-menu.active {
                 display: flex;
-                right: 0;
+                opacity: 0;
+                visibility: hidden;
+                transform: translateX(100%);
+                transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
             }
 
             .hamburger {
                 display: flex;
+                padding-left: 5%;
             }
 
-            .nav-menu li {
-                margin: 1rem 0;
+            .nav-menu.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateX(0);
+            }
+            
+            .nav-menu.active li,
+            .nav-menu.active li a {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin-left: auto;
+                margin-right: auto;
+                width: 100%;
             }
 
             .nav-menu a {
@@ -542,18 +582,22 @@
             /* Mobile dropdown adjustments */
             .nav-dropdown .dropdown-content {
                 position: relative;
-                display: none;
+                display: flex;
+                flex-direction: column;
                 min-width: auto;
-                width: 100%;
-                box-shadow: none;
+                width: clamp(200px, 100%, 270px);
+                max-height: 0;
+                opacity: 0;
+                visibility: hidden;
+                overflow: hidden;
                 border: none;
-                background: transparent;
-                margin-top: 0;
+                background: white;
+                margin-top: 5px;
                 top: auto;
-                border-radius: 0;
+                border-radius: 15px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
                 padding: 0;
-                 padding-top: 15px;
-
+                transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, padding-top 0.3s ease;
             }
 
             .nav-dropdown .dropdown-content a {
@@ -563,8 +607,10 @@
             }
 
             .nav-dropdown .dropdown-content.show {
-                display: block;
-                
+                max-height: 500px;
+                opacity: 1;
+                visibility: visible;
+                padding-top: 15px;
             }
             
         }
@@ -575,12 +621,13 @@
 </head>
 <body dir="rtl">
 
-<div class="nav-container">
+<header class="header">
+    <div class="nav-container">
         <nav class="nav-menu" id="navMenu">
           <li><a href="index.html"><i class="fa fa-home" style="font-size:2rem"></i></a></li>
           <li><a href="index.html#services">שירותים</a></li>
           <li class="nav-dropdown">
-            <a href="#" onclick="toggleHashCalculatorDropdown(event)">מחשבונים ▼</a>
+            <a href="#" onclick="toggleHashCalculatorDropdown(event); return false;">מחשבונים ▼</a>
             <div class="dropdown-content" id="hashCalculatorDropdown">
               <a href="prisatMaanak.html">פריסת מענק פרישה</a>
               <a href="ribitderibit.html">חישוב ערך עתידי</a>
@@ -589,26 +636,38 @@
               <a href="hashDmeyNihul.html">השוואת דמי ניהול</a>
             </div>
           </li>
-          <li><a href="index.html#about">איזור אישי</a></li>
+          <li class="nav-dropdown">
+            <a href="#" onclick="toggleHashToolsDropdown(event)">כלי השוואה ▼</a>
+            <div class="dropdown-content" id="hashToolsDropdown">
+              <a href="hashMenahalot.html">השוואת חברות מנהלות</a>
+              <a href="hasifotMeshulav.html">מחולל חשיפות</a>
+              <a href="#">השוואת תיק משולב מסלולים</a>
+              <a href="#">מחולל כללי</a>
+              <a href="#">יחס תשואה סיכון - שארפ</a>
+              <a href="#">ציון משקל תשואה לשארפ</a>
+            </div>
+          </li>
           <li><a href="index.html#about">אודות</a></li>
           <li><a href="index.html#contact">צור קשר</a></li>
           <li><a href="index.html#consultation" class="cta-button" onclick="openConsultationForm()">ליעוץ אישי</a></li>
         </nav>
-    <div class="logo"> <img class="logoimg" src="logoxnew.png"/></div>
+    <div class="logo" onclick="window.location.href='index.html'"> 
+        <img class="logoimg" src="logoxnew.png" alt="לוגו"/>
+    </div>
     <div class="hamburger" id="hamburger">
       <span></span>
       <span></span>
       <span></span>
     </div>
-</div>
+    </div>
+</header>
 
 <div class="main-container">
-    <div class="nav-header" style="background: white; padding: 20px; margin-bottom: 20px; border-bottom: 2px solid #667eea; border-radius: 16px;">
+    <div class="nav-header" style="display: flex;flex-direction: column; align-items: center;background: white; padding: 20px; margin-bottom: 20px; border-bottom: 2px solid #667eea; border-radius: 16px;">
         <div class="brand" style="display: flex; align-items: center; gap: 15px;">
             <div>
                 <h1 style="font-size: 24px; font-weight: 700; color: #667eea; margin: 0; display: flex; align-items: center; gap: 10px;">
                     השוואת דמי ניהול
-                    <i class="fas fa-home" style="font-size: 24px !important; color: #667eea !important; cursor: pointer; transition: transform 0.3s ease;" onclick="window.location.href='index.html'"></i>
                 </h1>
                 <div style="font-size: 14px; color: #777; margin-top: 4px;">השוואה בין דמי הניהול בגופים הפיננסיים השונים</div>
             </div>
@@ -742,34 +801,26 @@
     <script src="dmeyNihulScript.js"></script>
     
     <script>
-    // Calculator dropdown functionality
-    function toggleHashCalculatorDropdown(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        
-        const dropdown = document.getElementById('hashCalculatorDropdown');
-        const link = event.target;
-        
-        // Close other dropdowns first
-        document.querySelectorAll('.dropdown-content.show').forEach(d => {
-            if (d !== dropdown) {
-                d.classList.remove('show');
+    // Mobile menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
+
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a link
+        navMenu.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A' && !e.target.onclick) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
             }
         });
-        
-        if (dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-            link.innerHTML = 'מחשבונים ▼';
-        } else {
-            dropdown.classList.add('show');
-            link.innerHTML = 'מחשבונים ▲';
-        }
-        
-        // Prevent any default behavior
-        return false;
     }
-
-    // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט
+    
+    // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט - מחשבונים
     function toggleHashCalculatorDropdown(event) {
         event.preventDefault();
         event.stopPropagation();
@@ -790,6 +841,30 @@
         } else {
             dropdown.classList.add('show');
             link.innerHTML = 'מחשבונים ▲';
+        }
+    }
+    
+    // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט - כלי השוואה
+    function toggleHashToolsDropdown(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (window.innerWidth > 768) {return;}
+        const dropdown = document.getElementById('hashToolsDropdown');
+        const link = event.target;
+        
+        // Close other dropdowns first
+        document.querySelectorAll('.dropdown-content.show').forEach(d => {
+            if (d !== dropdown) {
+                d.classList.remove('show');
+            }
+        });
+        
+        if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+            link.innerHTML = 'כלי השוואה ▼';
+        } else {
+            dropdown.classList.add('show');
+            link.innerHTML = 'כלי השוואה ▲';
         }
     }
 
@@ -836,48 +911,5 @@
         });
     });
 
-    // Hamburger menu functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('navMenu');
-        hamburger.addEventListener('click', function() {
-                this.classList.toggle('active');
-                navMenu.classList.toggle('active');
-            });
-
-        if (hamburger && navMenu) {
-            
-
-            // Close menu when clicking on a link (but allow navigation)
-            document.querySelectorAll('.nav-menu a').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    // Don't close menu for dropdown toggle links
-                    if (this.hasAttribute('onclick') && this.getAttribute('onclick').includes('toggleCalculatorDropdown')) {
-                        return; // Let the dropdown function handle it
-                    }
-                    
-                    // Don't prevent default for regular links
-                    if (this.getAttribute('href') && this.getAttribute('href') !== '#') {
-                        // Let the browser handle the navigation
-                        return true;
-                    }
-                    
-                    // Only close menu for mobile, not for desktop links
-                    if (window.innerWidth <= 768) {
-                        hamburger.classList.remove('active');
-                        navMenu.classList.remove('active');
-                    }
-                });
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
-                    hamburger.classList.remove('active');
-                    navMenu.classList.remove('active');
-                }
-            });
-        }
-    });
     </script>
 </body>
