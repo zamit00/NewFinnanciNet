@@ -33,22 +33,7 @@
          height: auto;
          box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
      }
-     .filexml{
-         text-align: right;
-     }
-     .consultation-form-container{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        border-radius: 20px;
-        padding: 40px;
-        max-width: 500px;
-        width: 90%;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-     }
-    
+     
      .tbl-button:hover {
          background-color: #5a6fd8;
          transform: translateY(-2px);
@@ -1928,27 +1913,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        @media screen and (max-width: 600px) {
-            .hatid-title{
-                font-size: 1.6rem !important;
-                text-align: center !important;
-            }
-            .hatid-desdescription{
-                font-size: 1.2rem !important;
-            }
-            .filexml{
-                text-align: center !important;
-            }
-            .feature-description{
-                text-align: center !important;
-                font-size: 1.0rem !important;
-               max-width: 90% !important;
-                margin-left: auto !important;
-                margin-right: auto !important;
-                text-wrap: wrap !important;
-            }
-            
-        }
+        
         @media screen and (max-width: 768px) {
             .chart-actions {
                 flex-direction: column !important;
@@ -2065,16 +2030,16 @@
 
 <div class="mainTitle" dir="rtl">
 	<div class="feature-card">
-		<div class="hatid" dir="rtl">
-			<h1  class="feature-title hatid-title">העתיד הפיננסי שלך מתחיל כאן!</h1>
-			<h1 class="feature-description hatid-desdescription"> אנחנו משנים את הדרך שבה 
+		<div dir="rtl">
+			<h1  class="feature-title hatid">העתיד הפיננסי שלך מתחיל כאן!</h1>
+			<h1 class="feature-description"> אנחנו משנים את הדרך שבה 
 				אתה חוסך, משקיע ומשווה בין 			
 				מסלולים פנסיוניים – בעזרת כלים דיגיטליים חכמים,
 				נתונים בזמן אמת וניתוחים מתקדמים. כל מה שמעדיפים שלא תדע 
 				    – עכשיו שקוף, פשוט ונגיש.</h1>
                 <a href="#fileUpload" class="cta-button bigscreen" style="margin-left: auto;margin-right: auto;"
                 onclick="letStart()">בוא נתחיל בתהליך - חינם</a>
-            <div class="filexml" style="font-size: 20px;color: #666;">נדרש להעלות קובצי xml של המסלקה הפנסיונית</div>
+            <div style="font-size: 20px;text-align: right;color: #666;">נדרש להעלות קובצי xml של המסלקה הפנסיונית</div>
 		</div> 
 		<img class="hero-icon" src="savemoney.png" alt="Graph Icon" style="width: 300px; height: 300px;"/>           
             <a href="#fileUpload" class="cta-button smallscreen" style="margin-left: auto;margin-right: auto;"
@@ -2223,7 +2188,7 @@
 
     <!-- טופס ייעוץ פנסיוני -->
     <div id="consultationFormModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; backdrop-filter: blur(5px);">
-        <div class="consultation-form-container" style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; margin: 80px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div>
             <div style="text-align: center; margin-bottom: 30px;">
                 <div style="font-size: 3rem; margin-bottom: 15px;">💼</div>
                 <h3 style="color: #333; font-size: 1.8rem; margin-bottom: 10px;">קבל ייעוץ פנסיוני חינם</h3>
@@ -2410,7 +2375,7 @@
 
     <section class="features" id="services">
         <div class="container">
-            <h2 class="section-title hatid-title">למה לבחור בנו?</h2>
+            <h2 class="section-title">למה לבחור בנו?</h2>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon"><img src="advicing.png" width="120" height="auto"/></div>
