@@ -107,8 +107,8 @@
 			padding-bottom: 0%;
 			padding-top: 0%;
 		}
-        .file-upload-section{
-            display: none;
+          .file-upload-section{
+              display: none;
 		}
 		.secondTitle{
 			margin-top: 10px;
@@ -401,10 +401,15 @@
 			background: #f8fafc;
             margin: 0;
             padding: 0;
+            width: 100%;
+            max-width: 100vw;
         }
         
         html {
             scroll-behavior: smooth;
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
         }
         
         /* וידוא שהדף תמיד מתחיל בחלק העליון */
@@ -1206,14 +1211,72 @@
             }
 	.slider-touch {display: none;}
         
+        
+        
         #dataDisplayContainer {
             max-width: 1200px;
+            width: 100%;
             margin: 20px auto;
             display: none;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f8fafc;
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        
+        .data-grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .data-card {
+            background: rgba(255,255,255,0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        /* כרטיסיות מובייל לטבלת סיכום מפורט */
+        .cards-container-mobile {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+        
+        .product-card-mobile {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .card-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .card-row:last-child {
+            border-bottom: none;
+        }
+        
+        .card-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.95rem;
+        }
+        
+        .card-value {
+            font-weight: bold;
+            font-size: 1rem;
+            text-align: left;
         }
          @media (max-width: 1400px) {
             .logoimg{
@@ -1225,6 +1288,7 @@
          }
         /* Mobile Responsive */
         @media (max-width: 768px) {
+
             .flex-container-row{
                 display: flex;
                 flex-direction: column;
@@ -1246,6 +1310,9 @@
                  padding: 12px 20px !important;
              }
              
+             .data-card-table{
+                width:clamp(300px, 100%, 1000px) !important;
+             }
              .dropdown-content a,
              .tools-dropdown .dropdown-content a {
                  padding: 12px 18px !important;
@@ -1272,41 +1339,106 @@
              
                  /* עיצוב רספונסיבי לתצוגת הנתונים */
                  @media (max-width: 768px) {
-                 #dataDisplayContainer {
-                     padding: 15px !important;
-                     margin: 10px !important;
-                     max-width: 100% !important;
+                    #dataDisplayContainer {
+                        
+                        max-width: 100% !important;
+                        width:clamp(300px, 100%, 1000px) !important;
+                        box-sizing: border-box !important;
+                        overflow-x: hidden !important;
+                    }
+                 
+                 .data-grid-container {
+                     display: flex !important;
+                     flex-direction: column !important;
+                     gap: 15px !important;
+                     grid-template-columns: unset !important;
+                     width:clamp(300px, 100%, 1000px) !important;
+                     margin-bottom: 15px !important;
                  }
                  
-                 #dataDisplayContainer > div:first-child {
-                     grid-template-columns: 1fr !important;
-                     gap: 20px !important;
+                 .data-card {
+                     width:clamp(300px, 100%, 1000px) !important;
+                     max-width: 100% !important;
+                     padding: 12px !important;
+                     box-sizing: border-box !important;
+                     margin: 0 !important;
+                 }
+                 
+                 .product-card-mobile {
+                     width: 100% !important;
+                     padding: 12px !important;
+                     margin-bottom: 12px !important;
+                 }
+                 
+                 .card-row {
+                     padding: 8px 0 !important;
+                     flex-wrap: wrap !important;
+                 }
+                 
+                 .card-label {
+                     font-size: 0.85rem !important;
+                     flex: 1 !important;
+                     min-width: 140px !important;
+                 }
+                 
+                 .card-value {
+                     font-size: 0.9rem !important;
+                     text-align: right !important;
                  }
                  
                  #dataDisplayContainer h2 {
-                     font-size: 1.5rem !important;
+                     font-size: 1.2rem !important;
+                     text-align: center !important;
+                     line-height: 1.3 !important;
+                     padding: 0 5px !important;
                  }
                  
                  #dataDisplayContainer h3 {
-                     font-size: 1.1rem !important;
-                     white-space: nowrap !important;
+                     font-size: 0.9rem !important;
+                     white-space: normal !important;
+                     text-align: center !important;
+                     line-height: 1.3 !important;
+                     padding: 0 5px !important;
+                 }
+                 
+                 #dataDisplayContainer p {
+                     font-size: 0.85rem !important;
+                     padding: 0 5px !important;
+                     line-height: 1.4 !important;
                  }
                  
                  #dataDisplayContainer table {
-                     font-size: 0.7rem !important;
-                     min-width: 600px !important;
+                     font-size: 0.6rem !important;
+                     width: 100% !important;
+                     overflow-x: auto !important;
                  }
+                 
                  #dataDisplayContainer #detailedSummary {
                      overflow-x: auto !important;
+                     width: 100% !important;
+                     -webkit-overflow-scrolling: touch !important;
+                 }
+                 
+                 #dataDisplayContainer canvas {
+                     max-width: 100% !important;
+                     width: 100% !important;
+                     height: auto !important;
+                 }
+                 
+                 #dataDisplayContainer #pieChart {
+                     max-height: 200px !important;
+                     max-width: 100% !important;
                  }
                  
                  #dataDisplayContainer th,
                  #dataDisplayContainer td {
-                     padding: 6px !important;
+                     padding: 4px 2px !important;
+                     font-size: 0.6rem !important;
                  }
                  
                  #dataDisplayContainer th {
-                     font-size: 0.7rem !important;
+                     font-size: 0.65rem !important;
+                     line-height: 1.2 !important;
                  }
                  
                  /* עיצוב רספונסיבי לכרטיסיות */
@@ -1331,14 +1463,23 @@
                  }
                  
                 #dataDisplayContainer button {
-                    width: 90% !important;
-                    max-width: 300px !important;
-                    margin: 0 auto !important;
-                    padding: 12px 20px !important;
-                    font-size: 1rem !important;
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    margin: 5px auto !important;
+                    padding: 12px 15px !important;
+                    font-size: 0.9rem !important;
+                    box-sizing: border-box !important;
+                    white-space: normal !important;
+                    line-height: 1.3 !important;
                 }
                 
-                /* עיצוב רספונסיבי לטופס ייעוץ פנסיוני */
+                 /* תיקון עבור כרטיסיות שאינן בתוך dataDisplayContainer */
+                 .flex-container-row > .feature-card {
+                     width: 100% !important;
+                     max-width: 100% !important;
+                 }
+                 
+                 /* עיצוב רספונסיבי לטופס ייעוץ פנסיוני */
                 #consultationFormModal > div {
                     padding: 25px !important;
                     max-width: 95% !important;
@@ -1371,14 +1512,17 @@
                  /* עיצוב רספונסיבי ל-file-upload-section */
                  .file-upload-section {
                      max-width: 100% !important;
-                     width:auto !important;
+                     width: 100% !important;
                      margin: 0 !important;
-                     padding: 2rem 1rem !important;
+                     padding: 2rem 0.5rem !important;
+                     box-sizing: border-box !important;
                  }
                  
                  .file-upload-container {
                      max-width: 100% !important;
-                     padding: 0 1rem !important;
+                     width: 100% !important;
+                     padding: 0 0.5rem !important;
+                     box-sizing: border-box !important;
                  }
              }
 		.hero-text h1 {
@@ -1734,7 +1878,8 @@
         .file-upload-section {
             padding: 6rem 0;
             background: #f8fafc;
-            width: 1200px;
+            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
         }
         
@@ -2048,16 +2193,26 @@
             
             /* עיצוב רספונסיבי לטבלת פיצויים */
             #pitzuimTable {
-                min-width: 1000px !important;
+                min-width: 100% !important;
+                width: 100% !important;
+                display: block !important;
+                overflow-x: auto !important;
+            }
+            #pitzuimTable thead,
+            #pitzuimTable tbody,
+            #pitzuimTable tr {
+                display: table !important;
+                width: 100% !important;
             }
             #pitzuimTable th,
             #pitzuimTable td {
-                font-size: 0.6rem !important;
-                padding: 4px !important;
-                min-width: 80px !important;
+                font-size: 0.55rem !important;
+                padding: 4px 2px !important;
+                min-width: auto !important;
+                white-space: nowrap !important;
             }
             #pitzuimTable th {
-                font-size: 0.6rem !important;
+                font-size: 0.55rem !important;
                 line-height: 1.1 !important;
             }
         }
@@ -2443,6 +2598,57 @@
                 padding: 2rem 1rem;
             }
             
+            
+            
+            .data-card {
+                padding: 10px !important;
+            }
+            
+            .product-card-mobile {
+                padding: 10px !important;
+            }
+            
+            .product-card-mobile h4 {
+                font-size: 0.9rem !important;
+            }
+            
+            .card-label {
+                font-size: 0.75rem !important;
+                min-width: 120px !important;
+            }
+            
+            .card-value {
+                font-size: 0.8rem !important;
+            }
+            
+            #dataDisplayContainer h2 {
+                font-size: 1rem !important;
+                padding: 0 3px !important;
+            }
+            
+            #dataDisplayContainer h3 {
+                font-size: 0.8rem !important;
+                padding: 0 3px !important;
+            }
+            
+            #dataDisplayContainer p {
+                font-size: 0.7rem !important;
+            }
+            
+            #dataDisplayContainer button {
+                font-size: 0.7rem !important;
+                padding: 8px !important;
+            }
+            
+            #dataDisplayContainer table {
+                font-size: 0.5rem !important;
+            }
+            
+            #dataDisplayContainer th,
+            #dataDisplayContainer td {
+                padding: 3px 1px !important;
+            }
+            
             /* תיקון נוסף למובייל קטן - תפריטים נפתחים */
             .calculator-dropdown .dropdown-content a,
             .tools-dropdown .dropdown-content a {
@@ -2591,14 +2797,14 @@
                 
                 <!-- תצוגת נתונים יפה -->
                 <div id="dataDisplayContainer">
-                    <div style="text-align: right; margin-bottom: 30px;">
-                        <h2 style="text-align:center;color: white; font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">📊 סיכום הנתונים שלך</h2>
-                        <p style="text-align:center;color: rgba(255,255,255,0.9); font-size: 1.2rem;">כל המידע החשוב במקום אחד</p>
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h2 style="color: #333; font-size: 2.5rem; margin-bottom: 10px;">📊 סיכום הנתונים שלך</h2>
+                        <p style="color: #666; font-size: 1.2rem;">כל המידע החשוב במקום אחד</p>
                     </div>
                     
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                    <div class="data-grid-container">
                         <!-- פרטים אישיים -->
-                        <div style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <div class="data-card">
                             <h3 style="text-align:center;color: #333; margin-bottom: 20px; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px;">👤 פרטים אישיים</h3>
                             <div id="personalInfo" style="color: #555; line-height: 1.8;">
                                 <!-- כאן יוצגו הפרטים האישיים -->
@@ -2606,17 +2812,17 @@
                         </div>
                         
                         <!-- גרף עוגה -->
-                        <div style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <div class="data-card">
                             <h3 style="color: #333; margin-bottom: 20px; font-size: 1rem; border-bottom: 3px solid #667eea; padding-bottom: 10px;">🥧 חלוקת הצבירה לפי מוצרים</h3>
                             <canvas id="pieChart" style="max-height: 350px;"></canvas>
                         </div>
                     </div>
                     
                       <!-- טבלת סיכום מפורטת -->
-                      <div style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                      <div class="data-card-table" style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
                           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                               <h3 style="color: #333; margin: 0; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px; text-align: right;">📋 סיכום מפורט לפי מוצרים</h3>
-                              <button type="button" class="tbl-button" id="closeDetailedTable" onclick="closeDetailedTableDisplay()">סגור טבלה</button>
+                              <button type="button" class="tbl-button" id="closeDetailedTable" onclick="closeDetailedTableDisplay()">סגור</button>
                           </div>
                           <div id="detailedSummary" style="overflow-x: auto;">
                               <!-- כאן תוצג הטבלה המפורטת -->
@@ -2645,9 +2851,9 @@
                         <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem;">כל המידע החשוב במקום אחד</p>
                     </div>
                     
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                    <div class="data-grid-container">
                         <!-- פרטים אישיים -->
-                        <div style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <div class="data-card">
                             <h3 style="color: #333; margin-bottom: 20px; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px;">👤 פרטים אישיים</h3>
                             <div id="personalInfo" dir="rtl" style="color: #555; line-height: 1.8;">
                                 <!-- כאן יוצגו הפרטים האישיים -->
@@ -2655,22 +2861,22 @@
                         </div>
                         
                         <!-- גרף עוגה -->
-                        <div dir="rtl" style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                             <h3 style="color: #333; white-space: nowrap; margin-bottom: 20px; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px; text-align:center;">🥧 חלוקת הצבירה לפי מוצרים</h3>
+                        <div dir="rtl" class="data-card">
+                             <h3 style="color: #333; margin-bottom: 20px; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px; text-align:center;">🥧 חלוקת הצבירה לפי מוצרים</h3>
                             <canvas id="pieChart" style="max-height: 300px;"></canvas>
                         </div>
                     </div>
                     
                     <!-- טבלת סיכום מפורטת -->
-                    <div dir="rtl" style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    <div dir="rtl" class="data-card">
                         <h3 style="color: #333; margin-bottom: 20px; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px;">📋 סיכום מפורט לפי מוצרים</h3>
                         <div dir="rtl" id="detailedSummary" style="overflow-x: auto;">
                             <!-- כאן תוצג הטבלה המפורטת -->
                         </div>
                     </div>
                     
-                    <div style="text-align: right; margin-top: 30px;">
-                        <button onclick="closeDataDisplay()" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: all 0.3s ease;">
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button onclick="closeDataDisplay()" class="cta-button delete-btn" style="max-width: 300px;">
                             ✨ סגור תצוגה
                         </button>
                     </div>
@@ -3060,7 +3266,12 @@
 <script>
 
         function letStart(){
-            document.getElementById('fileUpload').style.display = 'flex';
+            if(window.innerWidth>768){
+                document.getElementById('fileUpload').style.display = 'flex';   
+            }else{
+                document.getElementById('fileUpload').style.display = 'block';
+            }
+            
             document.getElementById('fileUploadArea').style.display = 'block';
             document.getElementById('sectionHeader').style.display = 'flex';    
         }
@@ -4671,42 +4882,7 @@
                 masluleiHashkaa=[];sheabudIkulHalvaa=[];
                 dataMislaka = null;myChart = null;
                 document.getElementById('sectionHeader').style.display = 'none';
-                document.getElementById('dataDisplayContainer').innerHTML= `
-                    <div style="text-align: right; margin-bottom: 30px;">
-                        <h2 style="color: white; font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">📊 סיכום הנתונים שלך</h2>
-                        <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem;">כל המידע החשוב במקום אחד</p>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
-                        <!-- פרטים אישיים -->
-                        <div style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                            <h3 style="color: #333; margin-bottom: 20px; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px;">👤 פרטים אישיים</h3>
-                            <div id="personalInfo" dir="rtl" style="color: #555; line-height: 1.8;">
-                                <!-- כאן יוצגו הפרטים האישיים -->
-                            </div>
-                        </div>
-                        
-                        <!-- גרף עוגה -->
-                        <div dir="rtl" style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                             <h3 style="color: #333; white-space: nowrap; margin-bottom: 20px; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px; text-align:center;">🥧 חלוקת הצבירה לפי מוצרים</h3>
-                            <canvas id="pieChart" style="max-height: 300px;"></canvas>
-                        </div>
-                    </div>
-                    
-                    <!-- טבלת סיכום מפורטת -->
-                    <div dir="rtl" style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                        <h3 style="color: #333; margin-bottom: 20px; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px;">📋 סיכום מפורט לפי מוצרים</h3>
-                        <div dir="rtl" id="detailedSummary" style="overflow-x: auto;">
-                            <!-- כאן תוצג הטבלה המפורטת -->
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: right; margin-top: 30px;">
-                        <button onclick="closeDataDisplay()" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: all 0.3s ease;">
-                            ✨ סגור תצוגה
-                        </button>
-                    </div>
-                `
+                document.getElementById('dataDisplayContainer').style.display = 'none';
                 // Hide all containers
                 document.getElementById('uploadedFiles').style.display = 'none';
                 document.getElementById('fileDataDisplay').style.display = 'none';
@@ -5975,6 +6151,7 @@
             // הוספת הסכום הכולל באמצע הגרף
             const chartCanvas = document.getElementById('pieChart');
             const totalDiv = document.createElement('div');
+            if(window.innerWidth > 768){
             totalDiv.style.cssText = `
                 position: absolute;
                 top: 37%;
@@ -5993,6 +6170,20 @@
                 <div style="font-size: 1.8rem; color: #667eea; font-weight: bold;">₪${total.toLocaleString('he-IL')}</div>
                 <div style="font-size: 1rem; color: #666; margin-top: 5px;">סכום כולל</div>
             `;
+            }else{
+                totalDiv.style.cssText = `
+                    position: absolute;
+                    top: 28%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: 9px !important;
+                `;
+                totalDiv.innerHTML = `
+                <div style="font-size: 14px; color: #667eea; font-weight: bold;">₪${total.toLocaleString('he-IL')}</div>
+                <div style="font-size: 1rem; color: #666; margin-top: 5px;">סכום כולל</div>
+            `;
+            }
+            
 
             // הוספת הסכום הכולל לגרף
             chartCanvas.parentElement.style.position = 'relative';
@@ -6064,52 +6255,145 @@
                 '10': 'חיסכון לכל ילד'
             };
 
-            let tableHTML = `
-                <table id="detailedTable" dir="rtl" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                    <thead>
-                        <tr style="background: linear-gradient(45deg, #667eea, #764ba2); color: white;">
-                             <th style="padding: 10px; text-align: right; border: 1px solid #ddd; border-bottom: none; white-space: nowrap;"></th>
-                             <th style="padding: 10px; text-align: right; border: 1px solid #ddd; border-bottom: none; white-space: nowrap;"></th>
-                            <th colspan="4" style="padding: 10px; text-align: center; border: 1px solid #ddd; white-space: nowrap;">יתרות לגיל פרישה</th>
-                        </tr>
-                        <tr style="background: linear-gradient(45deg, #667eea, #764ba2); color: white;">
-                            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;border-top: none; white-space: nowrap;">סוג מוצר</th>
-                            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;border-top: none; white-space: nowrap;">סכום כולל</th>
-                            <th style="padding: 10px; text-align: center; border: 1px solid #ddd; white-space: nowrap;">צבירה ללא פרמיות</th>
-                            <th style="padding: 10px; text-align: center; border: 1px solid #ddd; white-space: nowrap;">צבירה עם פרמיות</th>
-                            <th style="padding: 10px; text-align: center; border: 1px solid #ddd; white-space: nowrap;">קצבה ללא פרמיות</th>
-                            <th style="padding: 10px; text-align: center; border: 1px solid #ddd; white-space: nowrap;">קצבה עם פרמיות</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
+            const isMobile = window.innerWidth <= 768;
+            let tableHTML = '';
 
-            for (let key in sumSugMutzar) {
-                if (sumSugMutzar[key][0] > 0) {
-                    // נשמור את הערך המקורי לפני הפורמט
-                    const originalTotalValue = sumSugMutzar[key][0];
-                    
-                    for (let i = 0; i < sumSugMutzar[key].length; i++) {
-                        if (sumSugMutzar[key][i] === 0) {
-                            if(i===1){
-                                let years;
-                                const birthYear = parseInt(taarichLeyda.slice(0,4));
-                                const retirementAge = 67;
-                                const currentYear = new Date().getFullYear();
-                                years = retirementAge - (currentYear - birthYear);
-                                
-                                const calculatedValue = Math.pow(1.04, years) * originalTotalValue;
-                                
-                                sumSugMutzar[key][i] = calculatedValue.toLocaleString('he-IL')+" "+'₪'
+            if (isMobile) {
+                // תצוגת כרטיסיות למובייל
+                tableHTML = '<div class="cards-container-mobile">';
+                
+                for (let key in sumSugMutzar) {
+                    if (sumSugMutzar[key][0] > 0) {
+                        const originalTotalValue = sumSugMutzar[key][0];
+                        
+                        for (let i = 0; i < sumSugMutzar[key].length; i++) {
+                            if (sumSugMutzar[key][i] === 0) {
+                                if(i===1){
+                                    let years;
+                                    const birthYear = parseInt(taarichLeyda.slice(0,4));
+                                    const retirementAge = 67;
+                                    const currentYear = new Date().getFullYear();
+                                    years = retirementAge - (currentYear - birthYear);
+                                    
+                                    const calculatedValue = Math.pow(1.04, years) * originalTotalValue;
+                                    
+                                    sumSugMutzar[key][i] = calculatedValue.toLocaleString('he-IL')+" "+'₪'
+                                }
+                                else {
+                                    sumSugMutzar[key][i]='לא רלבנטי'
+                                }
                             }
-                            else {
-                                sumSugMutzar[key][i]='לא רלבנטי'
+                            else{
+                                sumSugMutzar[key][i]=sumSugMutzar[key][i].toLocaleString('he-IL')+" "+'₪'
                             }
                         }
-                        else{
-                            sumSugMutzar[key][i]=sumSugMutzar[key][i].toLocaleString('he-IL')+" "+'₪'
+                        
+                        tableHTML += `
+                            <div class="product-card-mobile">
+                                <h4 style="color: #667eea; margin-bottom: 15px; font-size: 1.1rem; font-weight: bold; text-align: center; border-bottom: 2px solid #667eea; padding-bottom: 8px;">
+                                    ${shemTochnit[key]}
+                                </h4>
+                                <div class="card-row">
+                                    <span class="card-label">סכום כולל:</span>
+                                    <span class="card-value" style="color: #2c3e50;">${sumSugMutzar[key][0]}</span>
+                                </div>
+                        `;
+                        
+                        if (sumSugMutzar[key][1] !== 'לא רלבנטי') {
+                            tableHTML += `
+                                <div class="card-row">
+                                    <span class="card-label">צבירה ללא פרמיות:</span>
+                                    <span class="card-value" style="color: #27ae60;">${sumSugMutzar[key][1]}</span>
+                                </div>
+                            `;
                         }
+                        
+                        if (sumSugMutzar[key][2] !== 'לא רלבנטי') {
+                            tableHTML += `
+                                <div class="card-row">
+                                    <span class="card-label">צבירה עם פרמיות:</span>
+                                    <span class="card-value" style="color: #3498db;">${sumSugMutzar[key][2]}</span>
+                                </div>
+                            `;
+                        }
+                        
+                        if (sumSugMutzar[key][3] !== 'לא רלבנטי') {
+                            tableHTML += `
+                                <div class="card-row">
+                                    <span class="card-label">קצבה ללא פרמיות:</span>
+                                    <span class="card-value" style="color: #e74c3c;">${sumSugMutzar[key][3]}</span>
+                                </div>
+                            `;
+                        }
+                        
+                        if (sumSugMutzar[key][4] !== 'לא רלבנטי') {
+                            tableHTML += `
+                                <div class="card-row">
+                                    <span class="card-label">קצבה עם פרמיות:</span>
+                                    <span class="card-value" style="color: #f39c12;">${sumSugMutzar[key][4]}</span>
+                                </div>
+                            `;
+                        }
+                        
+                        tableHTML += '</div>';
                     }
+                }
+                
+                tableHTML += '</div>';
+                tableHTML += `
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; border-right: 4px solid #667eea;">
+                        <p style="color: #555; font-size: 0.85rem; margin: 0; text-align: right; line-height: 1.5;">
+                            <strong>הערה:</strong> בקופות גמל, קרנות השתלמות וקרן ותיקה החישוב מבוצע לפי 4% שנתי עד גיל 67
+                        </p>
+                    </div>
+                `;
+            } else {
+                // תצוגת טבלה למסכים גדולים
+                tableHTML = `
+                    <table id="detailedTable" dir="rtl" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                        <thead>
+                            <tr style="background: linear-gradient(45deg, #667eea, #764ba2); color: white;">
+                                 <th style="padding: 10px; text-align: right; border: 1px solid #ddd; border-bottom: none; white-space: nowrap;"></th>
+                                 <th style="padding: 10px; text-align: right; border: 1px solid #ddd; border-bottom: none; white-space: nowrap;"></th>
+                                <th colspan="4" style="padding: 10px; text-align: center; border: 1px solid #ddd; white-space: nowrap;">יתרות לגיל פרישה</th>
+                            </tr>
+                            <tr style="background: linear-gradient(45deg, #667eea, #764ba2); color: white;">
+                                <th style="padding: 10px; text-align: center; border: 1px solid #ddd;border-top: none; white-space: nowrap;">סוג מוצר</th>
+                                <th style="padding: 10px; text-align: center; border: 1px solid #ddd;border-top: none; white-space: nowrap;">סכום כולל</th>
+                                <th style="padding: 10px; text-align: center; border: 1px solid #ddd; white-space: nowrap;">צבירה ללא פרמיות</th>
+                                <th style="padding: 10px; text-align: center; border: 1px solid #ddd; white-space: nowrap;">צבירה עם פרמיות</th>
+                                <th style="padding: 10px; text-align: center; border: 1px solid #ddd; white-space: nowrap;">קצבה ללא פרמיות</th>
+                                <th style="padding: 10px; text-align: center; border: 1px solid #ddd; white-space: nowrap;">קצבה עם פרמיות</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                for (let key in sumSugMutzar) {
+                    if (sumSugMutzar[key][0] > 0) {
+                        const originalTotalValue = sumSugMutzar[key][0];
+                        
+                        for (let i = 0; i < sumSugMutzar[key].length; i++) {
+                            if (sumSugMutzar[key][i] === 0) {
+                                if(i===1){
+                                    let years;
+                                    const birthYear = parseInt(taarichLeyda.slice(0,4));
+                                    const retirementAge = 67;
+                                    const currentYear = new Date().getFullYear();
+                                    years = retirementAge - (currentYear - birthYear);
+                                    
+                                    const calculatedValue = Math.pow(1.04, years) * originalTotalValue;
+                                    
+                                    sumSugMutzar[key][i] = calculatedValue.toLocaleString('he-IL')+" "+'₪'
+                                }
+                                else {
+                                    sumSugMutzar[key][i]='לא רלבנטי'
+                                }
+                            }
+                            else{
+                                sumSugMutzar[key][i]=sumSugMutzar[key][i].toLocaleString('he-IL')+" "+'₪'
+                            }
+                        }
                         tableHTML += `
                             <tr style="background: rgba(102, 126, 234, 0.1);">
                                 <td style="padding: 12px; border: 1px solid #ddd; font-weight: bold; white-space: nowrap;">${shemTochnit[key]}</td>
@@ -6120,18 +6404,19 @@
                                 <td style="padding: 12px; border: 1px solid #ddd; text-align: right; color: #f39c12; white-space: nowrap;">${sumSugMutzar[key][4]}</td>
                             </tr>
                         `;
+                    }
                 }
-            }
 
-            tableHTML += `
-                    </tbody>
-                </table>
-                <div style="margin-top: 20px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; border-right: 4px solid #667eea;">
-                    <p id="detailedTableNote" style="color: #555; font-size: 0.9rem; margin: 0; text-align: right; line-height: 1.5;">
-                        <strong>הערה:</strong> בקופות גמל, קרנות השתלמות וקרן ותיקה החישוב מבוצע לפי 4% שנתי עד גיל 67
-                    </p>
-                </div>
-            `;
+                tableHTML += `
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; border-right: 4px solid #667eea;">
+                        <p id="detailedTableNote" style="color: #555; font-size: 0.9rem; margin: 0; text-align: right; line-height: 1.5;">
+                            <strong>הערה:</strong> בקופות גמל, קרנות השתלמות וקרן ותיקה החישוב מבוצע לפי 4% שנתי עד גיל 67
+                        </p>
+                    </div>
+                `;
+            }
 
             tableDiv.innerHTML = tableHTML;
         }
@@ -6242,18 +6527,16 @@
         }
         
         function closeDetailedTableDisplay() {
-            const table = document.getElementById('detailedTable');
+            const detailedSummary = document.getElementById('detailedSummary');
             const button = document.getElementById('closeDetailedTable');
-            const note = document.getElementById('detailedTableNote');
-            if (table && button && note) {
-                if (table.style.display === 'none') {
-                    table.style.display = 'table';
-                    button.textContent = 'סגור טבלה';
-                    note.style.display = 'block';
+            
+            if (detailedSummary && button) {
+                if (detailedSummary.style.display === 'none') {
+                    detailedSummary.style.display = 'block';
+                    button.textContent = 'סגור';
                 } else {
-                    table.style.display = 'none';
-                    button.textContent = 'פתח טבלה';
-                    note.style.display = 'none';
+                    detailedSummary.style.display = 'none';
+                    button.textContent = 'פתח';
                 }
             }
         }
