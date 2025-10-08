@@ -17,6 +17,54 @@
     <script src="kochavimscript.js"></script>
   <title>ezFinnaci</title>
   <style>
+    .choose-us-title{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: clamp(300px, 100%, 1400px);
+        margin-bottom: 30px;
+        background: white;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-radius: 20px;
+        margin-right: auto;
+        margin-left: auto;
+       
+    }
+    .choose-us-title-text{
+        font-size: 2rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        padding: 0.6rem;
+        
+    }
+    .flex-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width:clamp(300px, 100%, 1400px);
+        margin-right: auto;
+        margin-left: auto;
+    }
+    .flex-container-row{
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: center;
+        gap: 2rem;
+        width: clamp(300px, 100%, 1400px);
+        margin-right: auto;
+        margin-left: auto;
+        flex-wrap: wrap;
+    }
+    
+    .flex-container-row > .feature-card {
+        flex: 1;
+        min-width: 300px;
+        max-width: calc(33.333% - 1.5rem);
+    }
      .tbl-button{
          background-color: #667eea;
          color: white;
@@ -39,18 +87,18 @@
          transform: translateY(-2px);
          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
      }
-	.mainTitle{
+	.mainTitle,.secondTitle{
 
 			text-align: right;
-			margin: 50px 0;
+			margin: 10px 0;
 			font-size: 1.5rem;
 			color: #333;
 			max-width: 1400px;
 			display: flex;
-			justify-content: center;
+            flex-direction: column;
+            align-items: center;
 			margin-right: auto;
 			margin-left: auto;
-			margin-top: 15vh;
 			padding: 20px;
 			 
 		}
@@ -65,13 +113,15 @@
 		.secondTitle{
 			margin-top: 10px;
 		}
-		.mainTitle .feature-card {
+		.mainTitle .feature-card,.secondTitle .feature-card {
 			display: flex;
-			flex-direction: row;
+			flex-direction: column;
+            max-width:clamp(30%, 1400px, 1400px);
+            gap: 10px;
 		}
 
-		.mainTitle .feature-title {
-			text-align: right;
+		.mainTitle .feature-title,.secondTitle .feature-title {
+			text-align: center;
             font-size: 2.5rem;
             margin-bottom: 3rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -81,11 +131,11 @@
 			line-height: 1.2;
 		}
 
-		.mainTitle .feature-description{
+		.mainTitle .feature-description,.secondTitle .feature-description{
 			font-size: 1.8rem;
 			font-weight: lighter;
 		}
-		.mainTitle .cta-button{
+		.mainTitle .cta-button,.secondTitle .cta-button{
 			margin-top: 80px;
 		}
 	.feature-card {
@@ -300,7 +350,7 @@
 
         .logos-slide {
             display: flex;
-            animation: scroll 75s linear infinite;
+            animation: scroll 20s linear infinite;
         }
 
         .logos-slide img {
@@ -340,6 +390,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            max-width: 100%;
         }
 
         body {
@@ -363,15 +414,18 @@
 
         /* Header */
         .header {
-            position: fixed;
+            position:sticky;
             top: 0;
-            width: 100%;
+            width: 100% !important;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             box-shadow: 0 2px 20px rgba(0,0,0,0.1);
             z-index: 1000;
             padding: 1rem 0;
             transition: all 0.3s ease;
+            max-width: 1400px;
+            margin-right: auto;
+            margin-left: auto;
         }
 
         .nav-container {
@@ -436,7 +490,8 @@
         }
 
         .nav-dropdown .dropdown-content {
-            display: none;
+            display: flex;
+            flex-direction: column;
             position: absolute;
             top: calc(100% - 2px);
             right: 0;
@@ -448,6 +503,11 @@
             z-index: 1001;
             margin-top: 0;
             border-top: none;
+            max-height: 0;
+            opacity: 0;
+            visibility: hidden;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
         }
 
         .nav-dropdown .dropdown-content a {
@@ -470,13 +530,17 @@
         }
 
         .nav-dropdown .dropdown-content.show {
-            display: block;
+            max-height: 500px;
+            opacity: 1;
+            visibility: visible;
         }
         
         /* Desktop hover behavior - only when not using JavaScript */
         @media (min-width: 769px) {
             .nav-dropdown:hover .dropdown-content:not(.show) {
-                display: block;
+                max-height: 500px;
+                opacity: 1;
+                visibility: visible;
             }
         }
 
@@ -493,7 +557,6 @@
             display: inline-block;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 			margin-bottom: 10px;
-            text-align: right;
             margin-left: auto;
             margin-right: auto;
             min-width: 90%;
@@ -641,8 +704,8 @@
         }
 
         .hero-icon {
-            width: 300px;
-            height: 300px;
+            width: 200px;
+            height: 200px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             display: flex;
@@ -738,7 +801,7 @@
         }
 
         .section-title {
-            text-align: right;
+            text-align: center;
             font-size: 2.5rem;
             margin-bottom: 3rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -792,31 +855,43 @@
 
         /* CTA Section */
         .cta-section {
-            padding: 6rem 0;
+            padding: 4rem 2rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            text-align: right;
-			border-radius: 20px;
-			margin-left: auto;
-			margin-right: auto;
-			max-width: 1400px;	
+            border-radius: 20px;
+            margin: 4rem auto;
+            max-width: 1200px;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+        }
+        
+        .cta-section .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 1.5rem;
         }
 
         .cta-title {
             font-size: 2.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .cta-subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            opacity: 0.95;
+            line-height: 1.6;
+            max-width: 800px;
         }
 
         .cta-button-white {
             background: white;
             color: #667eea;
-            padding: 15px 30px;
+            padding: 18px 40px;
             border: none;
             border-radius: 50px;
             font-weight: bold;
@@ -824,12 +899,15 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            width: clamp(300px, 100%, 300px);
         }
 
         .cta-button-white:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+            background: #f8f9fa;
         }
 	.logoimg{
                 width: 200px;
@@ -837,14 +915,7 @@
                 
             }
 	.slider-touch {display: none;}
-        .bigscreen{
-                    display: block;
-                    margin-top: 30px;
-                    width: 100%;
-                }
-                .smallscreen{
-                    display: none;
-                }
+        
         #dataDisplayContainer {
             max-width: 1200px;
             margin: 20px auto;
@@ -864,14 +935,17 @@
          }
         /* Mobile Responsive */
         @media (max-width: 768px) {
-            .bigscreen{
-                display: none;
+            .flex-container-row{
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
             }
-             .smallscreen{
-                 display: block;
-                 margin-top: 30px;
-             }
-             
+            
+            .flex-container-row > .feature-card {
+                flex: 1;
+                min-width: 100%;
+                max-width: 100%;
+            }  
              /* רספונסיביות לרשימות הנפתחות */
              .calculator-dropdown button,
              .tools-dropdown button {
@@ -1012,34 +1086,38 @@
         .slider-arrow.prev,.slider-arrow.next {
            display: none;
         }
-		.mainTitle {
+		.mainTitle,.secondTitle {
 			margin-left: 2%;
 			margin-right: 2%;
 		}
-		.mainTitle .feature-card {
+		.mainTitle .feature-card,.secondTitle .feature-card {
 			flex-direction: column;
 			align-items: center;
 			gap:2rem;
 			
 		}
-		.mainTitle .cta-button{
+		.mainTitle .cta-button,.secondTitle .cta-button{
 			margin-top: -35px;
 			font-size: 1rem;
 			
 		}
-		.mainTitle .feature-title{
-			font-size: 2rem;
+		.mainTitle .feature-title,.secondTitle .feature-title{
+			font-size: 1.8rem;
 			padding-bottom: 0%;
 			margin-bottom: 0%;
+            text-align: center;
+            text-wrap: wrap;
 		}
-		.mainTitle .hero-icon{
+		.mainTitle .hero-icon,.secondTitle .hero-icon{
 			margin-top: 40px;
 		}
-		.mainTitle .feature-description{
+		.mainTitle .feature-description,.secondTitle .feature-description{
 			display: flex;
 			padding-bottom: 25px;
-			font-size: 1.5rem;
+			font-size: 1.2rem;
 			height: auto;
+            text-align: right;
+            text-wrap: wrap;
 			
 		}
             .feature-title {
@@ -1061,43 +1139,47 @@
 				padding: 1rem 1rem;
 			}
 
-			.nav-menu {
-				display: none;
-			}
+		.nav-menu {
+            position: fixed;
+            top: 80px;
+            right: 0;
+            width: 100%;
+            height: calc(100vh - 80px);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding-top: 2rem;
+            display: flex;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(100%);
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+		}
 
-			.hamburger {
-				display: flex;
-			}
+		.hamburger {
+			display: flex;
+		}
 
-			.nav-menu.active {
-				display: flex;
-                margin-top: -30px;
-			}
-            .nav-menu {
-                position: fixed;
-                top: 80px;
-                right: -100%;
-                width: 100%;
-                height: calc(100vh - 80px);
-                background: rgba(255, 255, 255, 0.98);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: center;
-                padding-top: 2rem;
-                transition: right 0.3s ease;
-            }
-			
-            .nav-menu.active {
-                right: 0;
-            }
+		.nav-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+            margin-top: -30px;
+		}
 
             /* Mobile nav-dropdown adjustments */
             .nav-dropdown .dropdown-content {
                 position: relative;
-                display: none;
+                display: flex;
+                flex-direction: column;
                 min-width: auto;
                 width: 100%;
+                max-height: 0;
+                opacity: 0;
+                visibility: hidden;
+                overflow: hidden;
                 box-shadow: none;
                 border: none;
                 background: transparent;
@@ -1105,6 +1187,7 @@
                 top: auto;
                 border-radius: 0;
                 padding: 0;
+                transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, padding-top 0.3s ease;
                 }
 
                 .nav-dropdown .dropdown-content a {
@@ -1114,8 +1197,10 @@
                 }
 
                 .nav-dropdown .dropdown-content.show {
-                display: block;
-                margin-top: 15px;
+                max-height: 500px;
+                opacity: 1;
+                visibility: visible;
+                padding-top: 15px;
                 }
 
             .hamburger {
@@ -1157,10 +1242,14 @@
                 gap: 1.5rem;
 				margin-right: -5%;
 				margin-left: -5%;
+                
+
             }
 
             .section-title {
                 font-size: 2rem;
+                text-align: center;
+                text-wrap: wrap;
             }
 
             .cta-title {
@@ -1193,12 +1282,21 @@
 
 			}
 			.cta-section{
-				margin-left: 5%;
-				margin-right: 5%;
-			
+				margin: 2rem 5%;
+				padding: 3rem 1.5rem;
 			}
-			.cta-section h1 {
-				font-size: 1.5rem;
+			
+			.cta-title {
+				font-size: 2rem;
+			}
+			
+			.cta-subtitle {
+				font-size: 1.1rem;
+			}
+			
+			.cta-button-white {
+				padding: 15px 30px;
+				font-size: 1rem;
 			}
         .logos-slide img {
 			width: 150px; /* Adjust width as needed */
@@ -1985,6 +2083,7 @@
                 text-align: right;
             }
         }
+        
     </style>
 </head>
 
@@ -2003,20 +2102,10 @@
                         <a href="hashDmeyNihul.html">השוואת דמי ניהול</a>
                     </div>
                 </li>
-                <li class="nav-dropdown">
-                    <a href="#" onclick="toggleNavDropdown(event)">כלי השוואה ▼</a>
-                    <div class="dropdown-content" id="navCalculatorDropdown">
-                        <a href="hashMenahalot.html">השוואת חברות מנהלות</a>
-                            <a href="#">מחולל חשיפות</a>
-                            <a href="#">השוואת תיק משולב מסלולים</a>
-                            <a href="#">מחולל כללי</a>
-                            <a href="#">יחס תשואה סיכון - שארפ</a>
-                            <a href="#">ציון משקל תשואה לשארפ</a>
-                    </div>
-                </li>
+                <li><a href="#about">כלי השוואה</a></li>
                 <li><a href="#about">אודות</a></li>
                 <li><a href="#contact">צור קשר</a></li>
-                <li><a href="#consultation" class="cta-button" onclick="openConsultationForm()">ליעוץ אישי</a></li>
+                
             </nav>
             <div class="logo"> <img class="logoimg" src="logoxnew.png"/></div>
             <div class="hamburger" id="hamburger">
@@ -2030,21 +2119,23 @@
 
 <div class="mainTitle" dir="rtl">
 	<div class="feature-card">
-		<div dir="rtl">
+		<div dir="rtl" class="flex-container">
 			<h1  class="feature-title hatid">העתיד הפיננסי שלך מתחיל כאן!</h1>
+            <img class="hero-icon" src="savemoney.png" alt="Graph Icon" style="width: 300px;
+             height: 300px;margin-left: auto;margin-right: auto;"/>           
+
 			<h1 class="feature-description"> אנחנו משנים את הדרך שבה 
 				אתה חוסך, משקיע ומשווה בין 			
 				מסלולים פנסיוניים – בעזרת כלים דיגיטליים חכמים,
 				נתונים בזמן אמת וניתוחים מתקדמים. כל מה שמעדיפים שלא תדע 
-				    – עכשיו שקוף, פשוט ונגיש.</h1>
-                <a href="#fileUpload" class="cta-button bigscreen" style="margin-left: auto;margin-right: auto;"
-                onclick="letStart()">בוא נתחיל בתהליך - חינם</a>
-            <div style="font-size: 20px;text-align: right;color: #666;">נדרש להעלות קובצי xml של המסלקה הפנסיונית</div>
-		</div> 
-		<img class="hero-icon" src="savemoney.png" alt="Graph Icon" style="width: 300px; height: 300px;"/>           
-            <a href="#fileUpload" class="cta-button smallscreen" style="margin-left: auto;margin-right: auto;"
-            onclick="letStart()">בוא נתחיל בתהליך - חינם</a>
-	</div>	
+				    – עכשיו שקוף, פשוט ונגיש.</h1>           
+            <a href="#fileUpload" class="cta-button bigscreen" style="margin-left: auto;margin-right: auto;"
+            onclick="letStart()">בוא נתחיל בתהליך - חינם*</a>
+            <div style="font-size: 20px;font-weight: bold;text-align: right;color: #666;">*נדרש להעלות קובצי xml של המסלקה הפנסיונית</div>
+   
+        </div> 
+	</div>
+    	
 </div>
     <!-- File Upload Section -->
     <section class="file-upload-section" id="fileUpload">
@@ -2187,16 +2278,16 @@
     </section>
 
     <!-- טופס ייעוץ פנסיוני -->
-    <div id="consultationFormModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; backdrop-filter: blur(5px);">
-        <div>
+    <div id="consultationFormModal" style="display: none; position: fixed; top:0;left: 0; width: 100%; height: 80%; box-sizing:border-box;background: rgba(0,0,0,0.7); z-index: 10000; backdrop-filter: blur(5px);">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 20px; padding: 40px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
             <div style="text-align: center; margin-bottom: 30px;">
                 <div style="font-size: 3rem; margin-bottom: 15px;">💼</div>
-                <h3 style="color: #333; font-size: 1.8rem; margin-bottom: 10px;">קבל ייעוץ פנסיוני חינם</h3>
+                <h3 style="color: #333; font-size: 1.8rem; margin-bottom: 10px;">לפגישת ייעוץ חינם</h3>
                 <p style="color: #666; font-size: 1rem; line-height: 1.5;">מלא את הפרטים ונחזור אליך תוך 24 שעות</p>
             </div>
             
-            <form id="consultationForm" dir="rtl" style="text-align: right;">
-                <div style="margin-bottom: 20px;">
+            <form style='max-height:90%;margin-top:5%;margin-bottom:5%;' id="consultationForm" dir="rtl" style="text-align: right;">
+                   <div style="margin-bottom: 20px;">
                     <label style="display: block; margin-bottom: 8px; color: #333; font-weight: bold;">שם מלא *</label>
                     <input type="text" id="fullName" required style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 10px; font-size: 1rem; transition: border-color 0.3s ease;" placeholder="הכנס את שמך המלא">
                 </div>
@@ -2374,9 +2465,12 @@
 </section>
 
     <section class="features" id="services">
-        <div class="container">
-            <h2 class="section-title">למה לבחור בנו?</h2>
-            <div class="features-grid">
+        <div class="containerCards" style="margin: 0 25px;">
+        <div class="choose-us-title">
+            <h2 class="choose-us-title-text">למה לבחור בנו?</h2>
+        </div>
+        <div class="flex-container-row feature-card" style="margin-bottom: 30px;">
+           
                 <div class="feature-card">
                     <div class="feature-icon"><img src="advicing.png" width="120" height="auto"/></div>
                     <h3 class="feature-title">יעוץ פנסיוני אישי ומקצועי</h3>
@@ -2413,6 +2507,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="flex-container-row feature-card" style="margin-bottom: 30px;">
+                
                 <div class="feature-card">
                     <div class="feature-icon"><img src="ofisikon.png" width="100" height="auto"/></div>
                     <h3 class="feature-title">התאמה  לאופי סיכון</h3>
@@ -2432,10 +2529,12 @@
 	<div class="feature-card">
 		<div dir="rtl">
 			<h1  class="feature-title">קופת גמל להשקעה או פוליסת חיסכון?</h1>
+            <img class="hero-icon" src="gemelorpolisa.png" alt="Graph Icon" style="width: 300px; height: 300px;
+            margin-left: auto;margin-right: auto;"/> 
 			<h1 class="feature-description"> ריכזנו עבורך את כל היתרונות והחסרונות של כל מוצר כך שתוכל לבחור איזה מהמוצרים יותר מתאים לך או אוליי שילוב ביניהם.</h1>
-			<a href="#fileUpload" class="cta-button">בוא נבדוק מה כדאי לך</a>
+			<a href="#fileUpload" class="cta-button">לבדיקה</a>
 		</div> 
-		<img class="hero-icon" src="gemelorpolisa.png" alt="Graph Icon" style="width: 300px; height: 300px;"/>           
+		          
 		
 	</div>
 	
@@ -2447,7 +2546,8 @@
         <div class="container">
             <h2 dir="rtl" class="cta-title">מוכן להתחיל לתכנן את עתידך הפנסיוני?</h2>
             <p class="cta-subtitle">קבל יעוץ מקצועי חינם ותתחיל לנהל את הכספים שלך בדרך הנכונה והרווחית</p>
-            <a href="#consultation" class="cta-button-white"> יעוץ אישי</a>
+            <a href="#consultation" class="cta-button-white" onclick="openConsultationForm()"> יעוץ אישי</a>
+        </div>
     </section>	
 	
 <div class="logos">
@@ -5995,3 +6095,6 @@
         <div class="slider-arrow prev">❯</div>
         <div class="slider-arrow next">❮</div>
     </section> -->
+
+
+
