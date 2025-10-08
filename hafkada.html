@@ -263,26 +263,35 @@
      /* Mobile dropdown adjustments */
      .nav-dropdown .dropdown-content {
        position: relative;
-       display: none;
+       display: flex;
+       flex-direction: column;
        min-width: auto;
-       width: 100%;
-       box-shadow: none;
+       width: clamp(200px, 100%, 270px);
+       max-height: 0;
+       opacity: 0;
+       visibility: hidden;
+       overflow: hidden;
        border: none;
-       background: transparent;
-       margin-top: 0;
+       background: white;
+       margin-top: 5px;
        top: auto;
-       border-radius: 0;
+       border-radius: 15px;
+       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
        padding: 0;
+       transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, padding-top 0.3s ease;
      }
 
     .nav-dropdown .dropdown-content a {
       padding: 8px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid #eee;
       font-size: 1rem;
     }
 
     .nav-dropdown .dropdown-content.show {
-      display: block;
+      max-height: 500px;
+      opacity: 1;
+      visibility: visible;
+      padding-top: 15px;
     }
   }
         .container {
