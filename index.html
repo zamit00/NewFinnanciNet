@@ -2509,7 +2509,17 @@
                         <a href="hashDmeyNihul.html">השוואת דמי ניהול</a>
                     </div>
                 </li>
-                <li><a href="#about">כלי השוואה</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" onclick="toggleNavToolsDropdown(event)">כלי השוואה ▼</a>
+                    <div class="dropdown-content" id="navToolsDropdown">
+                        <a href="hashMenahalot.html">השוואת חברות מנהלות</a>
+                        <a href="hasifotMeshulav.html">מחולל חשיפות</a>
+                        <a href="#">השוואת תיק משולב מסלולים</a>
+                        <a href="#">מחולל כללי</a>
+                        <a href="#">יחס תשואה סיכון - שארפ</a>
+                        <a href="#">ציון משקל תשואה לשארפ</a>
+                    </div>
+                </li>
                 <li><a href="#about">אודות</a></li>
                 <li><a href="#contact" onclick="openConsultationForm(); return false;">צור קשר</a></li>
                 
@@ -2889,7 +2899,7 @@
                         <button class="cta-button" id="toolsDropdownBtn"  onclick="toggleToolsDropdown()">השתמש בכלים ▼</button>
                         <div class="dropdown-content" id="toolsDropdown">
                             <a href="hashMenahalot.html">השוואת חברות מנהלות</a>
-                            <a href="#">מחולל חשיפות</a>
+                            <a href="hasifotMeshulav.html">מחולל חשיפות</a>
                             <a href="#">השוואת תיק משולב מסלולים</a>
                             <a href="#">מחולל כללי</a>
                             <a href="#">יחס תשואה סיכון - שארפ</a>
@@ -2907,6 +2917,7 @@
                             <a href="prisatMaanak.html">פריסת מענק פרישה</a>
                             <a href="ribitderibit.html">חישוב ערך עתידי</a>
                             <a href="loan.html">סימולטור הלוואה</a>
+                            <a href="hafkada.html">מחשבון הפקדה לסכום מטרה</a>
                             <a href="hashDmeyNihul.html">השוואת דמי ניהול</a>
                         </div>
                     </div>
@@ -3079,6 +3090,32 @@
             }
             
             // Prevent any default behavior
+            return false;
+        }
+        
+        // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט - כלי השוואה
+        function toggleNavToolsDropdown(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (window.innerWidth > 768) {return;}
+            const dropdown = document.getElementById('navToolsDropdown');
+            const link = event.target;
+            
+            // Close other dropdowns first
+            document.querySelectorAll('.dropdown-content.show').forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                }
+            });
+            
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                link.innerHTML = 'כלי השוואה ▼';
+            } else {
+                dropdown.classList.add('show');
+                link.innerHTML = 'כלי השוואה ▲';
+            }
+            
             return false;
         }
 
