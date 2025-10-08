@@ -1230,6 +1230,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 30px;
             margin-bottom: 30px;
+            width: 100%;
         }
         
         .data-card {
@@ -1237,6 +1238,7 @@
             padding: 25px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
         }
         
         /* כרטיסיות מובייל לטבלת סיכום מפורט */
@@ -1253,6 +1255,7 @@
             padding: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             border: 1px solid #e2e8f0;
+            width: 100%;
         }
         
         .card-row {
@@ -1339,35 +1342,41 @@
              
                  /* עיצוב רספונסיבי לתצוגת הנתונים */
                  @media (max-width: 768px) {
-                    #dataDisplayContainer {
-                        
-                        max-width: 100% !important;
-                        width:clamp(300px, 100%, 1000px) !important;
-                        box-sizing: border-box !important;
-                        overflow-x: hidden !important;
-                    }
+                     #dataDisplayContainer {
+                         max-width: 95vw !important;
+                         width: 95vw !important;
+                         margin: 10px auto !important;
+                         padding: 15px !important;
+                         box-sizing: border-box !important;
+                         overflow-x: hidden !important;
+                     }
                  
                  .data-grid-container {
                      display: flex !important;
                      flex-direction: column !important;
                      gap: 15px !important;
                      grid-template-columns: unset !important;
-                     width:clamp(300px, 100%, 1000px) !important;
+                     width: 100% !important;
                      margin-bottom: 15px !important;
                  }
                  
                  .data-card {
-                     width:clamp(300px, 100%, 1000px) !important;
+                     width: 100% !important;
                      max-width: 100% !important;
-                     padding: 12px !important;
+                     padding: 15px !important;
                      box-sizing: border-box !important;
                      margin: 0 !important;
                  }
                  
                  .product-card-mobile {
                      width: 100% !important;
-                     padding: 12px !important;
+                     padding: 15px !important;
                      margin-bottom: 12px !important;
+                     box-sizing: border-box !important;
+                 }
+                 
+                 .cards-container-mobile {
+                     width: 100% !important;
                  }
                  
                  .card-row {
@@ -2598,14 +2607,21 @@
                 padding: 2rem 1rem;
             }
             
-            
-            
-            .data-card {
+            #dataDisplayContainer {
+                max-width: 98vw !important;
+                width: 98vw !important;
+                margin: 5px auto !important;
                 padding: 10px !important;
             }
             
+            .data-card {
+                padding: 12px !important;
+                width: 100% !important;
+            }
+            
             .product-card-mobile {
-                padding: 10px !important;
+                padding: 12px !important;
+                width: 100% !important;
             }
             
             .product-card-mobile h4 {
