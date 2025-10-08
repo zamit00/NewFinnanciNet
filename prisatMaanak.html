@@ -643,7 +643,17 @@
           <a href="hashDmeyNihul.html">השוואת דמי ניהול</a>
         </div>
       </li>
-      <li><a href="index.html#about">כלי השוואה</a></li>
+      <li class="nav-dropdown">
+        <a href="#" onclick="togglePrisatToolsDropdown(event)">כלי השוואה ▼</a>
+        <div class="dropdown-content" id="prisatToolsDropdown">
+          <a href="hashMenahalot.html">השוואת חברות מנהלות</a>
+          <a href="hasifotMeshulav.html">מחולל חשיפות</a>
+          <a href="#">השוואת תיק משולב מסלולים</a>
+          <a href="#">מחולל כללי</a>
+          <a href="#">יחס תשואה סיכון - שארפ</a>
+          <a href="#">ציון משקל תשואה לשארפ</a>
+        </div>
+      </li>
       <li><a href="index.html#about">אודות</a></li>
       <li><a href="index.html#contact">צור קשר</a></li>
       <li><a href="index.html#consultation" class="cta-button" onclick="openConsultationForm()">ליעוץ אישי</a></li>
@@ -1212,11 +1222,7 @@ document.addEventListener('click', function(e) {
 function togglePrisatCalculatorDropdown(event) {
     event.preventDefault();
     event.stopPropagation();
-    
-    // Only handle clicks on mobile screens
-    if (window.innerWidth > 768) {
-        return;
-    }
+    if (window.innerWidth > 768) {return;}
     
     const dropdown = document.getElementById('prisatCalculatorDropdown');
     const link = event.target;
@@ -1236,7 +1242,33 @@ function togglePrisatCalculatorDropdown(event) {
         link.innerHTML = 'מחשבונים ▲';
     }
     
-    // Prevent any default behavior
+    return false;
+}
+
+// Tools dropdown functionality
+function togglePrisatToolsDropdown(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (window.innerWidth > 768) {return;}
+    
+    const dropdown = document.getElementById('prisatToolsDropdown');
+    const link = event.target;
+    
+    // Close other dropdowns first
+    document.querySelectorAll('.dropdown-content.show').forEach(d => {
+        if (d !== dropdown) {
+            d.classList.remove('show');
+        }
+    });
+    
+    if (dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+        link.innerHTML = 'כלי השוואה ▼';
+    } else {
+        dropdown.classList.add('show');
+        link.innerHTML = 'כלי השוואה ▲';
+    }
+    
     return false;
 }
 
