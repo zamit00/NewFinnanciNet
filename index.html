@@ -6641,33 +6641,31 @@
 
             tableDiv.innerHTML = tableHTML;
             
-            // חישוב סכומים לניתוח מתקדם מהטבלה
-            let sumHon = 0;
-            let sumKitzva = 0;
+            // חישוב סכומים לניתוח מתקדם - חיבור לפי עמודה שניה
+            let sumHon = 0;    // הוני: 4, 5, 9, 10
+            let sumKitzva = 0; // קצבה: 1, 2, 2_1, 2_2, 3
             
-            // מוצרים הוניים: 4, 5, 9, 10
-            const equityKeys = ['4', '5', '9', '10'];
-            // מוצרי קצבה: 1, 2_1, 2_2, 3
-            const pensionKeys = ['1', '2_1', '2_2', '3'];
-            
+            // לולאה על כל המוצרים
             for (let key in sumSugMutzar) {
-                const value = parseFloat(sumSugMutzar[key][0]) || 0;
+                const yitra = parseFloat(sumSugMutzar[key][0]) || 0; // עמודה שניה - יתרה
                 
-                if (equityKeys.includes(key)) {
-                    sumHon += value;
-                } else if (pensionKeys.includes(key)) {
-                    sumKitzva += value;
+                if (key === '4' || key === '5' || key === '9' || key === '10') {
+                    sumHon += yitra;
+                    console.log(`  ${shemTochnit[key]}: ₪${yitra.toLocaleString('he-IL')} → הוני`);
+                } else if (key === '1' || key === '2' || key === '2_1' || key === '2_2' || key === '3') {
+                    sumKitzva += yitra;
+                    console.log(`  ${shemTochnit[key]}: ₪${yitra.toLocaleString('he-IL')} → קצבה`);
                 }
             }
             
-            console.log('💰 סכומים מחושבים מהטבלה:');
-            console.log(`   סך הוני: ₪${sumHon.toLocaleString('he-IL')}`);
-            console.log(`   סך קצבה: ₪${sumKitzva.toLocaleString('he-IL')}`);
+            console.log('━━━━━━━━━━━━━━━━━━━━━━');
+            console.log(`💰 סך הוני: ₪${sumHon.toLocaleString('he-IL')}`);
+            console.log(`🏦 סך קצבה: ₪${sumKitzva.toLocaleString('he-IL')}`);
             
             // שמירה ב-sessionStorage
             sessionStorage.setItem('sumHonForAdvancedAnalysis', sumHon);
             sessionStorage.setItem('sumKitzvaForAdvancedAnalysis', sumKitzva);
-            console.log('💾 נתונים לניתוח מתקדם נשמרו ב-sessionStorage');
+            console.log('💾 נשמר ב-sessionStorage');
         }
 
         // פונקציה ליצירת טבלת סיכום לפי מסלול ומוצר
