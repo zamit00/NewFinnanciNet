@@ -17,7 +17,7 @@ const fieldsToAverage = [
   "tesuam", "tesuam36", "tesuam60",
     "stiya36", "stiya60", "yitratNechasim",
     "sharp", "tusaAharona", "tesuaMitchilatshana",
-    "kvutzaAhuz4751", "kvutzaAhuz4761"     
+    "kvutzaAhuz4751", "kvutzaAhuz4761","dmeyNihul","dmeyNihulHafkad"     
 ];
 const pHishSmall=`קרן השתלמות היא מכשיר חיסכון לטווח בינוני המאפשר חיסכון הן לשכירים והן לעצמאים. הקרן היא לספק מענה לצרכי השתלמות מקצועית, אך בפועל היא משמשת ככלי חיסכון פופולרי בישראל בזכות הטבות המס הנלוות לה . בקרן ההשתלמות מגוון מסלולי השקעה השונים זה מזה ברמת הסיכון. ככלל, הכספים בקרן ניתנים 
 למשיכה לאחר 6 שנים ממועד הפקדה ראשונה.`
@@ -171,7 +171,7 @@ async function indications(){
     dataIndicators.push(result);
   } 
     } 
-  
+  console.log(dataIndicators)
   };
 
 /*const sinon=document.getElementById('sinonHevra')
