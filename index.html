@@ -2731,6 +2731,7 @@
     <link rel="stylesheet" href="consultation-form.css">
     <link rel="stylesheet" href="terms-modal.css">
     <link rel="stylesheet" href="terms-consent.css">
+    <link rel="stylesheet" href="risk-quest-modal.css">
     
     <!-- Accessibility and Footer -->
     <link rel="stylesheet" href="mainStyle.css">
@@ -3139,7 +3140,7 @@
                     <div class="feature-icon"><img src="ofisikon.png" width="100" height="auto"/></div>
                     <h3 class="feature-title">התאמה  לאופי סיכון</h3>
                     <p class="feature-description">באמצעותנו תוכל לאפיין את רמת הסיכון שלך ואת המוצרים המתאימים לרמת הסיכון</p>
-                    <a href="#consultation" class="cta-button smallfont">עבור לשאלון סיכון</a>
+                    <a href="#" onclick="openRiskQuestModal(); return false;" class="cta-button smallfont">עבור לשאלון סיכון 🎯</a>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><img src="sherut.png" width="100" height="auto"/></div>
@@ -7246,6 +7247,7 @@
     <script src="about-modal.js"></script>
     <script src="consultation-form.js"></script>
     <script src="terms-modal.js"></script>
+    <script src="risk-quest-modal.js"></script>
     <script src="terms-consent.js"></script>
     <script>
         // Load Modal HTML files
@@ -7262,6 +7264,13 @@
                 document.getElementById('modals-container').innerHTML += html;
             })
             .catch(err => console.error('Error loading consultation form:', err));
+        
+        fetch('risk-quest-modal.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modals-container').innerHTML += html;
+            })
+            .catch(err => console.error('Error loading risk quest modal:', err));
         
         fetch('terms-modal.html')
             .then(response => response.text())
