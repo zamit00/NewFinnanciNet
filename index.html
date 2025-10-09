@@ -2787,7 +2787,8 @@
                     <div class="dropdown-content" id="navToolsDropdown">
                         <a href="hashMenahalot.html">השוואת חברות מנהלות</a>
                         <a href="hasifotMeshulav.html">מחולל חשיפות</a>
-                        <a href="VirtualInvest.html">השוואת תיק משולב מסלולים</a>               
+                        <a href="VirtualInvest.html">השוואת תיק משולב מסלולים</a>
+                        <a href="advancedAnalysis.html">ניתוח תיק מתקדם</a>
                         <a href="#">ציון משקל תשואה לשארפ</a>
                     </div>
                 </li>
@@ -2853,11 +2854,12 @@
                     <div class="file-actions">
                         <button class="cta-button" id="processFiles" style="display: none;">קרא נתונים</button>
                         <button class="cta-button delete-btn" id="deleteFiles">🗑️ סגור תצוגה ומחק נתונים</button>
-                        <button class="cta-button" id="advancedAnalysisBtnMain2" onclick="document.getElementById('advancedAnalysis').style.display = 'block'; performAdvancedAnalysis();" 
+                        <button class="cta-button" id="advancedAnalysisBtnMain2" onclick="window.location.href='advancedAnalysis.html';" 
+                         disabled
                          style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                           color: white; border: none; padding: 15px 40px; border-radius: 25px;
-                          font-size: 1.1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                           transition: all 0.3s ease; max-width: 400px; width: 100%;">📊 ניתוח מתקדם</button>
+                          font-size: 1.1rem; cursor: not-allowed; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                           transition: all 0.3s ease; max-width: 400px; width: 100%; opacity: 0.5;">📊 ניתוח מתקדם</button>
                     </div>
                     <h3 dir="rtl" id="uploadedFilesTitle">קבצים שהועלו - מיד יוצגו נתונים:</h3>
                     <div class="files-list" id="filesList"></div>  
@@ -2937,11 +2939,12 @@
                     </div>
                     
                     <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px;"> 
-                        <button class="cta-button" id="advancedAnalysisBtnMain2" onclick="document.getElementById('advancedAnalysis').style.display = 'block'; performAdvancedAnalysis();" 
+                        <button class="cta-button" id="advancedAnalysisBtnMain2" onclick="window.location.href='advancedAnalysis.html';" 
+                         disabled
                          style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                           color: white; border: none; padding: 15px 40px; border-radius: 25px;
-                          font-size: 1.1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                           transition: all 0.3s ease; max-width: 400px; width: 100%;">📊 ניתוח מתקדם</button>
+                          font-size: 1.1rem; cursor: not-allowed; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                           transition: all 0.3s ease; max-width: 400px; width: 100%; opacity: 0.5;">📊 ניתוח מתקדם</button>
                     </div>
                 </div>
                 
@@ -3131,8 +3134,8 @@
                         <div class="dropdown-content" id="toolsDropdown">
                             <a href="hashMenahalot.html">השוואת חברות מנהלות</a>
                             <a href="hasifotMeshulav.html">מחולל חשיפות</a>
-                            <a href="VirtualInvest.html">השוואת תיק משולב מסלולים</a>                          
-                            
+                            <a href="VirtualInvest.html">השוואת תיק משולב מסלולים</a>
+                            <a href="advancedAnalysis.html">ניתוח תיק מתקדם</a>
                             <a href="#">ציון משקל תשואה לשארפ</a>
                         </div>
                     </div>
@@ -4997,9 +5000,7 @@
         
         // Advanced Analysis functionality
         advancedAnalysisBtn.addEventListener('click', () => {
-            document.getElementById('chartContainer').style.display = 'none';
-            document.getElementById('advancedAnalysis').style.display = 'block';
-            performAdvancedAnalysis();
+            window.location.href = 'advancedAnalysis.html';
         });
 
         backToUploadBtn.addEventListener('click', () => {
@@ -5050,6 +5051,16 @@
                     pratimIshim='';yitrotLefiMutzar='';yitrotLeGilPrisha='';
                     masluleiHashkaa=[];sheabudIkulHalvaa=[];
                     dataMislaka = null;myChart = null;
+                    
+                    // השבת את כפתור הניתוח המתקדם
+                    const advBtns = document.querySelectorAll('#advancedAnalysisBtnMain2, #advancedAnalysisBtn');
+                    advBtns.forEach(btn => {
+                        if (btn) {
+                            btn.disabled = true;
+                            btn.style.opacity = '0.5';
+                            btn.style.cursor = 'not-allowed';
+                        }
+                    });
                     document.getElementById('sectionHeader').style.display = 'none';
                     document.getElementById('dataDisplayContainer').style.display = 'none';
                     // Hide all containers
@@ -6214,6 +6225,17 @@
 
             // הצגת התצוגה
             document.getElementById('dataDisplayContainer').style.display = 'block';
+            
+            // הפעלת כפתור ניתוח מתקדם לאחר טעינת הנתונים
+            const advBtns = document.querySelectorAll('#advancedAnalysisBtnMain2, #advancedAnalysisBtn');
+            advBtns.forEach(btn => {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                }
+            });
+            console.log('✅ כפתור ניתוח מתקדם הופעל');
         }
 
         // פונקציה ליצירת גרף עוגה תלת מימד
