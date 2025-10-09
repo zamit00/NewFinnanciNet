@@ -713,6 +713,49 @@
                 justify-content: center;
             }
         }
+        
+        /* Analysis Tab Buttons */
+        .analysis-tab-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+        
+        .analysis-tab-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: white;
+            transform: translateY(-2px);
+        }
+        
+        .analysis-tab-btn.active {
+            background: white;
+            color: var(--primary);
+            border-color: white;
+        }
+        
+        .analysis-tab-btn i {
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .analysis-tab-btn {
+                flex: 1;
+                min-width: auto;
+                padding: 10px 16px;
+                font-size: 0.9rem;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1391,20 +1434,65 @@
             }
             console.log('  clientRisk:', clientRisk);
             
+            // יצירת כותרת עם כפתורי ניתוח
             let html = `
                 <div class="analysis-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 30px;">
-                    <h3 style="color: white;">
+                    <h3 style="color: white; margin-bottom: 20px;">
                         <i class="fas fa-chart-line"></i>
-                        ניתוח מסלולי השקעה
+                        ניתוח איכות תיק
                     </h3>
-                    <p style="opacity: 0.9; margin-top: 10px;">
-                        בחינת רמת הסיכון של כל מסלול בחשבונות שלך
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="analysis-tab-btn active" onclick="showRiskAnalysis()" id="riskAnalysisBtn">
+                            <i class="fas fa-shield-alt"></i>
+                            רמת סיכון
+                        </button>
+                        <button class="analysis-tab-btn" onclick="showFeesAnalysis()" id="feesAnalysisBtn">
+                            <i class="fas fa-money-bill-wave"></i>
+                            דמי ניהול
+                        </button>
+                        <button class="analysis-tab-btn" onclick="showReturnsAnalysis()" id="returnsAnalysisBtn">
+                            <i class="fas fa-chart-bar"></i>
+                            תשואות
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="analysisContent"></div>
+            `;
+            
+            container.innerHTML = html;
+            
+            // הצג ניתוח סיכון כברירת מחדל
+            showRiskAnalysis();
+        }
+        
+        // פונקציה להצגת ניתוח סיכון
+        function showRiskAnalysis() {
+            // עדכון כפתורים
+            document.querySelectorAll('.analysis-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('riskAnalysisBtn')?.classList.add('active');
+            
+            const analysisContainer = document.getElementById('analysisContent');
+            if (!analysisContainer) return;
+            
+            const detailedData = clientAnalysisData.detailedData;
+            const pirteiHeshbon = detailedData.pirteiHeshbon;
+            const clientRisk = clientAnalysisData.profile.riskProfile;
+            
+            let html = `
+                <div class="analysis-card" style="background: #f8f9fa; margin-bottom: 20px; padding: 20px;">
+                    <h4 style="color: var(--primary); margin: 0 0 10px 0;">
+                        <i class="fas fa-info-circle"></i>
+                        מידע
+                    </h4>
+                    <p style="color: var(--text); margin: 0;">
+                        בדיקת התאמת מסלולי ההשקעה לפרופיל הסיכון שלך
                     </p>
                     ${clientRisk ? 
-                        `<div style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 8px;">
-                            רמת הסיכון שלך: <strong>${clientRisk}</strong>
+                        `<div style="margin-top: 15px; padding: 12px; background: white; border-radius: 8px; border-right: 4px solid var(--primary);">
+                            <strong>רמת הסיכון שלך:</strong> ${clientRisk}
                         </div>` : 
-                        `<div style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 8px;">
+                        `<div style="margin-top: 15px; padding: 12px; background: #fff3cd; border-radius: 8px; border-right: 4px solid #ffc107;">
                             ⚠️ לא מולא שאלון סיכון - לא ניתן לבדוק התאמה
                         </div>`
                     }
@@ -1519,7 +1607,49 @@
                 `;
             });
             
-            container.innerHTML = html;
+            analysisContainer.innerHTML = html;
+        }
+        
+        // פונקציה להצגת ניתוח דמי ניהול
+        function showFeesAnalysis() {
+            // עדכון כפתורים
+            document.querySelectorAll('.analysis-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('feesAnalysisBtn')?.classList.add('active');
+            
+            const analysisContainer = document.getElementById('analysisContent');
+            if (!analysisContainer) return;
+            
+            analysisContainer.innerHTML = `
+                <div class="analysis-card" style="text-align: center; padding: 40px;">
+                    <i class="fas fa-tools" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--text-dark); margin-bottom: 15px;">בקרוב: ניתוח דמי ניהול</h3>
+                    <p style="color: var(--text-light); max-width: 500px; margin: 0 auto;">
+                        מערכת ניתוח דמי הניהול תכלול בדיקה האם דמי הניהול נמצאים בטווח הסביר
+                        לעומת מוצרים דומים בשוק
+                    </p>
+                </div>
+            `;
+        }
+        
+        // פונקציה להצגת ניתוח תשואות
+        function showReturnsAnalysis() {
+            // עדכון כפתורים
+            document.querySelectorAll('.analysis-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('returnsAnalysisBtn')?.classList.add('active');
+            
+            const analysisContainer = document.getElementById('analysisContent');
+            if (!analysisContainer) return;
+            
+            analysisContainer.innerHTML = `
+                <div class="analysis-card" style="text-align: center; padding: 40px;">
+                    <i class="fas fa-tools" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--text-dark); margin-bottom: 15px;">בקרוב: ניתוח תשואות</h3>
+                    <p style="color: var(--text-light); max-width: 500px; margin: 0 auto;">
+                        מערכת ניתוח התשואות תכלול השוואה של התשואות של המסלולים שלך
+                        לעומת ממוצע הענף בתקופות שונות
+                    </p>
+                </div>
+            `;
         }
         
         // פונקציה לחיפוש ramatsikon לפי שם המסלול
