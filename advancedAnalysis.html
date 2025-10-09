@@ -874,14 +874,26 @@
             
             // ניתוח אוטומטי של נתונים קיימים בעת טעינת הדף
             setTimeout(function() {
-                if (typeof PortfolioAnalyzer !== 'undefined') {
-                    const hasData = PortfolioAnalyzer.analyzeFromGlobalData();
-                    if (hasData) {
-                        console.log('✅ נתוני תיק נטענו מהדף הראשי');
-                        updateStep1Display();
-                    } else {
-                        console.log('ℹ️ לא נמצאו נתונים - נא להעלות קבצי מסלקה בדף הבית');
-                    }
+                // קריאת נתונים מ-sessionStorage
+                const importedData = importAndClearSessionData();
+                
+                // עדכון ב-clientAnalysisData
+                if (importedData.age) {
+                    clientAnalysisData.profile.age = importedData.age;
+                    clientAnalysisData.profile.yearsToRetirement = importedData.yearsToRetirement;
+                    clientAnalysisData.portfolio.equityTotal = importedData.equityTotal;
+                    clientAnalysisData.portfolio.pensionTotal = importedData.pensionTotal;
+                    clientAnalysisData.portfolio.totalValue = importedData.equityTotal + importedData.pensionTotal;
+                    
+                    AnalysisStorage.save();
+                    
+                    console.log('✅ נתוני לקוח נטענו:', clientAnalysisData.profile);
+                    console.log('✅ נתוני תיק נטענו:', clientAnalysisData.portfolio);
+                    
+                    // עדכון התצוגה
+                    updateStep1Display();
+                } else {
+                    console.log('ℹ️ לא נמצאו נתונים - נא להעלות קבצי מסלקה בדף הבית');
                 }
             }, 500);
         });
@@ -951,7 +963,7 @@
                             }
                         }
                         
-                        console.log('✅ רמת סיכון נשמרה:', riskLevel);
+                        //console.log('✅ רמת סיכון נשמרה:', riskLevel);
                     }
                 }, { once: true });
             } else {
@@ -1007,7 +1019,7 @@
                 employmentStatus
             });
             
-            console.log('✅ נתוני לקוח נשמרו:', clientAnalysisData.profile);
+            //console.log('✅ נתוני לקוח נשמרו:', clientAnalysisData.profile);
             
             // החזרת רמת סיכון (אם קיימת)
             const riskLevel = clientAnalysisData.profile.riskProfile || 'לא הוגדר';

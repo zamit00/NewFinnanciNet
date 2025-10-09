@@ -6238,26 +6238,6 @@
             // הצגת התצוגה
             document.getElementById('dataDisplayContainer').style.display = 'block';
             
-            // חישוב סכומים לניתוח מתקדם
-            // מוצרים הוניים: 4, 5, 9, 10 (גמל השקעה, השתלמות, חסכון)
-            const sumHon = (sumSugMutzar['4']?.[0] || 0) + 
-                          (sumSugMutzar['5']?.[0] || 0) + 
-                          (sumSugMutzar['9']?.[0] || 0) + 
-                          (sumSugMutzar['10']?.[0] || 0);
-            
-            // מוצרי קצבה: 1, 2, 3 (ביטוח מנהלים, פנסיה, גמל)
-            const sumKitzva = (sumSugMutzar['1']?.[0] || 0) + 
-                             (sumSugMutzar['2_1']?.[0] || 0) + 
-                             (sumSugMutzar['2_2']?.[0] || 0) + 
-                             (sumSugMutzar['3']?.[0] || 0);
-            
-            // שמירת נתונים לניתוח מתקדם ב-sessionStorage
-            sessionStorage.setItem('sumHonForAdvancedAnalysis', sumHon);
-            sessionStorage.setItem('sumKitzvaForAdvancedAnalysis', sumKitzva);
-            console.log('💾 נתונים לניתוח מתקדם נשמרו ב-sessionStorage');
-            console.log(`   סך הוני: ₪${sumHon.toLocaleString('he-IL')}`);
-            console.log(`   סך קצבה: ₪${sumKitzva.toLocaleString('he-IL')}`);
-            
             // הפעלת כפתור ניתוח מתקדם לאחר טעינת הנתונים
             const advBtns = document.querySelectorAll('#advancedAnalysisBtnMain2, #advancedAnalysisBtn');
             advBtns.forEach(btn => {
@@ -6660,6 +6640,34 @@
             }
 
             tableDiv.innerHTML = tableHTML;
+            
+            // חישוב סכומים לניתוח מתקדם מהטבלה
+            let sumHon = 0;
+            let sumKitzva = 0;
+            
+            // מוצרים הוניים: 4, 5, 9, 10
+            const equityKeys = ['4', '5', '9', '10'];
+            // מוצרי קצבה: 1, 2_1, 2_2, 3
+            const pensionKeys = ['1', '2_1', '2_2', '3'];
+            
+            for (let key in sumSugMutzar) {
+                const value = parseFloat(sumSugMutzar[key][0]) || 0;
+                
+                if (equityKeys.includes(key)) {
+                    sumHon += value;
+                } else if (pensionKeys.includes(key)) {
+                    sumKitzva += value;
+                }
+            }
+            
+            console.log('💰 סכומים מחושבים מהטבלה:');
+            console.log(`   סך הוני: ₪${sumHon.toLocaleString('he-IL')}`);
+            console.log(`   סך קצבה: ₪${sumKitzva.toLocaleString('he-IL')}`);
+            
+            // שמירה ב-sessionStorage
+            sessionStorage.setItem('sumHonForAdvancedAnalysis', sumHon);
+            sessionStorage.setItem('sumKitzvaForAdvancedAnalysis', sumKitzva);
+            console.log('💾 נתונים לניתוח מתקדם נשמרו ב-sessionStorage');
         }
 
         // פונקציה ליצירת טבלת סיכום לפי מסלול ומוצר

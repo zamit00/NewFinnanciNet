@@ -1,5 +1,6 @@
 // Advanced Analysis Engine - Data Management and Analysis
 // מנוע ניתוח מתקדם - ניהול ואיחסון נתונים
+
 // ייבוא נתונים מ-sessionStorage ומחיקה מיידית
 function importAndClearSessionData() {
     const gil = sessionStorage.getItem('gilForAdvancedAnalysis');
