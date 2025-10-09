@@ -1,5 +1,6 @@
 var datanetunimKlaliXM;var datanetunimKlaliXB;var datanetunimKlaliXP;
-var clickStatus;let dataIndicators = [];let tkofa;
+var clickStatus;let dataIndicators = [];
+var tkofa;let tkofa;
 const gufmosdixA = [
     'הראל פנסיה וגמל', 'כלל פנסיה וגמל',
     'מגדל מקפת קרנות פנסיה וקופות גמל', 'מנורה מבטחים פנסיה וגמל',
@@ -48,10 +49,15 @@ async function loadalldata() {
             fetchdataJasonP(),
             fetchdataJasonM(),
         ]);
-        console.log('כל הנתונים נטענו בהצלחה');
+        //console.log('כל הנתונים נטענו בהצלחה');
         await indications(); 
-        tkofa=datanetunimKlaliXM.filter(item=>Number(item.mh)===579)[0]['tesua12']
-        console.log(tkofa)
+        const tkofaItem = datanetunimKlaliXM.filter(item=>item.mh==='579')[0];
+        if (tkofaItem && tkofaItem.tesua12) {
+            tkofa = tkofaItem.tesua12.split('=')[1]; // מקבל רק את התקופה אחרי ה-=
+            console.log('תקופת נתונים:', tkofa); // יציג 202508
+        } else {
+            console.error('לא נמצא פריט עם mh=579');
+        }fa
   } catch (error) {
         console.error("שגיאה בטעינת הנתונים:", error);
   }
@@ -76,7 +82,7 @@ async function fetchdataJasonM() {
         //tkf=tkf[0].tesua12;
         //tkf = tkf.split("=")[1].substring(4, 6) + "/" + tkf.split("=")[1].substring(0, 4);
         //tkofa.innerText = 'הנתונים נכונים ל ' + tkf;
-
+        
         return data;  // חובה להחזיר נתונים כדי שהפונקציה תחכה באמת
     } catch (error) {
         console.error('שגיאה בשליפת הנתונים:', error);
