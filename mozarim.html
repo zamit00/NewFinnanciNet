@@ -8,8 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="data.js"></script>
-    <script src="kochavimscript.js"></script>
-    <script src="PensiaScript.js"></script>
     
     <style>
         :root {
@@ -365,18 +363,28 @@
             const internalName = productMap[productType];
             
             try {
+                // Wait for data to be loaded
+                if (typeof datanetunimKlaliXM === 'undefined') {
+                    setTimeout(() => loadProduct(productType), 500);
+                    return;
+                }
+
                 if (productType === 'קרנות פנסיה חדשות') {
                     if (typeof maslulimP === 'function') {
                         await maslulimP(1, internalName, 0);
+                    } else {
+                        console.error('maslulimP function not found');
                     }
                 } else {
                     if (typeof maslulim === 'function') {
                         await maslulim(1, internalName, 0);
+                    } else {
+                        console.error('maslulim function not found');
                     }
                 }
             } catch (error) {
                 console.error('Error loading product data:', error);
-                tablesContainer.innerHTML = '<div style="text-align: center; padding: 40px; color: red;"><i class="fas fa-exclamation-circle" style="font-size: 3rem;"></i><p style="margin-top: 20px;">שגיאה בטעינת הנתונים</p></div>';
+                tablesContainer.innerHTML = '<div style="text-align: center; padding: 40px; color: red;"><i class="fas fa-exclamation-circle" style="font-size: 3rem;"></i><p style="margin-top: 20px;">שגיאה בטעינת הנתונים. וודא שקבצי הנתונים נטענו.</p></div>';
             }
             
             // Close mobile menu
@@ -765,6 +773,10 @@
 
     <!-- Accessibility Menu Script -->
     <script src="accessibility.js"></script>
+
+    <!-- Embedded Product Scripts -->
+    <script src="kochavimscript.js"></script>
+    <script src="PensiaScript.js"></script>
 
 </body>
 </html>

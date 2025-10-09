@@ -55,16 +55,37 @@ const bateyhashkaot=['אינפיניטי השתלמות, גמל ופנסיה','�
 ]
 
 async function maslulim(t,moz,hevra){ 
-  if(t===2){document.getElementById("tkufatdivuach").scrollIntoView({ behavior: "smooth" });t=1};
-document.getElementById("closeinfo").style.display='none';	
- document.getElementById("menu").classList.remove("open");
-  document.querySelector(".menu-btn").classList.remove("open");
-  if (t===1){document.getElementById('filter').style.display='none';  
+  if(t===2){
+    const tkufatEl = document.getElementById("tkufatdivuach");
+    if (tkufatEl) tkufatEl.scrollIntoView({ behavior: "smooth" });
+    t=1;
   }
+  
+  // Hide elements only if they exist
+  const closeinfo = document.getElementById("closeinfo");
+  if (closeinfo) closeinfo.style.display='none';
+  
+  const menu = document.getElementById("menu");
+  if (menu) menu.classList.remove("open");
+  
+  const menuBtn = document.querySelector(".menu-btn");
+  if (menuBtn) menuBtn.classList.remove("open");
+  
+  if (t===1){
+    const filter = document.getElementById('filter');
+    if (filter) filter.style.display='none';  
+  }
+  
   const allTheTables=document.getElementById('allTheTables');
+  if (!allTheTables) {
+    console.error('allTheTables element not found');
+    return;
+  }
   allTheTables.innerHTML='';
   allTheTables.style.display='flex';
-  document.getElementById('kothasifot').style.display='none';
+  
+  const kothasifot = document.getElementById('kothasifot');
+  if (kothasifot) kothasifot.style.display='none';
   var z = 0;var dataY;
   for(let r=0;r<=4;r++){
     if(z!==0 && Number(z) % 3 !==0){
@@ -88,7 +109,7 @@ document.getElementById("closeinfo").style.display='none';
     const sinonHevra=document.getElementById('sinonHevra')
     var hadashim=document.getElementById('hadashim');
     //sinonHevra.selectedIndex = 0
-    mesanen.style.display='none'
+    if (mesanen) mesanen.style.display='none'
     if (t===30){
       const h2Elements = document.querySelectorAll('[name="h2Hish"]');
       const aElements = document.querySelectorAll('[name="spanHish"]');
