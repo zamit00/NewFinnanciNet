@@ -1446,7 +1446,26 @@
                 maslulim.forEach(maslul => {
                     const pathwayName = maslul.shemMaslul || 'לא ידוע';
                     const pathwayAmount = parseFloat(maslul.schumTzvira || 0);
-                    const ramatsikon = maslul.ramatsikon || 'לא ידוע';
+                    
+                    // ניסיון לקבל ramatsikon מהמסלול עצמו
+                    let ramatsikon = maslul.ramatsikon;
+                    
+                    // אם אין ramatsikon, חפש בנתונים הגלובליים
+                    if (!ramatsikon || ramatsikon === 'לא ידוע' || ramatsikon === '') {
+                        const foundRamatsikon = findRamatsikonInData(
+                            maslul.kodMislaka || heshbon.kodMislaka,
+                            pathwayName,
+                            heshbon.sugMutzar
+                        );
+                        if (foundRamatsikon) {
+                            ramatsikon = foundRamatsikon;
+                        }
+                    }
+                    
+                    // אם עדיין אין, השתמש בברירת מחדל
+                    if (!ramatsikon) {
+                        ramatsikon = 'לא ידוע';
+                    }
                     
                     // זיהוי רמת סיכון לפי ramatsikon
                     const pathwayRisk = getRiskLevel(ramatsikon);
@@ -1493,6 +1512,51 @@
             });
             
             container.innerHTML = html;
+        }
+        
+        // פונקציה לחיפוש ramatsikon בנתונים הגלובליים
+        function findRamatsikonInData(kodMislaka, shemMaslul, sugMutzar) {
+            // בחירת מקור הנתונים לפי סוג המוצר
+            let dataSource = null;
+            let dataSourceName = '';
+            
+            // קרנות פנסיה חדשות
+            if (sugMutzar === 'קרן פנסיה חדשה' || sugMutzar === 'קרן פנסיה' || sugMutzar === 5) {
+                dataSource = typeof datanetunimKlaliXP !== 'undefined' ? datanetunimKlaliXP : null;
+                dataSourceName = 'datanetunimKlaliXP';
+            }
+            // ביטוח (גמל, פוליסות)
+            else if (sugMutzar === 'קופת גמל' || sugMutzar === 'קופת גמל להשקעה' || 
+                     sugMutzar === 'פוליסת ביטוח חיים משולב חסכון' || 
+                     sugMutzar === 2 || sugMutzar === '2_1' || sugMutzar === '2_2' || sugMutzar === 3) {
+                dataSource = typeof datanetunimKlaliXB !== 'undefined' ? datanetunimKlaliXB : null;
+                dataSourceName = 'datanetunimKlaliXB';
+            }
+            // השתלמות, חסכון לילד, גמל להשקעה
+            else {
+                dataSource = typeof datanetunimKlaliXM !== 'undefined' ? datanetunimKlaliXM : null;
+                dataSourceName = 'datanetunimKlaliXM';
+            }
+            
+            if (!dataSource || !Array.isArray(dataSource)) {
+                console.log(`⚠️ ${dataSourceName} לא זמין עבור ${sugMutzar}`);
+                return null;
+            }
+            
+            // חיפוש המסלול לפי קוד מסלקה ושם מסלול
+            const maslulData = dataSource.find(item => 
+                item.kodmislaka === kodMislaka && 
+                item.shemkupa && shemMaslul && 
+                item.shemkupa.trim() === shemMaslul.trim()
+            );
+            
+            if (maslulData && maslulData.ramatsikon) {
+                console.log(`✅ נמצא ramatsikon ב-${dataSourceName}: ${maslulData.ramatsikon} עבור ${shemMaslul}`);
+                return maslulData.ramatsikon;
+            } else {
+                console.log(`❌ לא נמצא ramatsikon ב-${dataSourceName} עבור ${shemMaslul} (קוד: ${kodMislaka})`);
+                return null;
+            }
         }
         
         // פונקציה לזיהוי רמת סיכון מ-ramatsikon
