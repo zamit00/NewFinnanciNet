@@ -1,7 +1,7 @@
 #accessibility-panel {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  top: 20%;
+  right:15%;
   direction: rtl;
   font-family: "Varela Round", sans-serif;
   z-index: 99999;
@@ -55,4 +55,9 @@
 .highlight-links a {
   text-decoration: underline !important;
   color: #ff3300 !important;
+}
+@media (max-width: 768px) {
+  #accessibility-panel {
+   display: none;
+  }
 }

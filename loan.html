@@ -612,6 +612,9 @@
     
     <!-- External Modal Styles -->
     <link rel="stylesheet" href="about-modal.css">
+    <link rel="stylesheet" href="terms-modal.css">
+    <link rel="stylesheet" href="mainStyle.css">
+    <link rel="stylesheet" href="footer.css">
 </head>
 <body>
   <div class="nav-container">
@@ -1190,14 +1193,31 @@
 
     <!-- External Modal Scripts -->
     <script src="about-modal.js"></script>
+    <script src="terms-modal.js"></script>
+    <script src="accessibility.js"></script>
     <script>
-        // Load About Modal HTML
+        // Load Modal HTML files
         fetch('about-modal.html')
             .then(response => response.text())
             .then(html => {
                 document.getElementById('modals-container').innerHTML += html;
             })
-            .catch(err => console.error('Error loading modal:', err));
+            .catch(err => console.error('Error loading about modal:', err));
+        
+        fetch('terms-modal.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modals-container').innerHTML += html;
+            })
+            .catch(err => console.error('Error loading terms modal:', err));
+        
+        // Load Footer
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.body.insertAdjacentHTML('beforeend', html);
+            })
+            .catch(err => console.error('Error loading footer:', err));
     </script>
 
 </body>

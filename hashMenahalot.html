@@ -854,6 +854,9 @@ padding-right:10px; padding-left: 10px;
     
     <!-- External Modal Styles -->
     <link rel="stylesheet" href="about-modal.css">
+    <link rel="stylesheet" href="terms-modal.css">
+    <link rel="stylesheet" href="mainStyle.css">
+    <link rel="stylesheet" href="footer.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1992,14 +1995,31 @@ function pdfDo() {
 
     <!-- External Modal Scripts -->
     <script src="about-modal.js"></script>
+    <script src="terms-modal.js"></script>
+    <script src="accessibility.js"></script>
     <script>
-        // Load About Modal HTML
+        // Load Modal HTML files
         fetch('about-modal.html')
             .then(response => response.text())
             .then(html => {
                 document.getElementById('modals-container').innerHTML += html;
             })
-            .catch(err => console.error('Error loading modal:', err));
+            .catch(err => console.error('Error loading about modal:', err));
+        
+        fetch('terms-modal.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modals-container').innerHTML += html;
+            })
+            .catch(err => console.error('Error loading terms modal:', err));
+        
+        // Load Footer
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.body.insertAdjacentHTML('beforeend', html);
+            })
+            .catch(err => console.error('Error loading footer:', err));
     </script>
 
 </body>
