@@ -117,24 +117,38 @@ tableTesuot.innerHTML += `
     </tr>
   `
  
-  for (const field of fieldsToCompare) {
-    const val = analysisScore.fields.find(f => f.field === field).value || 0;
-    const avg =analysisScore.fields.find(f => f.field === field).average || 0; 
-    const result = analysisScore.fields.find(f => f.field === field).result || "";
+  // Check if analysisScore is valid
+  if (analysisScore && analysisScore.fields && Array.isArray(analysisScore.fields)) {
+    for (const field of fieldsToCompare) {
+      const fieldData = analysisScore.fields.find(f => f.field === field);
+      if (!fieldData) continue;
+      
+      const val = fieldData.value || 0;
+      const avg = fieldData.average || 0; 
+      const result = fieldData.result || "";
 
     if (isNaN(val) || isNaN(avg)) continue;
 
+      tableTesuot.innerHTML += `
+      <tr>
+          <td style="padding:8px; border:1px solid #ccc;text-align:right">${fieldNames[field] || field}</td>
+          <td style="padding:8px; border:1px solid #ccc;text-align:center">
+          ${val.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+          <td style="padding:8px; border:1px solid #ccc;text-align:center">
+          ${avg.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+          <td style="padding:8px; border:1px solid #ccc;text-align:center">${result}</td>
+      </tr>
+      `
+    }
+  } else {
+    // If no analysis data, show message
     tableTesuot.innerHTML += `
     <tr>
-        <td style="padding:8px; border:1px solid #ccc;text-align:right">${fieldNames[field] || field}</td>
-        <td style="padding:8px; border:1px solid #ccc;text-align:center">
-        ${val.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-        <td style="padding:8px; border:1px solid #ccc;text-align:center">
-        ${avg.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-        <td style="padding:8px; border:1px solid #ccc;text-align:center">${result}</td>
+        <td colspan="4" style="padding:15px; text-align:center; color:#666;">
+        לא נמצאו נתוני השוואה לממוצע ענף
+        </td>
     </tr>
-  `
-
+    `
   }
   kupaInfo.innerHTML+=`<canvas id="myChartkupa" style="width:100%;max-width:1000px;max-height: 200px;"></canvas>
   	<canvas id="myChart"  style="width:100%;max-width: 1000px;
@@ -437,9 +451,18 @@ function analyzeMaslulAgainstAverage(maslulData) {
     fields: []
   };
 
+  // Check if dataIndicators exists
+  if (typeof dataIndicators === 'undefined' || !Array.isArray(dataIndicators)) {
+    console.warn('dataIndicators not found or not an array');
+    return analysis;
+  }
+
   var averageData = dataIndicators.find(item =>
     item.maslul === maslulData.mas && item.mozar === maslulData.mozar);
-  if (!averageData) return;
+  if (!averageData) {
+    console.warn('No average data found for:', maslulData.mas, maslulData.mozar);
+    return analysis;
+  }
   if (averageData["tesuam36"] && averageData["stiya36"] && averageData["stiya36"] !== 0) {
   averageData["tesuaLestiya36"] = parseFloat(averageData["tesuam36"] / averageData["stiya36"]).toFixed(2);
 }
