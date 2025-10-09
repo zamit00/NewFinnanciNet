@@ -1,70 +1,129 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <title>פיננסינט</title>
-    <script src="data.js"></script>
-    <script src="kochavimscript.js"></script>
+    <title>בנה תיק משולב מסלולים - פיננסי-נט</title>
+    
+    <!-- External Styles -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="about-modal.css">
+    <link rel="stylesheet" href="terms-modal.css">
+    <link rel="stylesheet" href="mainStyle.css">
+    <link rel="stylesheet" href="footer.css">
+    
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="data.js"></script>
+    <script src="kochavimscript.js"></script>
+    <script src="PensiaScript.js"></script>
+    <script src="mainscript.js"></script>
     
     <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --text-dark: #333;
+            --text-light: #666;
+        }
+
         *{
             box-sizing: border-box;
-            max-width: 100%;
-            margin:0%;
-            padding:0%;
-            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
         }
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            font-family: 'Heebo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            min-height: 100vh;
+            direction: rtl;
+            padding-top: 80px;
+        }
+        
+        #ex{display:none}
+        
+        .main-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            margin: 0;
-            width: 100%;
-            overflow-x: hidden;
-
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        #ex{display:none}
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .page-title p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+        
         .container {
-            background: aliceblue;
-            border-radius: 10px;
-            box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
-            width:100%;
-            max-width: clamp(310px,100%,800px);
-            border-radius: 10px;
-            margin:0%;padding: 5px;
-            margin-top: 30px;
-            min-height:600px;
-            box-sizing: border-box;
-           
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 900px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
         }
         
         .row {
-           
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            margin-right:25%;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+        
+        .row label {
+            min-width: 100px;
+            font-weight: 600;
+            color: var(--text-dark);
         }
         
         select, input {
             flex: 1;
-            padding: 5px;
-            border-radius: 5px;
-            box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
-            width: clamp(200px,85%,300px);
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
             max-width: 300px;
-            margin-top: 10px;
         }
-        .closewindow{color:black;position: relative;right:20px;top:5px;}
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .closewindow{
+            display: none;
+        }
+        
         .btn {
             display: flex;
             align-items: center;
@@ -73,47 +132,217 @@
             border-radius: 50%;
             border: none;
             color: white;
+            transition: all 0.3s ease;
         }
-    #btnclear{display: none;}
-    .percentage {   max-width: 150px; box-sizing: border-box;text-align: center;}
-    .btn-add {  width: 30px; height: 30px;background-color: green; font-size: 20px; }
-    
-    .btn:hover { opacity: 0.8; }
-    .error { color: red; font-size: 20px; text-align: center; }
-    .btndo{width:clamp(150px,50%,150px);height: 30px;margin-top: 30px;
-    background: #3498db;color: white;font-weight: bold;border-radius: 5px;
-    font-size: 16px;}
-    .tblData{margin-top: 15px;}
-    .tblCenter{display:none;justify-content: center;}
-    .tblData,.tblData tr{width: clamp(300px,60%,800px);border-collapse: collapse;}
-    .tblData,.tblData tr,.tblData th,.tblData td{border:1px solid #333;text-align: center;}
-    .tdmaslul,#men{width:60%;}
-    .tdshiur{width:25%;}
-    .tdbitul{width:15%;display:flex;align-items:center;justify-content:center;}
-    .klalikoch,.klalikoch tr{width:clamp(300px,95%,800px) ;}
-    .klalikoch,.klalikoch tr, .klalikoch td{
-        border: 1px solid black;border-collapse: collapse;font-size: 10px;
-      }
-      .tdbig{text-align:right;padding-right: 5px;
-    line-height: 18px;overflow-y: hidden;font-size:16px ;}
-      .tdsmall{text-align: center;line-height: 18px;overflow-y: hidden;font-size:16px ;}
-      #shana,#shalosh,#hamesh{display:flex;flex-direction: column;
-        align-items: center;
-
-      }
-      .klalikoch .tdbig{width: 55%;color:rgb(37, 60, 255);font-weight: bold;}
-      .klalikoch .tdsmall{width: 16%;}
-      .chart-container {
+        
+        #btnclear{display: none;}
+        
+        .percentage {   
+            max-width: 80px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .btn-add {  
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-add:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.5);
+        }
+        
+        .error {
+            color: #F44336;
+            font-size: 1.1rem;
+            text-align: center;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+        
+        .btndo {
+            width: clamp(140px, 45%, 180px);
+            height: 45px;
+            margin: 10px 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btndo:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+        /* Tables */
+        .tblData {
+            margin-top: 25px;
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .tblCenter {
+            display: none;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .tblData th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 1.05rem;
+        }
+        
+        .tblData td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: center;
+        }
+        
+        .tblData tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .tdmaslul, #men {
+            width: 60%;
+            text-align: right !important;
+            font-weight: 500;
+        }
+        
+        .tdshiur {
+            width: 25%;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .tdbitul {
+            width: 15%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tdbitul button {
+            background: #F44336;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+        
+        .tdbitul button:hover {
+            background: #d32f2f;
+            transform: scale(1.1);
+        }
+        
+        /* Result Tables */
+        .klalikoch {
+            width: clamp(300px, 95%, 800px);
+            border-collapse: collapse;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .klalikoch tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .klalikoch td {
+            padding: 12px 8px;
+            font-size: 0.95rem;
+        }
+        
+        .klalikoch tr:first-child {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .klalikoch tr:hover:not(:first-child) {
+            background-color: #f0f4ff;
+        }
+        
+        .tdbig {
+            text-align: right !important;
+            padding-right: 10px !important;
+            font-weight: 500;
+        }
+        
+        .klalikoch .tdbig {
+            width: 55%;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .tdsmall {
+            text-align: center;
+        }
+        
+        .klalikoch .tdsmall {
+            width: 16%;
+        }
+        
+        #shana, #shalosh, #hamesh {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
             max-width: 100%;
-            height: 300px;
-            box-sizing: border-box;
-            margin: 0%;padding: 0%;
-            overflow: visible;
+            height: 400px;
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        #barchart{
+        
+        #barchart {
             height: 400px;  
         }
-        #centerTbl{display:none;}
+        
+        #centerTbl {
+            display: none;
+        }
+        
+        #notar {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        #divBtn {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
         
         @media screen and (max-width:600px){
             .centerTbl,#shana,.chart-container{min-width:100%;max-width: 100%;}
@@ -131,28 +360,56 @@
             .centerTbl,#shana,.chart-container,.klalikoch{width: clamp(550px,90%,750px)}}
     </style>
 </head>
-<body dir="rtl">
-    <div class="container" id="container">
-        <!-- <div class="baalrishayon" onclick="window.parent.yossi()"
-        style="width: 100%;
-        box-sizing: border-box;
-        margin: 0%;
-        margin-top: 30px;
-        padding: 10px;
-        height: 30px;
-        font-size: 16px;
-        text-align: center;
-        background-color: blue;
-        position: relative;
-        top: 0%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;overflow-y: hidden;">צור קשר עם סוכן פנסיוני
-		&nbsp;<i class="fa fa-phone"></i></div> -->
-        <div class='closewindow' onclick='window.parent.showHashvaa();'><i class="fa-solid fa-rotate-left"></i></div>
-        <h3 style="text-align: center;color:rgb(0,148,254);">בנה תיק משולב מסלולים</h3>
+<body>
+    
+    <!-- Header with Navigation (same as other pages) -->
+    <div class="nav-container">
+        <nav class="nav-menu" id="navMenu">
+          <li><a href="index.html"><i class="fa fa-home" style="font-size:2rem"></i></a></li>
+          <li><a href="mozarim.html">מוצרים ותשואות</a></li>
+          <li class="nav-dropdown">
+            <a href="#" onclick="toggleVirtualCalculatorDropdown(event)">מחשבונים ▼</a>
+            <div class="dropdown-content" id="virtualCalculatorDropdown">
+              <a href="prisatMaanak.html">פריסת מענק פרישה</a>
+              <a href="ribitderibit.html">חישוב ערך עתידי</a>
+              <a href="loan.html">סימולטור הלוואה</a>
+              <a href="hafkada.html">מחשבון הפקדה לסכום מטרה</a>
+              <a href="hashDmeyNihul.html">השוואת דמי ניהול</a>
+            </div>
+          </li>
+          <li class="nav-dropdown">
+            <a href="#" onclick="toggleVirtualToolsDropdown(event)">כלי השוואה ▼</a>
+            <div class="dropdown-content" id="virtualToolsDropdown">
+              <a href="hashMenahalot.html">השוואת חברות מנהלות</a>
+              <a href="hasifotMeshulav.html">מחולל חשיפות</a>
+              <a href="VirtualInvest.html">השוואת תיק משולב מסלולים</a>
+            </div>
+          </li>
+          <li><a href="#" onclick="openAboutModal(); return false;">אודות</a></li>
+          <li><a href="index.html#contact">צור קשר</a></li>
+          <li class="whatsapp-desktop"><a href="https://wa.me/972545287184?text=שלום, אני מעוניין בייעוץ פנסיוני" target="_blank" title="צור קשר בוואטסאפ"><i class="fab fa-whatsapp" style="font-size:2rem; color:#25D366;"></i></a></li>
+        </nav>
+        <div class="whatsapp-mobile">
+            <a href="https://wa.me/972545287184?text=שלום, אני מעוניין בייעוץ פנסיוני" target="_blank" title="צור קשר בוואטסאפ">
+                <i class="fab fa-whatsapp" style="font-size:2rem; color:#25D366;"></i>
+            </a>
+        </div>
+        <div class="logo"> <img class="logoimg" src="logoxnew.png" onclick="window.location.href='index.html'" style="cursor: pointer;"/></div>
+        <div class="hamburger" id="hamburger" style="padding: 10px;">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-title">
+            <h1>🔧 בנה תיק משולב מסלולים</h1>
+            <p>בחר מסלולים שונים וצור תיק מותאם אישית עם משקלים לפי בחירתך</p>
+        </div>
+        
+        <div class="container" id="container">
          <div id='mas'  style='width:clamp(300px,90vw,600px);height:100vh;z-index:1000;background-color:white;display:none;' ></div> 
         <div class="row">
             <label>בחר מוצר:</label>
@@ -1041,6 +1298,123 @@ function createChart(lbl, dt) {
 }
  
  </script>
+
+    <!-- Modal Container -->
+    <div id="modals-container"></div>
+
+    <!-- External Modal Scripts -->
+    <script src="about-modal.js"></script>
+    <script src="terms-modal.js"></script>
+    <script src="accessibility.js"></script>
+    
+    <script>
+        // Load Modal HTML files
+        fetch('about-modal.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modals-container').innerHTML += html;
+            })
+            .catch(err => console.error('Error loading about modal:', err));
+        
+        fetch('terms-modal.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modals-container').innerHTML += html;
+            })
+            .catch(err => console.error('Error loading terms modal:', err));
+        
+        // Load Footer
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.body.insertAdjacentHTML('beforeend', html);
+            })
+            .catch(err => console.error('Error loading footer:', err));
+        
+        // Dropdown functions for mobile menu
+        function toggleVirtualCalculatorDropdown(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (window.innerWidth > 768) {return;}
+            const dropdown = document.getElementById('virtualCalculatorDropdown');
+            const link = event.target;
+            
+            document.querySelectorAll('.dropdown-content.show').forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink && d.id === 'virtualToolsDropdown') {
+                        parentLink.innerHTML = 'כלי השוואה ▼';
+                    }
+                }
+            });
+            
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                link.innerHTML = 'מחשבונים ▼';
+            } else {
+                dropdown.classList.add('show');
+                link.innerHTML = 'מחשבונים ▲';
+            }
+        }
+
+        function toggleVirtualToolsDropdown(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (window.innerWidth > 768) {return;}
+            const dropdown = document.getElementById('virtualToolsDropdown');
+            const link = event.target;
+            
+            document.querySelectorAll('.dropdown-content.show').forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink && d.id === 'virtualCalculatorDropdown') {
+                        parentLink.innerHTML = 'מחשבונים ▼';
+                    }
+                }
+            });
+            
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                link.innerHTML = 'כלי השוואה ▼';
+            } else {
+                dropdown.classList.add('show');
+                link.innerHTML = 'כלי השוואה ▲';
+            }
+        }
+
+        // Hamburger menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                        navMenu.classList.remove('active');
+                        hamburger.classList.remove('active');
+                    }
+                });
+
+                document.querySelectorAll('.nav-menu a').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        if (window.innerWidth <= 768 && !this.hasAttribute('onclick')) {
+                            navMenu.classList.remove('active');
+                            hamburger.classList.remove('active');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
  
 </body>
 </html>

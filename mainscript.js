@@ -111,14 +111,14 @@ async function fetchdataJasonP() {
     }
 }
 async function indications(){ 
-  for(let r=0;r<=6;r++){
+  for(let r=0;r<=5;r++){
     const sugmuzar=mozAll[r] 
   var typamas;
   if(r===0 || r===2 || r===4){typamas=hishtalmot}
   else if(r===1){typamas=gemel}
   else if(r===3){typamas=layeled}
   else if(r===5){typamas=pensia}  // קרנות פנסיה
-  else if(r===6){typamas=merkazit}
+  
   
   for (let i = 0; i < typamas.length; i++) {
     const dataY = await filterMaslul(typamas[i], sugmuzar, 0);
