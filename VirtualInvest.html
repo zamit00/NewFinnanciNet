@@ -227,19 +227,9 @@
             font-size: 1.05rem;
         }
         
-        .tblData th.tdbitul {
-            padding: 15px 10px;
-            text-align: center;
-            vertical-align: middle;
-        }
         
-        .tblData th.tdbitul i {
-            display: block;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
+        
+        
         
         .tblData td {
             padding: 12px;
@@ -263,12 +253,7 @@
             color: var(--primary);
         }
         
-        .tdbitul {
-            width: 15%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        
         
         .tdbitul button {
             background: #F44336;
@@ -690,12 +675,27 @@
             
             .tblData {
                 font-size: 0.85rem;
-                display: block;
-                overflow-x: auto;
+                width: 100%;
+                table-layout: fixed;
             }
             
             .tblData .tdmaslul {
                 font-size: 0.75rem;
+                width: 40% !important;
+            }
+            
+            .tblData .tdshiur {
+                width: 30% !important;
+            }
+            
+            .tblData .tdbitul,
+            .tblData td:last-child {
+                width: 30% !important;
+            }
+            
+            .tblData th, .tblData td {
+                padding: 10px 5px;
+                word-wrap: break-word;
             }
             
             .tdbig, .tdsmall {
@@ -826,12 +826,17 @@
         
         <div class="tblCenter" id="tblCenter">
             <table id="tblData" class="tblData">
+                <thead>
                 <tr>
                     <th class="tdmaslul">מסלול</th>
                     <th class="tdshiur">שיעור</th>
                     <th class="tdbitul"><i class="fas fa-trash-alt"></i></th>
                 </tr>
+                </thead>
+                <tbody>
+                </tbody>
             </table>
+
         </div>
         <div id="notar" style="margin-top: 10px;width: 100%;text-align: center;"></div>
         <div id="divBtn" style="display:flex;justify-content: center;width:100%;">
@@ -874,14 +879,8 @@
         const selectedProduct = document.getElementById('sugMMen').value;
         console.log('Selected product:', selectedProduct);
         
-        let table = document.getElementById("tblData");
-        table.innerHTML=`
-                <tr>
-                    <th class="tdmaslul">מסלול</th>
-                    <th class="tdshiur">שיעור</th>
-                    <th class="tdbitul"><i class="fas fa-trash-alt"></i></th>
-                </tr>
-        `
+        let tbody = document.getElementById("tblData").getElementsByTagName('tbody')[0];
+        tbody.innerHTML = '';
         const allSelects = document.querySelectorAll('.selectShemkupa');
         console.log('Found selects:', allSelects.length);
         
@@ -928,17 +927,11 @@ function chngTik(){
     document.getElementById('hamesh').innerHTML='';
     document.getElementById('centerTbl').style.display='none'
     document.querySelectorAll('.row').forEach(el => el.style.display = 'flex');
-    let table = document.getElementById("tblData");
+    let tbody = document.getElementById("tblData").getElementsByTagName('tbody')[0];
     let tblCenter= document.getElementById("tblCenter");
     document.getElementById('btnDo').innerHTML==='הפעל';
     tblCenter.style.display='none';
-    table.innerHTML=`
-    <tr>
-        <th class="tdmaslul">מסלול</th>
-        <th class="tdshiur">שיעור</th>
-        <th class="tdbitul"><i class="fas fa-trash-alt"></i></th>
-    </tr>
-`
+    tbody.innerHTML = '';
     document.getElementById('notar').innerHTML='';
 }
 
@@ -1004,7 +997,7 @@ async function addRow(x) {
 
     if(rtn==="back"){rtn="";return}
     
-    let table = document.getElementById("tblData");
+    let table = document.getElementById("tblData").getElementsByTagName('tbody')[0];
     let tblCenter= document.getElementById("tblCenter");
     
     tblCenter.style.display='flex';
@@ -1059,7 +1052,7 @@ async function addRow(x) {
         <tr>
             <td>${Select.value}</td>
             <td>${inp.value}%</td> 
-                <td style="background-color: red;font-size: 16px;" onclick="removeRow(this)">-</td>  
+                <td style="background-color: red;font-size: 16px;width: 100%;" onclick="removeRow(this)">-</td>  
         </tr>      
     `;
     updateNotar()
@@ -1068,18 +1061,15 @@ async function addRow(x) {
 
 }
 function updateNotar(){
-    let table = document.getElementById("tblData");
-    const rows=table.querySelectorAll("tr")
+    let tbody = document.getElementById("tblData").getElementsByTagName('tbody')[0];
+    const rows = tbody.querySelectorAll("tr");
     var accum=0
 
-    rows.forEach((row,index)=>{
-        if(index!==0){
-            accum =accum+ Number(row.children[1].innerText.replace('%', ''));
-        }     
-        });
-        document.getElementById('notar').innerHTML='';
-        document.getElementById('notar').innerHTML=`נותר לנצל: ${100-accum}%`;
-        
+    rows.forEach((row)=>{
+        accum = accum + Number(row.children[1].innerText.replace('%', ''));
+    });
+    document.getElementById('notar').innerHTML='';
+    document.getElementById('notar').innerHTML=`נותר לנצל: ${100-accum}%`;
 }
 
 
@@ -1093,16 +1083,12 @@ function removeRow(btn) {
     document.getElementById('hamesh').innerHTML='';}
 }
 function validateSum() {
-            let table = document.getElementById("tblData");
-            const rows=table.querySelectorAll("tr")
+            let tbody = document.getElementById("tblData").getElementsByTagName('tbody')[0];
+            const rows = tbody.querySelectorAll("tr");
             var accum=0;var bt=0;
-            rows.forEach((row,index)=>{
-               
-                if(index!==0){
-                    accum =accum+ Number(row.children[1].innerText.replace('%', ''));
-                    }
-                    
-                });
+            rows.forEach((row)=>{
+                accum = accum + Number(row.children[1].innerText.replace('%', ''));
+            });
            if(accum<100) {bt=1}   
            return bt;
         }
@@ -1174,8 +1160,8 @@ async function submitForm() {
 
     abc=abc.filter(item=>item.mozar===selectedProduct)
     
-    let table = document.getElementById("tblData");
-    const rows=table.querySelectorAll("tr")
+    let tbody = document.getElementById("tblData").getElementsByTagName('tbody')[0];
+    const rows = tbody.querySelectorAll("tr");
 
 
     var accum=0;var abc1; var accum36=0;var accum60=0;
@@ -1183,7 +1169,7 @@ async function submitForm() {
     var collection=[];var abc2;const mySet = new Set();
 
 for(let i=0;i<gufmosdixA.length;i++){
-    for (const row of Array.from(rows).slice(1)) {
+    for (const row of Array.from(rows)) {
         
         abc2 = await filterMaslulA(String(row.children[0].innerText), abc,selectedProduct);
        
@@ -1209,7 +1195,7 @@ for (var value of Array.from(mySet)) {
         abc1=abc.filter(item=>item.shemkupa.includes(value.split(" ")[0]) && item.tesuam!==0
     && item.tesuam!==undefined)
     }
-    for (const row of Array.from(rows).slice(1)) {
+    for (const row of Array.from(rows)) {
         abc2 = await filterMaslulA(String(row.children[0].innerText), abc1,selectedProduct);
         abc2 =  abc2.filter(item=>item.tesuam!==undefined && item.tesuam!==0);
         if(abc2.length!==0 && accumW===0){
