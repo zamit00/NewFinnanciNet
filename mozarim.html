@@ -146,6 +146,14 @@
             .product-btn span {
                 font-size: 0.9rem;
             }
+
+            /* Hide "מה" column on small screens */
+            .klalikoch tr td:first-child,
+            .klalikoch tr th:first-child,
+            .klalikochX tr td:first-child,
+            .klalikochX tr th:first-child {
+                display: none !important;
+            }
         }
 
         @media (max-width: 480px) {
@@ -400,6 +408,11 @@
                         throw new Error('maslulim function not found');
                     }
                 }
+
+                // Scroll to tables after they load
+                setTimeout(() => {
+                    tablesContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
             } catch (error) {
                 console.error('Error loading product data:', error);
                 tablesContainer.innerHTML = '<div style="text-align: center; padding: 40px; color: red;"><i class="fas fa-exclamation-circle" style="font-size: 3rem;"></i><p style="margin-top: 20px;">שגיאה בטעינת הנתונים: ' + error.message + '</p></div>';
