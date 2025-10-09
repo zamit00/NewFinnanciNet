@@ -29,7 +29,7 @@
 }
 
 .risk-modal-header {
-    background: linear-gradient(135deg, #00796B 0%, #004D40 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 25px 30px;
     border-radius: 20px 20px 0 0;
@@ -85,7 +85,7 @@
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #00796B 0%, #26A69A 100%);
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
     transition: width 0.4s ease;
     border-radius: 10px;
 }
@@ -104,7 +104,7 @@
 }
 
 .risk-intro h3 {
-    color: #00796B;
+    color: #667eea;
     margin-bottom: 20px;
     font-size: 1.5rem;
 }
@@ -121,16 +121,16 @@
     margin: 8px 0;
     background: #f5f5f5;
     border-radius: 10px;
-    border-right: 4px solid #00796B;
+    border-right: 4px solid #667eea;
 }
 
 .risk-intro li .bold {
-    color: #00796B;
+    color: #667eea;
     font-weight: 700;
 }
 
 .risk-intro button {
-    background: linear-gradient(135deg, #00796B 0%, #004D40 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
     padding: 15px 40px;
@@ -139,13 +139,13 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     margin-top: 20px;
 }
 
 .risk-intro button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 121, 107, 0.5);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
 }
 
 /* Questions */
@@ -161,7 +161,7 @@
 .risk-question {
     font-size: 1.3rem;
     font-weight: 600;
-    color: #00796B;
+    color: #667eea;
     margin-bottom: 25px;
     text-align: center;
 }
@@ -185,8 +185,8 @@
 }
 
 .risk-option:hover {
-    background: #e8f5e9;
-    border-color: #00796B;
+    background: #f0f4ff;
+    border-color: #667eea;
     transform: translateX(-5px);
 }
 
@@ -195,7 +195,7 @@
     width: 22px;
     height: 22px;
     cursor: pointer;
-    accent-color: #00796B;
+    accent-color: #667eea;
 }
 
 .risk-option label {
@@ -206,8 +206,8 @@
 }
 
 .risk-option.selected {
-    background: linear-gradient(135deg, rgba(0, 121, 107, 0.1) 0%, rgba(38, 166, 154, 0.1) 100%);
-    border-color: #00796B;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-color: #667eea;
     border-width: 3px;
 }
 
@@ -240,14 +240,14 @@
 }
 
 .risk-btn-next, .risk-btn-submit {
-    background: linear-gradient(135deg, #00796B 0%, #004D40 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .risk-btn-next:hover, .risk-btn-submit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 121, 107, 0.5);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
 }
 
 .risk-btn:disabled {
@@ -298,7 +298,7 @@
     line-height: 1.8;
     color: #333;
     margin: 20px 0;
-    border-right: 4px solid #00796B;
+    border-right: 4px solid #667eea;
 }
 
 .risk-result-actions {
@@ -332,12 +332,12 @@
 
 .risk-result-btn-secondary {
     background: white;
-    color: #00796B;
-    border: 2px solid #00796B;
+    color: #667eea;
+    border: 2px solid #667eea;
 }
 
 .risk-result-btn-secondary:hover {
-    background: #00796B;
+    background: #667eea;
     color: white;
 }
 
