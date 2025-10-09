@@ -2788,7 +2788,6 @@
                         <a href="hashMenahalot.html">השוואת חברות מנהלות</a>
                         <a href="hasifotMeshulav.html">מחולל חשיפות</a>
                         <a href="VirtualInvest.html">השוואת תיק משולב מסלולים</a>
-                        <a href="advancedAnalysis.html">ניתוח תיק מתקדם</a>
                         <a href="#">ציון משקל תשואה לשארפ</a>
                     </div>
                 </li>
@@ -3135,7 +3134,6 @@
                             <a href="hashMenahalot.html">השוואת חברות מנהלות</a>
                             <a href="hasifotMeshulav.html">מחולל חשיפות</a>
                             <a href="VirtualInvest.html">השוואת תיק משולב מסלולים</a>
-                            <a href="advancedAnalysis.html">ניתוח תיק מתקדם</a>
                             <a href="#">ציון משקל תשואה לשארפ</a>
                         </div>
                     </div>
@@ -3299,7 +3297,7 @@
     </div>
 
 <script>
-
+    // משתנים לניתוח מתקדם - נשמרים רק ב-sessionStorage
         function letStart(){
             if(window.innerWidth>768){
                 document.getElementById('fileUpload').style.display = 'flex';   
@@ -3626,8 +3624,8 @@
                     '9': [0, 0,0,0,0], '10': [0, 0,0,0,0]
                 };
         
-        let taarichLeyda = '';  
-        let DataAll=[];let kodMaslulSet = new Set();let yitrotKaspeyPizoyim=[];
+        let taarichLeyda = '';let DataAll=[];  
+        let kodMaslulSet = new Set();let yitrotKaspeyPizoyim=[];
         let pratimIshim;let yitrotLefiMutzar;let yitrotLeGilPrisha;
         let masluleiHashkaa=[];let sheabudIkulHalvaa=[];let pirteiHeshbon=[];
         // Mobile menu toggle
@@ -3958,6 +3956,10 @@
                             const birthYear = parseInt(taarichLeyda.slice(0,4));
                             const currentYear = new Date().getFullYear();
                             gil = currentYear - birthYear;
+                            
+                            // שמירה ב-sessionStorage לשימוש בעמוד הניתוח המתקדם
+                            sessionStorage.setItem('gilForAdvancedAnalysis', gil);
+                            sessionStorage.setItem('ageToRetirementForAdvancedAnalysis', 67-Number(gil));
                         };
                         
                         pratimIshim={shemPrati,shemMishpacha,misparCellulari,eMail,misparZihuyLakoach,taarichLeyda,gil};
@@ -3986,6 +3988,7 @@
                                     const totalErkeiPidion = cleanVal(getElementText(yitra, 'TOTAL-ERKEI-PIDION')) || 0;
                                     if(sugMutzar!=='2'){
                                         sumSugMutzar[sugMutzar][0] = (sumSugMutzar[sugMutzar][0] || 0) + parseFloat(totalErkeiPidion);    
+                                        // סכומים נשמרים רק ב-sessionStorage בסוף התהליך
                                     }
                                     else{
                                         if(pensiaVatikaOHadasha==='1'){
@@ -3994,6 +3997,7 @@
                                         else{
                                             sumSugMutzar[sugMutzar+'_2'][0] = (sumSugMutzar[sugMutzar+'_2'][0] || 0) + parseFloat(totalErkeiPidion);    
                                         }
+
                                     }
                                 }
                                
@@ -5000,6 +5004,7 @@
         
         // Advanced Analysis functionality
         advancedAnalysisBtn.addEventListener('click', () => {
+           
             window.location.href = 'advancedAnalysis.html';
         });
 
@@ -5051,6 +5056,13 @@
                     pratimIshim='';yitrotLefiMutzar='';yitrotLeGilPrisha='';
                     masluleiHashkaa=[];sheabudIkulHalvaa=[];
                     dataMislaka = null;myChart = null;
+                    
+                    // ניקוי sessionStorage של נתוני ניתוח מתקדם
+                    sessionStorage.removeItem('gilForAdvancedAnalysis');
+                    sessionStorage.removeItem('ageToRetirementForAdvancedAnalysis');
+                    sessionStorage.removeItem('sumHonForAdvancedAnalysis');
+                    sessionStorage.removeItem('sumKitzvaForAdvancedAnalysis');
+                    console.log('🗑️ נתוני ניתוח מתקדם נמחקו מ-sessionStorage');
                     
                     // השבת את כפתור הניתוח המתקדם
                     const advBtns = document.querySelectorAll('#advancedAnalysisBtnMain2, #advancedAnalysisBtn');
@@ -6225,6 +6237,26 @@
 
             // הצגת התצוגה
             document.getElementById('dataDisplayContainer').style.display = 'block';
+            
+            // חישוב סכומים לניתוח מתקדם
+            // מוצרים הוניים: 4, 5, 9, 10 (גמל השקעה, השתלמות, חסכון)
+            const sumHon = (sumSugMutzar['4']?.[0] || 0) + 
+                          (sumSugMutzar['5']?.[0] || 0) + 
+                          (sumSugMutzar['9']?.[0] || 0) + 
+                          (sumSugMutzar['10']?.[0] || 0);
+            
+            // מוצרי קצבה: 1, 2, 3 (ביטוח מנהלים, פנסיה, גמל)
+            const sumKitzva = (sumSugMutzar['1']?.[0] || 0) + 
+                             (sumSugMutzar['2_1']?.[0] || 0) + 
+                             (sumSugMutzar['2_2']?.[0] || 0) + 
+                             (sumSugMutzar['3']?.[0] || 0);
+            
+            // שמירת נתונים לניתוח מתקדם ב-sessionStorage
+            sessionStorage.setItem('sumHonForAdvancedAnalysis', sumHon);
+            sessionStorage.setItem('sumKitzvaForAdvancedAnalysis', sumKitzva);
+            console.log('💾 נתונים לניתוח מתקדם נשמרו ב-sessionStorage');
+            console.log(`   סך הוני: ₪${sumHon.toLocaleString('he-IL')}`);
+            console.log(`   סך קצבה: ₪${sumKitzva.toLocaleString('he-IL')}`);
             
             // הפעלת כפתור ניתוח מתקדם לאחר טעינת הנתונים
             const advBtns = document.querySelectorAll('#advancedAnalysisBtnMain2, #advancedAnalysisBtn');

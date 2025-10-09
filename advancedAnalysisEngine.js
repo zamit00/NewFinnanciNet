@@ -1,5 +1,32 @@
 // Advanced Analysis Engine - Data Management and Analysis
 // מנוע ניתוח מתקדם - ניהול ואיחסון נתונים
+// ייבוא נתונים מ-sessionStorage ומחיקה מיידית
+function importAndClearSessionData() {
+    const gil = sessionStorage.getItem('gilForAdvancedAnalysis');
+    const yearsToRetirement = sessionStorage.getItem('ageToRetirementForAdvancedAnalysis');
+    const equitySum = sessionStorage.getItem('sumHonForAdvancedAnalysis');
+    const pensionSum = sessionStorage.getItem('sumKitzvaForAdvancedAnalysis');
+    
+    console.log('📥 מייבא נתונים מ-sessionStorage...');
+    console.log('  גיל:', gil);
+    console.log('  שנים לפרישה:', yearsToRetirement);
+    console.log('  סך הוני:', equitySum);
+    console.log('  סך קצבה:', pensionSum);
+    
+    // מחיקה מיידית מ-sessionStorage
+    sessionStorage.removeItem('gilForAdvancedAnalysis');
+    sessionStorage.removeItem('ageToRetirementForAdvancedAnalysis');
+    sessionStorage.removeItem('sumHonForAdvancedAnalysis');
+    sessionStorage.removeItem('sumKitzvaForAdvancedAnalysis');
+    console.log('🗑️ נתונים נמחקו מ-sessionStorage');
+    
+    return {
+        age: gil ? parseInt(gil) : null,
+        yearsToRetirement: yearsToRetirement ? parseInt(yearsToRetirement) : null,
+        equityTotal: equitySum ? parseFloat(equitySum) : 0,
+        pensionTotal: pensionSum ? parseFloat(pensionSum) : 0
+    };
+}
 
 // אובייקט מרכזי לאחסון נתוני הלקוח
 const clientAnalysisData = {
@@ -133,15 +160,22 @@ const PortfolioAnalyzer = {
         const providerBreakdown = {};
         const pathwayBreakdown = {};
         
-        // קריאת נתוני לקוח מהמשתנים הגלובליים המוכנים
-        if (typeof gilForAdvancedAnalysis !== 'undefined' && gilForAdvancedAnalysis > 0) {
-            clientAnalysisData.profile.age = gilForAdvancedAnalysis;
-            console.log(`📅 גיל לקוח: ${clientAnalysisData.profile.age}`);
+        // קריאה מ-sessionStorage ומחיקה מיידית
+        const importedData = importAndClearSessionData();
+        
+        if (importedData.age) {
+            clientAnalysisData.profile.age = importedData.age;
         }
         
-        if (typeof ageToRetirementForAdvancedAnalysis !== 'undefined') {
-            clientAnalysisData.profile.yearsToRetirement = ageToRetirementForAdvancedAnalysis;
-            console.log(`⏰ שנים עד פרישה: ${clientAnalysisData.profile.yearsToRetirement}`);
+        if (importedData.yearsToRetirement !== null) {
+            clientAnalysisData.profile.yearsToRetirement = importedData.yearsToRetirement;
+        }
+        
+        // שימוש בסכומים המוכנים
+        if (importedData.equityTotal > 0 || importedData.pensionTotal > 0) {
+            clientAnalysisData.portfolio.equityTotal = importedData.equityTotal;
+            clientAnalysisData.portfolio.pensionTotal = importedData.pensionTotal;
+            clientAnalysisData.portfolio.totalValue = importedData.equityTotal + importedData.pensionTotal;
         }
         
         // הגדרת גיל פרישה
