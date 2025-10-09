@@ -1197,7 +1197,7 @@
         // Close calculator dropdown when clicking outside
         document.addEventListener('click', function(e) {
             const dropdown = document.getElementById('loanCalculatorDropdown');
-            const dropdownLink = document.querySelector('.nav-dropdown a');
+            const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
             
             if (dropdownLink && dropdown && !dropdownLink.contains(e.target) && !dropdown.contains(e.target)) {
                 dropdown.classList.remove('show');
@@ -1214,7 +1214,7 @@
                 // Close dropdown after a short delay to allow navigation
                 setTimeout(() => {
                     const dropdown = document.getElementById('loanCalculatorDropdown');
-                    const dropdownLink = document.querySelector('.nav-dropdown a');
+                    const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
                     
                     if (dropdown) {
                         dropdown.classList.remove('show');

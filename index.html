@@ -1631,7 +1631,7 @@
             opacity: 1;
             visibility: visible;
             transform: translateX(0);
-            margin-top: -30px; 
+            margin-top: -25px; 
 		}
         .nav-menu.active li,.nav-menu.active li a{
             display: flex;
@@ -3465,14 +3465,23 @@
                 button.innerHTML = 'בחר מחשבון ▼';
             }
             
-            // Close nav dropdown when clicking outside
-            const navDropdown = document.getElementById('navCalculatorDropdown');
-            const navLink = document.querySelector('.nav-dropdown a');
-            
-            if (navDropdown && navLink && !navDropdown.contains(event.target) && !navLink.contains(event.target)) {
-                navDropdown.classList.remove('show');
-                navLink.innerHTML = 'מחשבונים ▼';
-            }
+            // Close nav dropdowns when clicking outside
+            document.querySelectorAll('.dropdown-content.show').forEach(d => {
+                if (!d.contains(event.target)) {
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink && !parentLink.contains(event.target)) {
+                        d.classList.remove('show');
+                        if (d.id === 'navProductsDropdown') {
+                            parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                        } else if (d.id === 'navCalculatorDropdown') {
+                            parentLink.innerHTML = 'מחשבונים ▼';
+                        } else if (d.id === 'navToolsDropdown') {
+                            parentLink.innerHTML = 'כלי השוואה ▼';
+                        }
+                    }
+                }
+            });
         });
 
         // סגירת הרשימה הנפתחת כשלוחצים על קישור
@@ -3489,10 +3498,27 @@
             // Close nav dropdown when clicking on links
             if (event.target.closest('#navCalculatorDropdown a')) {
                 const navDropdown = document.getElementById('navCalculatorDropdown');
-                const navLink = document.querySelector('.nav-dropdown a');
+                const navLink = navDropdown.closest('.nav-dropdown')?.querySelector('a');
                 
-                navDropdown.classList.remove('show');
-                navLink.innerHTML = 'מחשבונים ▼';
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'מחשבונים ▼';
+            }
+            
+            // Close other nav dropdowns when clicking on their links
+            if (event.target.closest('#navProductsDropdown a')) {
+                const navDropdown = document.getElementById('navProductsDropdown');
+                const navLink = navDropdown.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'מוצרים ותשואות ▼';
+            }
+            
+            if (event.target.closest('#navToolsDropdown a')) {
+                const navDropdown = document.getElementById('navToolsDropdown');
+                const navLink = navDropdown.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'כלי השוואה ▼';
             }
         });
 
@@ -3505,7 +3531,7 @@
                 // Close dropdown after a short delay to allow navigation
                 setTimeout(() => {
                     const dropdown = document.getElementById('navCalculatorDropdown');
-                    const dropdownLink = document.querySelector('.nav-dropdown a');
+                    const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
                     
                     if (dropdown) {
                         dropdown.classList.remove('show');
