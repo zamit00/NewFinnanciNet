@@ -6641,31 +6641,50 @@
 
             tableDiv.innerHTML = tableHTML;
             
-            // חישוב סכומים לניתוח מתקדם - חיבור לפי עמודה שניה
-            let sumHon = 0;    // הוני: 4, 5, 9, 10
-            let sumKitzva = 0; // קצבה: 1, 2, 2_1, 2_2, 3
-            
-            // לולאה על כל המוצרים
-            for (let key in sumSugMutzar) {
-                const yitra = parseFloat(sumSugMutzar[key][0]) || 0; // עמודה שניה - יתרה
+            // חישוב סכומים לניתוח מתקדם - מריצה על שורות הטבלה
+            setTimeout(() => {
+                const table = tableDiv.querySelector('table tbody');
+                if (!table) return;
                 
-                if (key === '4' || key === '5' || key === '9' || key === '10') {
-                    sumHon += yitra;
-                    console.log(`  ${shemTochnit[key]}: ₪${yitra.toLocaleString('he-IL')} → הוני`);
-                } else if (key === '1' || key === '2' || key === '2_1' || key === '2_2' || key === '3') {
-                    sumKitzva += yitra;
-                    console.log(`  ${shemTochnit[key]}: ₪${yitra.toLocaleString('he-IL')} → קצבה`);
+                const rows = table.querySelectorAll('tr');
+                let sumHon = 0;
+                let sumKitzva = 0;
+                
+                // מוצרים הוניים
+                const equityProducts = ['קרן השתלמות', 'פוליסת חיסכון טהור', 'קופת גמל להשקעה', 'חיסכון לכל ילד'];
+                // מוצרי קצבה
+                const pensionProducts = ['פוליסת ביטוח חיים משולב חסכון', 'קרן פנסיה', 'קופת גמל'];
+                
+                // רוץ על השורות (החל מהשנייה - דלג על הכותרת)
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i].children;
+                    if (cells.length < 2) continue;
+                    
+                    const productName = cells[0].textContent.trim(); // עמודה ראשונה - שם מוצר
+                    const amountText = cells[1].textContent.trim();  // עמודה שניה - סכום
+                    
+                    // המרת הסכום למספר (הסרת ₪ ופסיקים)
+                    const amount = parseFloat(amountText.replace(/[₪,\s]/g, '')) || 0;
+                    
+                    // סיווג לפי שם המוצר
+                    if (equityProducts.some(eq => productName.includes(eq))) {
+                        sumHon += amount;
+                        console.log(`  ${productName}: ₪${amount.toLocaleString('he-IL')} → הוני`);
+                    } else if (pensionProducts.some(pen => productName.includes(pen))) {
+                        sumKitzva += amount;
+                        console.log(`  ${productName}: ₪${amount.toLocaleString('he-IL')} → קצבה`);
+                    }
                 }
-            }
-            
-            console.log('━━━━━━━━━━━━━━━━━━━━━━');
-            console.log(`💰 סך הוני: ₪${sumHon.toLocaleString('he-IL')}`);
-            console.log(`🏦 סך קצבה: ₪${sumKitzva.toLocaleString('he-IL')}`);
-            
-            // שמירה ב-sessionStorage
-            sessionStorage.setItem('sumHonForAdvancedAnalysis', sumHon);
-            sessionStorage.setItem('sumKitzvaForAdvancedAnalysis', sumKitzva);
-            console.log('💾 נשמר ב-sessionStorage');
+                
+                console.log('━━━━━━━━━━━━━━━━━━━━━━');
+                console.log(`💰 סך הוני: ₪${sumHon.toLocaleString('he-IL')}`);
+                console.log(`🏦 סך קצבה: ₪${sumKitzva.toLocaleString('he-IL')}`);
+                
+                // שמירה ב-sessionStorage
+                sessionStorage.setItem('sumHonForAdvancedAnalysis', sumHon);
+                sessionStorage.setItem('sumKitzvaForAdvancedAnalysis', sumKitzva);
+                console.log('💾 נשמר ב-sessionStorage');
+            }, 100);
         }
 
         // פונקציה ליצירת טבלת סיכום לפי מסלול ומוצר
