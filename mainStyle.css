@@ -89,7 +89,8 @@
         display: flex !important;
         align-items: center;
         order: 2;
-        margin-right: 8px;
+        margin-right: 5px;
+        margin-left: auto;
     }
     
     .whatsapp-mobile i {
@@ -97,12 +98,13 @@
     }
     
     .logo {
-        order: 3;
+        order: 1;
+        margin-right: auto;
         margin-left: 15px;
     }
     
     .hamburger {
-        order: 1;
+        order: 3;
         margin-right: 15px;
     }
     
