@@ -1,6 +1,6 @@
 var datanetunimKlaliXM;var datanetunimKlaliXB;var datanetunimKlaliXP;
 var clickStatus;let dataIndicators = [];
-var tkofa;
+var tkofa;let sikonData = [];
 const gufmosdixA = [
     'הראל פנסיה וגמל', 'כלל פנסיה וגמל',
     'מגדל מקפת קרנות פנסיה וקופות גמל', 'מנורה מבטחים פנסיה וגמל',
@@ -53,6 +53,7 @@ async function loadalldata() {
         //console.log('✅ כל הנתונים נטענו בהצלחה');
         //console.log('📊 מעבד ממוצעים...');
         await indications();
+        await fetchInvestmentData();
         //console.log('✅ עיבוד ממוצעים הושלם');
         //console.log(`📈 נוצרו ${dataIndicators.length} רשומות ממוצע`);
         const tkofaItem = datanetunimKlaliXM.filter(item=>item.mh==='579')[0].tesua12
@@ -72,6 +73,47 @@ async function loadalldata() {
 window.onload = async function() {
   await loadalldata();
 }
+
+async function fetchInvestmentData() {
+  const response = await fetch("ofihashkaa.xml");
+  const text = await response.text();
+
+  // ממיר את ה־XML למסמך קריא
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(text, "application/xml");
+
+  // אוסף את כל הרשומות
+  const rows = xml.getElementsByTagName("Row");
+  
+
+  for (let row of rows) {
+    const name = row.getElementsByTagName("ID")[0]?.textContent.trim();
+    
+    // חיפוש SIKON - קודם בתוך Row, אחר כך אחרי Row
+    let risk = row.getElementsByTagName("SIKON")[0]?.textContent.trim();
+    
+    // אם לא נמצא בתוך Row, חפש את האלמנט הבא אחרי Row
+    if (!risk && row.nextElementSibling) {
+      if (row.nextElementSibling.tagName === "SIKON") {
+        risk = row.nextElementSibling.textContent.trim();
+      }
+    }
+    
+    if (name && risk) {
+      sikonData.push({ name, risk });
+      console.log(`✅ נטען: ${name} → ${risk}`);
+    } else if (name) {
+      console.warn(`⚠️ חסר SIKON עבור: ${name}`);
+    }
+  }
+
+  console.log(`📊 נטענו ${sikonData.length} מסלולים מ-ofihashkaa.xml`);
+  return sikonData;
+}
+
+// קריאה לפונקציה
+
+
 
 async function fetchdataJasonM() {
     try {

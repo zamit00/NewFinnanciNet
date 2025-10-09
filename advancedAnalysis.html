@@ -1379,9 +1379,15 @@
             console.log('🔍 DEBUG Step 2 - analyzeQuality:');
             console.log('  pirteiHeshbon:', pirteiHeshbon);
             console.log('  מספר חשבונות:', pirteiHeshbon?.length || 0);
+            console.log('  sikonData זמין?', typeof sikonData !== 'undefined' && sikonData?.length > 0);
+            console.log('  sikonData length:', typeof sikonData !== 'undefined' ? sikonData?.length : 'undefined');
             if (pirteiHeshbon && pirteiHeshbon[0]) {
                 console.log('  דוגמה לחשבון ראשון:', pirteiHeshbon[0]);
                 console.log('  מסלולים בחשבון ראשון:', pirteiHeshbon[0].mafyenMaslulim);
+                if (pirteiHeshbon[0].mafyenMaslulim && pirteiHeshbon[0].mafyenMaslulim[0]) {
+                    console.log('  שם מסלול ראשון:', pirteiHeshbon[0].mafyenMaslulim[0].shemMaslul);
+                    console.log('  ramatsikon במסלול:', pirteiHeshbon[0].mafyenMaslulim[0].ramatsikon);
+                }
             }
             console.log('  clientRisk:', clientRisk);
             
@@ -1444,20 +1450,28 @@
                 
                 // עבור על כל מסלול בחשבון
                 maslulim.forEach(maslul => {
-                    const pathwayName = maslul.shemMaslul || 'לא ידוע';
+                    const pathwayName = maslul.shemMaslulHashkaa || maslul.shemMaslul || 'לא ידוע';
                     const pathwayAmount = parseFloat(maslul.schumTzvira || 0);
+                    
+                    console.log(`📍 מעבד מסלול: ${pathwayName}`);
+                    console.log(`  ramatsikon מקורי:`, maslul.ramatsikon);
                     
                     // ניסיון לקבל ramatsikon מהמסלול עצמו
                     let ramatsikon = maslul.ramatsikon;
                     
                     // אם אין ramatsikon, חפש לפי שם המסלול
                     if (!ramatsikon || ramatsikon === 'לא ידוע' || ramatsikon === '') {
+                        console.log(`  מחפש ב-sikonData...`);
                         const foundRamatsikon = findRamatsikonByName(pathwayName);
                         if (foundRamatsikon) {
                             ramatsikon = foundRamatsikon;
+                            console.log(`  ✅ נמצא: ${ramatsikon}`);
                         } else {
                             ramatsikon = 'לא ידוע';
+                            console.log(`  ❌ לא נמצא`);
                         }
+                    } else {
+                        console.log(`  שימוש ב-ramatsikon מקורי: ${ramatsikon}`);
                     }
                     
                     // זיהוי רמת סיכון לפי ramatsikon
