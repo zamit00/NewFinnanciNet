@@ -6655,10 +6655,10 @@
                 let sumHon = 0;
                 let sumKitzva = 0;
                 
-                // מוצרים הוניים
-                const equityProducts = ['קרן השתלמות', 'פוליסת חיסכון טהור', 'קופת גמל להשקעה', 'חיסכון לכל ילד'];
-                // מוצרי קצבה
-                const pensionProducts = ['פוליסת ביטוח חיים משולב חסכון', 'קרן פנסיה', 'קופת גמל'];
+                // מוצרים הוניים - מילות מפתח
+                const equityKeywords = ['השתלמות', 'חיסכון טהור', 'גמל להשקעה', 'חיסכון לכל ילד'];
+                // מוצרי קצבה - מילות מפתח
+                const pensionKeywords = ['ביטוח חיים', 'פנסיה', 'קופת גמל'];
                 
                 // רוץ על כל השורות (מהראשונה)
                 for (let i = 0; i < rows.length; i++) {
@@ -6669,16 +6669,27 @@
                     const productName = cells[0].textContent.trim(); // עמודה ראשונה - שם מוצר
                     const amountText = cells[1].textContent.trim();  // עמודה שניה - סכום
                     
+                    // דלג על כותרת או שורות ריקות
+                    if (!productName || productName === 'סוג מוצר' || !amountText) {
+                        console.log(`  ⏭️ מדלג על שורה ${i} (כותרת או ריקה)`);
+                        continue;
+                    }
+                    
                     // המרת הסכום למספר (הסרת ₪ ופסיקים)
                     const amount = parseFloat(amountText.replace(/[₪,\s]/g, '')) || 0;
                     
-                    // סיווג לפי שם המוצר
-                    if (equityProducts.some(eq => productName.includes(eq))) {
+                    // סיווג לפי מילות מפתח בשם המוצר
+                    const isEquity = equityKeywords.some(keyword => productName.includes(keyword));
+                    const isPension = pensionKeywords.some(keyword => productName.includes(keyword));
+                    
+                    if (isEquity) {
                         sumHon += amount;
-                        console.log(`  ${productName}: ₪${amount.toLocaleString('he-IL')} → הוני`);
-                    } else if (pensionProducts.some(pen => productName.includes(pen))) {
+                        console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → הוני`);
+                    } else if (isPension) {
                         sumKitzva += amount;
-                        console.log(`  ${productName}: ₪${amount.toLocaleString('he-IL')} → קצבה`);
+                        console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → קצבה`);
+                    } else if (amount > 0) {
+                        console.log(`  ⚠️ ${productName}: ₪${amount.toLocaleString('he-IL')} → לא מסווג`);
                     }
                 }
                 
