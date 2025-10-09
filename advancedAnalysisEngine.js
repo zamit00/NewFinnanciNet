@@ -93,7 +93,10 @@ const clientAnalysisData = {
     
     // תאריך ניתוח
     analysisDate: null,
-    lastUpdated: null
+    lastUpdated: null,
+    
+    // נתונים מפורטים מהקבצים
+    detailedData: null
 };
 
 // פונקציות לשמירה ושליפה מ-localStorage

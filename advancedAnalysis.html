@@ -1159,6 +1159,9 @@
                     clientAnalysisData.portfolio.pensionTotal = importedData.pensionTotal;
                     clientAnalysisData.portfolio.totalValue = importedData.equityTotal + importedData.pensionTotal;
                     
+                    // שמירת הנתונים המפורטים
+                    clientAnalysisData.detailedData = importedData.detailedData;
+                    
                     // טעינת רמת סיכון אם קיימת
                     if (importedData.riskProfile) {
                         clientAnalysisData.profile.riskProfile = importedData.riskProfile;
@@ -1346,9 +1349,11 @@
         function analyzeQuality() {
             const container = document.getElementById('qualityAnalysis');
             
+            // שימוש בנתונים שכבר נטענו ל-clientAnalysisData
+            const detailedData = clientAnalysisData.detailedData;
+            
             // בדיקה אם יש נתונים
-            const importedData = importAndClearSessionData();
-            if (!importedData.detailedData || !importedData.detailedData.pirteiHeshbon) {
+            if (!detailedData || !detailedData.pirteiHeshbon) {
                 container.innerHTML = `
                     <div class="analysis-card" style="text-align: center;">
                         <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--warning);"></i>
@@ -1365,8 +1370,8 @@
                 return;
             }
             
-            const pirteiHeshbon = importedData.detailedData.pirteiHeshbon;
-            const masluleiHashkaa = importedData.detailedData.masluleiHashkaa || [];
+            const pirteiHeshbon = detailedData.pirteiHeshbon;
+            const masluleiHashkaa = detailedData.masluleiHashkaa || [];
             const clientRisk = clientAnalysisData.profile.riskProfile;
             
             let html = `
