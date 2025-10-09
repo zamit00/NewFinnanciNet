@@ -18,10 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const hasAcceptedTerms = localStorage.getItem('termsAccepted');
         
         console.log('Terms accepted:', hasAcceptedTerms); // Debug
+        console.log('Overlay element found:', !!overlay); // Debug
         
         if (!hasAcceptedTerms && overlay) {
             // Show overlay on first visit
-            overlay.classList.remove('hidden');
+            overlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
             console.log('Showing terms consent overlay'); // Debug
         } else if (overlay) {
             // Hide overlay if already accepted
@@ -42,7 +44,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (overlay) {
                     overlay.style.animation = 'fadeOut 0.3s ease';
                     setTimeout(() => {
+                        overlay.classList.remove('show');
                         overlay.classList.add('hidden');
+                        document.body.style.overflow = 'auto';
                     }, 300);
                 }
             });
