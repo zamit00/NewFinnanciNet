@@ -16,6 +16,7 @@
     <script src="mainscript.js"></script>
     <script src="data.js"></script>
     <script src="kochavimscript.js"></script>
+    <script src="PensiaScript.js"></script>
   <title>ezFinnaci</title>
   <style>
 
@@ -2743,12 +2744,12 @@
                 <li class="nav-dropdown">
                     <a href="#" onclick="toggleNavProductsDropdown(event)">מוצרים ותשואות ▼</a>
                     <div class="dropdown-content" id="navProductsDropdown">
-                        <a href="index.html#products">קרנות השתלמות</a>
-                        <a href="index.html#products">קופות גמל</a>
-                        <a href="index.html#products">קופות גמל להשקעה</a>
-                        <a href="index.html#products">חסכון לילד</a>
-                        <a href="index.html#products">פוליסות חסכון</a>
-                        <a href="index.html#products">קרנות פנסיה חדשות</a>
+                        <a href="mozarim.html">קרנות השתלמות</a>
+                        <a href="mozarim.html">קופות גמל</a>
+                        <a href="mozarim.html">קופות גמל להשקעה</a>
+                        <a href="mozarim.html">חסכון לילד</a>
+                        <a href="mozarim.html">פוליסות חסכון</a>
+                        <a href="mozarim.html">קרנות פנסיה חדשות</a>
                     </div>
                 </li>
                 <li class="nav-dropdown">
@@ -3149,6 +3150,14 @@
             </div>
         </div>
     </section>
+
+    <!-- Products Tables Section -->
+    <section id="products" style="display: none; padding: 20px 0;">
+        <div class="container" style="max-width: 1400px; margin: 0 auto;">
+            <div id="allTheTables" class="allTheTables"></div>
+        </div>
+    </section>
+
 <div class="mainTitle secondTitle" dir="rtl">
 	<div class="feature-card">
 		<div dir="rtl" class="flex-container">
@@ -3277,6 +3286,51 @@
             
             document.getElementById('fileUploadArea').style.display = 'block';
             document.getElementById('sectionHeader').style.display = 'flex';    
+        }
+
+        // Function to show product tables
+        async function showProductTables(productType) {
+            // Hide other sections
+            const productsSection = document.getElementById('products');
+            if (!productsSection) return;
+            
+            // Show products section
+            productsSection.style.display = 'block';
+            
+            // Scroll to products section
+            productsSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Map product type to internal name and call appropriate function
+            const productMap = {
+                'קרנות השתלמות': 'קרנות השתלמות',
+                'קופות גמל': 'תגמולים ואישית לפיצויים',
+                'קופות גמל להשקעה': 'קופת גמל להשקעה',
+                'חסכון לילד': 'קופת גמל להשקעה - חסכון לילד',
+                'פוליסות חסכון': 'פוליסות חסכון',
+                'קרנות פנסיה חדשות': 'קרנות חדשות'
+            };
+            
+            const internalName = productMap[productType];
+            
+            if (productType === 'קרנות פנסיה חדשות') {
+                // Call pension function
+                if (typeof maslulimP === 'function') {
+                    await maslulimP(1, internalName, 0);
+                }
+            } else {
+                // Call regular products function
+                if (typeof maslulim === 'function') {
+                    await maslulim(1, internalName, 0);
+                }
+            }
+            
+            // Close mobile menu if open
+            const navMenu = document.getElementById('navMenu');
+            const hamburger = document.getElementById('hamburger');
+            if (navMenu && hamburger) {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
         }
 
         // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט
