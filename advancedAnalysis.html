@@ -526,18 +526,14 @@
             </button>
             <button class="step-btn" data-step="2">
                 <div class="step-number">2</div>
-                <div class="step-title">ניתוח מבנה התיק</div>
+                <div class="step-title">ניתוח איכות</div>
             </button>
             <button class="step-btn" data-step="3">
                 <div class="step-number">3</div>
-                <div class="step-title">ניתוח איכות</div>
+                <div class="step-title">איתור פערים</div>
             </button>
             <button class="step-btn" data-step="4">
                 <div class="step-number">4</div>
-                <div class="step-title">איתור פערים</div>
-            </button>
-            <button class="step-btn" data-step="5">
-                <div class="step-number">5</div>
                 <div class="step-title">דוח המלצות</div>
             </button>
         </div>
@@ -608,15 +604,15 @@
             </div>
         </div>
         
-        <!-- Step 2: Portfolio Structure -->
+        <!-- Step 2: Quality Analysis -->
         <div class="step-panel" id="step-2">
             <div class="panel-header">
-                <h2>שלב 2: ניתוח מבנה התיק</h2>
-                <p>סקירה מפורטת של המוצרים והחשבונות שלך</p>
+                <h2>שלב 2: ניתוח איכות השקעה</h2>
+                <p>השוואת הביצועים שלך לממוצע הענף</p>
             </div>
             
-            <div id="portfolioStructure">
-                <!-- יאוכלס דינמית עם נתוני התיק -->
+            <div id="qualityAnalysis">
+                <!-- Will be populated dynamically -->
             </div>
             
             <div class="step-actions">
@@ -631,14 +627,14 @@
             </div>
         </div>
         
-        <!-- Step 3: Quality Analysis -->
+        <!-- Step 3: Gap Analysis -->
         <div class="step-panel" id="step-3">
             <div class="panel-header">
-                <h2>שלב 3: ניתוח איכות השקעה</h2>
-                <p>השוואת הביצועים שלך לממוצע הענף</p>
+                <h2>שלב 3: איתור פערים והזדמנויות</h2>
+                <p>זיהוי אזורים לשיפור ואופטימיזציה</p>
             </div>
             
-            <div id="qualityAnalysis">
+            <div id="gapAnalysis">
                 <!-- Will be populated dynamically -->
             </div>
             
@@ -654,33 +650,10 @@
             </div>
         </div>
         
-        <!-- Step 4: Gap Analysis -->
+        <!-- Step 4: Recommendations Report -->
         <div class="step-panel" id="step-4">
             <div class="panel-header">
-                <h2>שלב 4: איתור פערים והזדמנויות</h2>
-                <p>זיהוי אזורים לשיפור ואופטימיזציה</p>
-            </div>
-            
-            <div id="gapAnalysis">
-                <!-- Will be populated dynamically -->
-            </div>
-            
-            <div class="step-actions">
-                <button class="btn btn-secondary" onclick="goToStep(3)">
-                    <i class="fas fa-arrow-right"></i>
-                    חזור
-                </button>
-                <button class="btn btn-primary" onclick="goToStep(5)">
-                    המשך
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-            </div>
-        </div>
-        
-        <!-- Step 5: Recommendations Report -->
-        <div class="step-panel" id="step-5">
-            <div class="panel-header">
-                <h2>שלב 5: דוח המלצות</h2>
+                <h2>שלב 4: דוח המלצות</h2>
                 <p>סיכום מקיף והמלצות פעולה</p>
             </div>
             
@@ -689,7 +662,7 @@
             </div>
             
             <div class="step-actions">
-                <button class="btn btn-secondary" onclick="goToStep(4)">
+                <button class="btn btn-secondary" onclick="goToStep(3)">
                     <i class="fas fa-arrow-right"></i>
                     חזור
                 </button>
@@ -767,12 +740,10 @@
             
             // קריאה לפונקציות ספציפיות לכל שלב
             if (stepNumber === 2) {
-                analyzePortfolioStructure();
-            } else if (stepNumber === 3) {
                 analyzeQuality();
-            } else if (stepNumber === 4) {
+            } else if (stepNumber === 3) {
                 analyzeGaps();
-            } else if (stepNumber === 5) {
+            } else if (stepNumber === 4) {
                 generateRecommendations();
             }
             
@@ -915,124 +886,6 @@
                     `;
                 }
             }
-        }
-        
-        // פונקציה להצגת ניתוח מבנה התיק
-        function analyzePortfolioStructure() {
-            const container = document.getElementById('portfolioStructure');
-            
-            if (!clientAnalysisData.portfolio.totalValue || clientAnalysisData.portfolio.totalValue === 0) {
-                container.innerHTML = `
-                    <div class="analysis-card" style="text-align: center;">
-                        <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--warning); margin-bottom: 20px;"></i>
-                        <h3>אין נתונים זמינים</h3>
-                        <p style="color: var(--text-light); margin: 20px 0;">
-                            נא להעלות את קבצי המסלקה שלך בדף הבית כדי לראות ניתוח מפורט
-                        </p>
-                        <button class="btn btn-primary" onclick="window.location.href='index.html#fileUpload'">
-                            <i class="fas fa-upload"></i>
-                            עבור להעלאת קבצים
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-            
-            // הצגת סיכום כללי
-            const summary = PortfolioAnalyzer.getSummary();
-            let html = `
-                <div class="analysis-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 30px;">
-                    <h3 style="color: white; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 15px; margin-bottom: 20px;">
-                        <i class="fas fa-briefcase"></i>
-                        סיכום התיק
-                    </h3>
-                    <div class="analysis-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                        <div style="text-align: center; padding: 15px;">
-                            <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">
-                                ${AnalysisUtils.formatCurrency(summary.totalValue)}
-                            </div>
-                            <div style="opacity: 0.9;">סך הצבירה</div>
-                        </div>
-                        <div style="text-align: center; padding: 15px;">
-                            <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">
-                                ${summary.accountsCount}
-                            </div>
-                            <div style="opacity: 0.9;">חשבונות</div>
-                        </div>
-                        <div style="text-align: center; padding: 15px;">
-                            <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">
-                                ${summary.productCount}
-                            </div>
-                            <div style="opacity: 0.9;">מוצרים</div>
-                        </div>
-                        <div style="text-align: center; padding: 15px;">
-                            <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">
-                                ${summary.providerCount}
-                            </div>
-                            <div style="opacity: 0.9;">ספקים</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <h3 style="color: var(--primary); margin: 30px 0 20px 0;">
-                    <i class="fas fa-chart-pie"></i>
-                    פילוח לפי מוצרים
-                </h3>
-                <div class="analysis-grid">
-            `;
-            
-            // פילוח לפי מוצרים
-            Object.entries(clientAnalysisData.portfolio.productBreakdown).forEach(([product, value]) => {
-                const percentage = (value / summary.totalValue * 100).toFixed(1);
-                html += `
-                    <div class="analysis-card">
-                        <h3><i class="fas fa-box"></i> ${product}</h3>
-                        <div class="metric">
-                            <span class="metric-label">סכום:</span>
-                            <span class="metric-value">${AnalysisUtils.formatCurrency(value)}</span>
-                        </div>
-                        <div class="metric">
-                            <span class="metric-label">אחוז מהתיק:</span>
-                            <span class="metric-value">${percentage}%</span>
-                        </div>
-                        <div style="margin-top: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 8px; border-radius: 4px; overflow: hidden;">
-                            <div style="width: ${percentage}%; height: 100%; background: white; opacity: 0.8; transition: width 1s ease;"></div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += `
-                </div>
-                
-                <h3 style="color: var(--primary); margin: 30px 0 20px 0;">
-                    <i class="fas fa-building"></i>
-                    פילוח לפי ספקים
-                </h3>
-                <div class="analysis-grid">
-            `;
-            
-            // פילוח לפי ספקים
-            Object.entries(clientAnalysisData.portfolio.providerBreakdown).forEach(([provider, value]) => {
-                const percentage = (value / summary.totalValue * 100).toFixed(1);
-                html += `
-                    <div class="analysis-card">
-                        <h3><i class="fas fa-university"></i> ${provider}</h3>
-                        <div class="metric">
-                            <span class="metric-label">סכום:</span>
-                            <span class="metric-value">${AnalysisUtils.formatCurrency(value)}</span>
-                        </div>
-                        <div class="metric">
-                            <span class="metric-label">אחוז מהתיק:</span>
-                            <span class="metric-value">${percentage}%</span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += `</div>`;
-            
-            container.innerHTML = html;
         }
         
         // שמירת נתוני שלב 1 והמשך
