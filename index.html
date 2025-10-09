@@ -2725,6 +2725,7 @@
     <link rel="stylesheet" href="about-modal.css">
     <link rel="stylesheet" href="consultation-form.css">
     <link rel="stylesheet" href="terms-modal.css">
+    <link rel="stylesheet" href="terms-consent.css">
     
     <!-- Accessibility and Footer -->
     <link rel="stylesheet" href="mainStyle.css">
@@ -2757,8 +2758,13 @@
                 </li>
                 <li><a href="#" onclick="openAboutModal(); return false;">אודות</a></li>
                 <li><a href="#contact" onclick="openConsultationForm(); return false;">צור קשר</a></li>
-                
+                <li class="whatsapp-desktop"><a href="https://wa.me/972544440044?text=שלום, אני מעוניין בייעוץ פנסיוני" target="_blank" title="צור קשר בוואטסאפ"><i class="fab fa-whatsapp" style="font-size:2rem; color:#25D366;"></i></a></li>
             </nav>
+            <div class="whatsapp-mobile">
+                <a href="https://wa.me/972544440044?text=שלום, אני מעוניין בייעוץ פנסיוני" target="_blank" title="צור קשר בוואטסאפ">
+                    <i class="fab fa-whatsapp" style="font-size:2rem; color:#25D366;"></i>
+                </a>
+            </div>
             <div class="logo"> <img class="logoimg" src="logoxnew.png"/></div>
             <div class="hamburger" id="hamburger">
                 <span></span>
@@ -7095,6 +7101,7 @@
     <script src="about-modal.js"></script>
     <script src="consultation-form.js"></script>
     <script src="terms-modal.js"></script>
+    <script src="terms-consent.js"></script>
     <script>
         // Load Modal HTML files
         fetch('about-modal.html')
@@ -7117,6 +7124,13 @@
                 document.getElementById('modals-container').innerHTML += html;
             })
             .catch(err => console.error('Error loading terms modal:', err));
+        
+        fetch('terms-consent.html')
+            .then(response => response.text())
+            .then(html => {
+                document.body.insertAdjacentHTML('afterbegin', html);
+            })
+            .catch(err => console.error('Error loading terms consent:', err));
         
         // Load Footer
         fetch('footer.html')
