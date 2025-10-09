@@ -1112,6 +1112,14 @@
 
         // Hamburger menu functionality
         document.addEventListener('DOMContentLoaded', function() {
+            // טעינת כל הנתונים הגלובליים (dataIndicators)
+            if (typeof loadalldata === 'function') {
+                loadalldata().then(() => {
+                    console.log('✅ dataIndicators זמין:', typeof dataIndicators !== 'undefined');
+                    console.log('📊 מספר רשומות:', dataIndicators?.length || 0);
+                });
+            }
+            
             const hamburger = document.getElementById('hamburger');
             const navMenu = document.getElementById('navMenu');
             
@@ -1150,6 +1158,30 @@
                     clientAnalysisData.portfolio.equityTotal = importedData.equityTotal;
                     clientAnalysisData.portfolio.pensionTotal = importedData.pensionTotal;
                     clientAnalysisData.portfolio.totalValue = importedData.equityTotal + importedData.pensionTotal;
+                    
+                    // טעינת רמת סיכון אם קיימת
+                    if (importedData.riskProfile) {
+                        clientAnalysisData.profile.riskProfile = importedData.riskProfile;
+                        clientAnalysisData.profile.riskScore = importedData.riskScore;
+                        
+                        // הצגת רמת הסיכון שנטענה
+                        const riskResult = document.getElementById('riskResult');
+                        const riskBadge = document.getElementById('riskBadge');
+                        if (riskResult && riskBadge) {
+                            riskResult.style.display = 'block';
+                            riskBadge.textContent = importedData.riskProfile;
+                            
+                            // צביעה לפי רמה
+                            if (importedData.riskProfile === 'נמוך') {
+                                riskBadge.className = 'status-badge status-good';
+                            } else if (importedData.riskProfile === 'בינוני') {
+                                riskBadge.className = 'status-badge status-warning';
+                            } else {
+                                riskBadge.className = 'status-badge status-danger';
+                            }
+                        }
+                        console.log('✅ רמת סיכון נטענה:', importedData.riskProfile);
+                    }
                     
                     AnalysisStorage.save();
                     
@@ -1219,6 +1251,10 @@
                         clientAnalysisData.profile.riskProfile = riskLevel;
                         clientAnalysisData.profile.riskScore = event.detail.score || 0;
                         AnalysisStorage.save();
+                        
+                        // שמירה גם ב-sessionStorage למקרה של מעבר בין דפים
+                        sessionStorage.setItem('riskProfile', riskLevel);
+                        sessionStorage.setItem('riskScore', event.detail.score || 0);
                         
                         // הצגת התוצאה
                         const riskResult = document.getElementById('riskResult');

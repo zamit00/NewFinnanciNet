@@ -7,25 +7,46 @@ function importAndClearSessionData() {
     const yearsToRetirement = sessionStorage.getItem('ageToRetirementForAdvancedAnalysis');
     const equitySum = sessionStorage.getItem('sumHonForAdvancedAnalysis');
     const pensionSum = sessionStorage.getItem('sumKitzvaForAdvancedAnalysis');
+    const riskProfile = sessionStorage.getItem('riskProfile');
+    const riskScore = sessionStorage.getItem('riskScore');
+    const detailedDataStr = sessionStorage.getItem('advancedAnalysisData');
     
     console.log('📥 מייבא נתונים מ-sessionStorage...');
     console.log('  גיל:', gil);
     console.log('  שנים לפרישה:', yearsToRetirement);
     console.log('  סך הוני:', equitySum);
     console.log('  סך קצבה:', pensionSum);
+    console.log('  רמת סיכון:', riskProfile);
+    
+    // פענוח נתונים מפורטים
+    let detailedData = null;
+    if (detailedDataStr) {
+        try {
+            detailedData = JSON.parse(detailedDataStr);
+            console.log('✅ נתונים מפורטים נטענו:', Object.keys(detailedData));
+        } catch (error) {
+            console.error('❌ שגיאה בפענוח נתונים מפורטים:', error);
+        }
+    }
     
     // מחיקה מיידית מ-sessionStorage
     sessionStorage.removeItem('gilForAdvancedAnalysis');
     sessionStorage.removeItem('ageToRetirementForAdvancedAnalysis');
     sessionStorage.removeItem('sumHonForAdvancedAnalysis');
     sessionStorage.removeItem('sumKitzvaForAdvancedAnalysis');
+    sessionStorage.removeItem('riskProfile');
+    sessionStorage.removeItem('riskScore');
+    sessionStorage.removeItem('advancedAnalysisData');
     console.log('🗑️ נתונים נמחקו מ-sessionStorage');
     
     return {
         age: gil ? parseInt(gil) : null,
         yearsToRetirement: yearsToRetirement ? parseInt(yearsToRetirement) : null,
         equityTotal: equitySum ? parseFloat(equitySum) : 0,
-        pensionTotal: pensionSum ? parseFloat(pensionSum) : 0
+        pensionTotal: pensionSum ? parseFloat(pensionSum) : 0,
+        riskProfile: riskProfile || null,          // רמת סיכון
+        riskScore: riskScore ? parseInt(riskScore) : null,  // ציון סיכון
+        detailedData: detailedData  // כל הנתונים המפורטים
     };
 }
 
