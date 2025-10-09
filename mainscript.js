@@ -40,21 +40,23 @@ const pGemelSmall=`קופה גמל לחסכון הינה סוג של קופת ג
 
 const gufmosdiA = gufmosdixA.sort((a, b) => a.localeCompare(b, 'he'));
 
-window.onload = async function() {
+// Function to load all data (can be called from other pages)
+async function loadalldata() {
   try {
         await Promise.all([
             fetchdataJasonB(),
             fetchdataJasonP(),
-             fetchdataJasonM(),
-            
+            fetchdataJasonM(),
         ]);
-        //console.log('כל הנתונים נטענו בהצלחה',datanetunimKlaliXM,datanetunimKlaliXB,datanetunimKlaliXP);
-       //indications(); 
-        //backtop();     
-       
+        console.log('כל הנתונים נטענו בהצלחה');
+        await indications(); 
   } catch (error) {
         console.error("שגיאה בטעינת הנתונים:", error);
   }
+}
+
+window.onload = async function() {
+  await loadalldata();
 }
 
 async function fetchdataJasonM() {
@@ -108,7 +110,47 @@ async function fetchdataJasonP() {
         throw error;  // זורק את השגיאה כדי ש-Promise.all יוכל לטפל בה
     }
 }
-
+async function indications(){ 
+  for(let r=0;r<=6;r++){
+    const sugmuzar=mozAll[r] 
+  var typamas;
+  if(r===0 || r===2 || r===4){typamas=hishtalmot}
+  else if(r===1 || r===5){typamas=gemel} 
+  else if(r===3){typamas=layeled}
+  else if(r===6){typamas=merkazit}
+  
+  for (let i = 0; i < typamas.length; i++) {
+    const dataY = await filterMaslul(typamas[i], sugmuzar, 0);
+    if (dataY.length === 0) continue;
+  
+    const result = {
+      mozar: sugmuzar,
+      maslul: typamas[i]
+    };
+    for (const field of fieldsToAverage) {
+      const validItems = dataY.filter(obj =>
+        obj[field] !== undefined &&
+        obj[field] !== null &&
+        obj[field] !== '' &&
+        !isNaN(obj[field])
+      );
+      const total = validItems.reduce((sum, obj) => sum + parseFloat(obj[field]), 0);
+      const avg = validItems.length > 0 ? total / validItems.length : 0;
+      result[field] = avg.toFixed(2); 
+      
+    }
+    if (result["tesuam36"] && result["stiya36"]) {
+    result["tesuaLestiya36"] = parseFloat(result["tesuam36"] / result["stiya36"]).toFixed(2);
+  }
+  
+  if (result["tesuam60"] && result["stiya60"]) {
+    result["tesuaLestiya60"] = parseFloat(result["tesuam60"] / result["stiya60"]).toFixed(2);
+  }
+    dataIndicators.push(result);
+  } 
+    } 
+  
+  };
 
 /*const sinon=document.getElementById('sinonHevra')
 sinon.innerHTML='';
