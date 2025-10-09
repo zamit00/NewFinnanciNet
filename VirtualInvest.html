@@ -202,10 +202,19 @@
         .tblData th {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 15px;
+            padding: 15px 10px;
             font-weight: 600;
             text-align: center;
             font-size: 1.05rem;
+        }
+        
+        .tblData th.tdbitul {
+            padding: 15px 5px;
+        }
+        
+        .tblData th i {
+            display: inline-block;
+            width: 100%;
         }
         
         .tblData td {
@@ -657,11 +666,36 @@
             
             .tblData {
                 font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .tblData .tdmaslul {
+                font-size: 0.75rem;
             }
             
             .tdbig, .tdsmall {
                 line-height: 14px;
                 font-size: 0.8rem;
+            }
+            
+            .klalikoch .tdbig {
+                font-size: 0.7rem !important;
+                padding-right: 5px !important;
+            }
+            
+            .klalikoch .tdsmall {
+                font-size: 0.75rem;
+            }
+            
+            #shana, #shalosh, #hamesh {
+                overflow-x: auto;
+                width: 100%;
+            }
+            
+            .klalikoch {
+                width: 100% !important;
+                font-size: 0.75rem;
             }
             
             .chart-container {
@@ -740,7 +774,7 @@
          <div id='mas'  style='width:clamp(300px,90vw,600px);height:100vh;z-index:1000;background-color:white;display:none;' ></div> 
         <div class="row">
             <label>בחר מוצר:</label>
-            <select id="sugMMen" class="selectShemkupa" style="text-align: center;" onchange="clearform();addMaslulim()">
+            <select id="sugMMen" class="selectShemkupaA" style="text-align: center;" onchange="clearform();addMaslulim()">
                 <option value="" disabled selected>בחר מוצר</option>
                 <option value='קרנות השתלמות'>קרנות השתלמות</option>
 				<option value='תגמולים ואישית לפיצויים'>קופות גמל</option>
