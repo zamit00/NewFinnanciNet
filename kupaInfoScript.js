@@ -151,6 +151,11 @@ tableTesuot.innerHTML += `
    // document.getElementById('pdf').style.display='block';
     document.getElementById('kupaInfo').style.display='block';
     document.getElementById('kupaInfo').style.margin='0 auto';
+    
+    // Open modal with kupa info
+    if (typeof openKupaInfoModal === 'function') {
+        openKupaInfoModal(shemkupa);
+    }
 
     /*const tospeak=`המסלול ${shemkupa} של ${menahelet} מדורג במקום ה${fieldNames[mikom]} 
     בתשואה ל - 12 חודשים אחרונים עם תשואה של ${data[0].tesuam} אחוזים.
