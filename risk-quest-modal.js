@@ -143,6 +143,17 @@ function calculateRiskScore() {
     document.getElementById('riskResultLevel').className = `risk-result-level ${levelClass}`;
     document.getElementById('riskResultExplanation').textContent = explanation;
     document.getElementById('riskResult').classList.add('show');
+    
+    // שליחת event עם התוצאה
+    const event = new CustomEvent('riskQuestComplete', {
+        detail: {
+            riskLevel: riskLevel.replace('סיכון ', ''), // "נמוך", "בינוני", "גבוה"
+            score: totalScore,
+            explanation: explanation
+        }
+    });
+    window.dispatchEvent(event);
+    console.log('✅ שאלון סיכון הושלם - רמת סיכון:', riskLevel);
 }
 
 function resetRiskQuest() {
