@@ -7,6 +7,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="mainscript.js"></script>
     <script src="data.js"></script>
     
     <style>
@@ -325,8 +326,20 @@
     <!-- External Modal Scripts -->
     <script src="about-modal.js"></script>
     <script src="terms-modal.js"></script>
-    <script src="accessibility.js"></script>
+    
+    <!-- Product Data Scripts - Load FIRST -->
+    <script src="kochavimscript.js"></script>
+    <script src="PensiaScript.js"></script>
+    
     <script>
+        // Load all data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load JSON data
+            if (typeof loadalldata === 'function') {
+                loadalldata();
+            }
+        });
+
         // Load Product based on selection
         async function loadProduct(productType) {
             // Remove empty state
@@ -363,28 +376,33 @@
             const internalName = productMap[productType];
             
             try {
-                // Wait for data to be loaded
+                // Wait for data to be loaded (max 10 seconds)
+                let attempts = 0;
+                while (typeof datanetunimKlaliXM === 'undefined' && attempts < 20) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    attempts++;
+                }
+
                 if (typeof datanetunimKlaliXM === 'undefined') {
-                    setTimeout(() => loadProduct(productType), 500);
-                    return;
+                    throw new Error('Data not loaded after timeout');
                 }
 
                 if (productType === 'קרנות פנסיה חדשות') {
                     if (typeof maslulimP === 'function') {
                         await maslulimP(1, internalName, 0);
                     } else {
-                        console.error('maslulimP function not found');
+                        throw new Error('maslulimP function not found');
                     }
                 } else {
                     if (typeof maslulim === 'function') {
                         await maslulim(1, internalName, 0);
                     } else {
-                        console.error('maslulim function not found');
+                        throw new Error('maslulim function not found');
                     }
                 }
             } catch (error) {
                 console.error('Error loading product data:', error);
-                tablesContainer.innerHTML = '<div style="text-align: center; padding: 40px; color: red;"><i class="fas fa-exclamation-circle" style="font-size: 3rem;"></i><p style="margin-top: 20px;">שגיאה בטעינת הנתונים. וודא שקבצי הנתונים נטענו.</p></div>';
+                tablesContainer.innerHTML = '<div style="text-align: center; padding: 40px; color: red;"><i class="fas fa-exclamation-circle" style="font-size: 3rem;"></i><p style="margin-top: 20px;">שגיאה בטעינת הנתונים: ' + error.message + '</p></div>';
             }
             
             // Close mobile menu
@@ -773,10 +791,6 @@
 
     <!-- Accessibility Menu Script -->
     <script src="accessibility.js"></script>
-
-    <!-- Embedded Product Scripts -->
-    <script src="kochavimscript.js"></script>
-    <script src="PensiaScript.js"></script>
 
 </body>
 </html>

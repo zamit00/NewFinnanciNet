@@ -113,12 +113,12 @@ async function maslulim(t,moz,hevra){
     if (t===30){
       const h2Elements = document.querySelectorAll('[name="h2Hish"]');
       const aElements = document.querySelectorAll('[name="spanHish"]');
-       if(sugmuzar!=="פוליסות חסכון"){mesanen.style.display='flex'}
+       if(sugmuzar!=="פוליסות חסכון" && mesanen){mesanen.style.display='flex'}
     // עבור על כל ה-h2
     for (let i = 0; i < h2Elements.length; i++) {
         const a = aElements[i];
         // שנה את ה- onclick ב-a
-        a.setAttribute('onclick', 'maslulim(1,0,0);backtop();showMabaatar();hideMabaatarSpecific();');
+        a.setAttribute('onclick', 'maslulim(1,0,0); if(typeof backtop === \"function\") backtop(); if(typeof showMabaatar === \"function\") showMabaatar(); if(typeof hideMabaatarSpecific === \"function\") hideMabaatarSpecific();');
         // שנה את הטקסט של ה-a
         a.textContent = 'חזור';
         a.className='spanHish back';
@@ -133,9 +133,10 @@ async function maslulim(t,moz,hevra){
     for (let i = 0; i < typamas.length; i++) {  
       if (i>t && i>2){continue;}
          dataY = await filterMaslul(typamas[i], sugmuzar,hevra);
-         if (hadashim.checked===false){
+         if (hadashim && hadashim.checked===false){
           dataY.sort((a, b) => b.tesuam - a.tesuam);}
-          else{dataY.sort((a, b) => b.tusaAharona - a.tusaAharona);}
+          else if (hadashim){dataY.sort((a, b) => b.tusaAharona - a.tusaAharona);}
+          else{dataY.sort((a, b) => b.tesuam - a.tesuam);}
         if(dataY.length===0){continue}
          addtble(z,typamas[i])
             const table = document.getElementById(`klalikoch${z}`);
@@ -218,7 +219,7 @@ async function maslulim(t,moz,hevra){
   } 
 
     addclick(); tablerek()
-    if(t!==30){await maslulimP(1,0,0)};
+    if(t!==30 && typeof maslulimP === 'function'){await maslulimP(1,0,0)};
     document.querySelectorAll('[class^="klalikoch"] td').forEach(td => {
       let text = td.textContent.trim();
       if (text.startsWith("-")) {
@@ -226,7 +227,10 @@ async function maslulim(t,moz,hevra){
           td.style.color="red";
       }
       //window.scrollTo({ top: 0, behavior: "smooth" }); 
-      if(t===30){document.getElementById("mabaatarSpecific").scrollIntoView({ behavior: "smooth" });}   
+      if(t===30){
+        const mabaatarEl = document.getElementById("mabaatarSpecific");
+        if (mabaatarEl) mabaatarEl.scrollIntoView({ behavior: "smooth" });
+      }   
   });
 };
 function addtble(x,mas){
@@ -277,13 +281,28 @@ function addclick(){
     }
 async function bringinfo(x) {
   
-if(document.getElementById('hadashim').checked){return;}
-hidefooter();hideAllimages();hideMaBaatar();hideMabaatarSpecific();
-document.getElementById('sanenMosdy').style.display='none';
-document.getElementById("closeinfo").style.display='block';
-document.getElementById('allTheTables').style.display='none';
-document.getElementById('kupaInfo').style.display='block';	
-hidkot();
+const hadashimEl = document.getElementById('hadashim');
+if(hadashimEl && hadashimEl.checked){return;}
+
+// Call functions only if they exist
+if(typeof hidefooter === 'function') hidefooter();
+if(typeof hideAllimages === 'function') hideAllimages();
+if(typeof hideMaBaatar === 'function') hideMaBaatar();
+if(typeof hideMabaatarSpecific === 'function') hideMabaatarSpecific();
+
+const sanenEl = document.getElementById('sanenMosdy');
+if (sanenEl) sanenEl.style.display='none';
+
+const closeinfoEl = document.getElementById("closeinfo");
+if (closeinfoEl) closeinfoEl.style.display='block';
+
+const allTablesEl = document.getElementById('allTheTables');
+if (allTablesEl) allTablesEl.style.display='none';
+
+const kupaInfoEl = document.getElementById('kupaInfo');
+if (kupaInfoEl) kupaInfoEl.style.display='block';
+
+if(typeof hidkot === 'function') hidkot();
 
     const table = x.closest("table"); // מקבל את אלמנט הטבלה
     const mhkupaf = x.parentNode.firstElementChild.textContent.trim(); ;// מקבל את הערך מהתא הראשון בשורה

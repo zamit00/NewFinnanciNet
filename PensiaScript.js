@@ -28,6 +28,10 @@ const pensia=[
 async function maslulimP(t,moz,hev){ 
   
   const allTheTables=document.getElementById('allTheTables');
+  if (!allTheTables) {
+    console.error('allTheTables element not found');
+    return;
+  }
   if(t===30){allTheTables.innerHTML='';}
   allTheTables.style.display='flex';
   
@@ -41,17 +45,17 @@ async function maslulimP(t,moz,hev){
     allTheTables.innerHTML+=msll;
     const mesanen=document.getElementById('sanenMosdy')
     const sinonHevra=document.getElementById('sinonHevra')
-    sinonHevra.selectedIndex = 0
-    mesanen.style.display='none'
+    if (sinonHevra) sinonHevra.selectedIndex = 0
+    if (mesanen) mesanen.style.display='none'
     if (t===30){
       const h2Elements = document.querySelectorAll('[name="h2Hish"]');
       const aElements = document.querySelectorAll('[name="spanHish"]');
-       mesanen.style.display='flex'
+       if (mesanen) mesanen.style.display='flex'
     // עבור על כל ה-h2
     for (let i = 0; i < h2Elements.length; i++) {
         const a = aElements[i];
         // שנה את ה- onclick ב-a
-        a.setAttribute('onclick', 'maslulim(1,0,0);backtop();showMabaatar();hideMabaatarSpecific();');
+        a.setAttribute('onclick', 'maslulim(1,0,0); if(typeof backtop === \"function\") backtop(); if(typeof showMabaatar === \"function\") showMabaatar(); if(typeof hideMabaatarSpecific === \"function\") hideMabaatarSpecific();');
         // שנה את הטקסט של ה-a
         a.textContent = 'חזור';
         a.className='spanHish back';
@@ -163,7 +167,10 @@ async function maslulimP(t,moz,hev){
           td.style.color="red";
       }
   });
-  if(t===30){document.getElementById("mabaatarSpecific").scrollIntoView({ behavior: "smooth" });}
+  if(t===30){
+    const mabaatarEl = document.getElementById("mabaatarSpecific");
+    if (mabaatarEl) mabaatarEl.scrollIntoView({ behavior: "smooth" });
+  }
 };
 function addtbleX(x,mas){
     
@@ -218,10 +225,18 @@ function addclickX(){
     });
     }
 async function bringinfoX(x) {
-hidefooter();hideAllimages();
-document.getElementById("closeinfo").style.display='block';
-document.getElementById('allTheTables').style.display='none';
-document.getElementById('kupaInfo').style.display='block';	
+// Call functions only if they exist
+if(typeof hidefooter === 'function') hidefooter();
+if(typeof hideAllimages === 'function') hideAllimages();
+
+const closeinfoEl = document.getElementById("closeinfo");
+if (closeinfoEl) closeinfoEl.style.display='block';
+
+const allTablesEl = document.getElementById('allTheTables');
+if (allTablesEl) allTablesEl.style.display='none';
+
+const kupaInfoEl = document.getElementById('kupaInfo');
+if (kupaInfoEl) kupaInfoEl.style.display='block';	
     const table = x.closest("table"); // מקבל את אלמנט הטבלה
     const mhkupaf = x.parentNode.firstElementChild.textContent.trim(); ;// מקבל את הערך מהתא הראשון בשורה
     const rows = table.getElementsByTagName('tr'); // כל השורות בטבלה
