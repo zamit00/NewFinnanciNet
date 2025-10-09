@@ -228,6 +228,8 @@ async function bringinfoX(x) {
 // Call functions only if they exist
 if(typeof hidefooter === 'function') hidefooter();
 if(typeof hideAllimages === 'function') hideAllimages();
+if(typeof hideMaBaatar === 'function') hideMaBaatar();
+if(typeof hideMabaatarSpecific === 'function') hideMabaatarSpecific();
 
 const closeinfoEl = document.getElementById("closeinfo");
 if (closeinfoEl) closeinfoEl.style.display='block';
@@ -236,9 +238,14 @@ const allTablesEl = document.getElementById('allTheTables');
 if (allTablesEl) allTablesEl.style.display='none';
 
 const kupaInfoEl = document.getElementById('kupaInfo');
-if (kupaInfoEl) kupaInfoEl.style.display='block';	
+if (kupaInfoEl) kupaInfoEl.style.display='block';
+
+if(typeof hidkot === 'function') hidkot();
+
     const table = x.closest("table"); // מקבל את אלמנט הטבלה
     const mhkupaf = x.parentNode.firstElementChild.textContent.trim(); ;// מקבל את הערך מהתא הראשון בשורה
+    console.log(mhkupaf);
+    
     const rows = table.getElementsByTagName('tr'); // כל השורות בטבלה
     for (let i = 0; i < rows.length; i++) {
         const secondCell = rows[i].children[1];
@@ -248,12 +255,22 @@ if (kupaInfoEl) kupaInfoEl.style.display='block';
     }
     var data;
   
-  
- 
-    data = datanetunimKlaliXP.filter(item => 
-        String(item.shemkupa).trim() === String(mhkupaf).trim() 
+  // Try to find in all data sources, just like bringinfo does
+  data = datanetunimKlaliXM.filter(item => 
+      String(item.shemkupa).trim() === String(mhkupaf).trim() 
   );
   
+  if(data.length===0){
+    data = datanetunimKlaliXB.filter(item => 
+      String(item.shemkupa).trim() === String(mhkupaf).trim()
+    );
+  }
+  
+  if(data.length===0){
+    data = datanetunimKlaliXP.filter(item => 
+        String(item.shemkupa).trim() === String(mhkupaf).trim() 
+    );
+  }
 
  await bring(data,mikom);
   }
