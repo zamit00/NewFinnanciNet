@@ -113,12 +113,13 @@ const ClientProfile = {
 
 // פונקציות לניתוח תיק ההשקעות
 const PortfolioAnalyzer = {
-    // ניתוח קבצי מסלקה שהועלו
-    analyzeFromMislaka: function(mislakaData) {
-        console.log('🔍 מנתח נתוני מסלקה...');
+    // ניתוח מהנתונים הגלובליים שכבר הועלו
+    analyzeFromGlobalData: function() {
+        console.log('🔍 מנתח נתונים קיימים...');
         
-        if (!mislakaData || !mislakaData.data) {
-            console.warn('⚠️ אין נתוני מסלקה זמינים');
+        // בדיקה אם יש נתונים גלובליים
+        if (typeof DataAll === 'undefined' || !DataAll || DataAll.length === 0) {
+            console.warn('⚠️ אין נתונים זמינים - נא להעלות קבצי מסלקה בדף הבית');
             return false;
         }
         
@@ -128,51 +129,71 @@ const PortfolioAnalyzer = {
         const providerBreakdown = {};
         const pathwayBreakdown = {};
         
-        // עובר על כל הקבצים
-        for (const fileData of mislakaData.data) {
-            if (fileData.data && fileData.data.accounts) {
-                for (const account of fileData.data.accounts) {
-                    const accountInfo = {
-                        provider: account.shemGoofMenahel || 'לא ידוע',
-                        product: account.sugKupa || 'לא ידוע',
-                        accountNumber: account.msTik || '',
-                        balance: parseFloat(account.tsviratZchuyot) || 0,
-                        managementFee: parseFloat(account.dmeyNihul) || 0,
-                        pathways: []
-                    };
-                    
-                    // הוסף למאזן כולל
-                    totalValue += accountInfo.balance;
-                    
-                    // עדכן פילוח לפי מוצר
-                    productBreakdown[accountInfo.product] = 
-                        (productBreakdown[accountInfo.product] || 0) + accountInfo.balance;
-                    
-                    // עדכן פילוח לפי ספק
-                    providerBreakdown[accountInfo.provider] = 
-                        (providerBreakdown[accountInfo.provider] || 0) + accountInfo.balance;
-                    
-                    // ניתוח מסלולים
-                    if (account.pathways) {
-                        for (const pathway of account.pathways) {
-                            const pathwayInfo = {
-                                name: pathway.shemMasulHashkaa || 'לא ידוע',
-                                value: parseFloat(pathway.schumBemislul) || 0,
-                                return12m: parseFloat(pathway.tsuaNeto) || 0,
-                                type: this.identifyPathwayType(pathway.shemMasulHashkaa)
-                            };
-                            
-                            accountInfo.pathways.push(pathwayInfo);
-                            
-                            // עדכן פילוח מסלולים
-                            pathwayBreakdown[pathwayInfo.type] = 
-                                (pathwayBreakdown[pathwayInfo.type] || 0) + pathwayInfo.value;
-                        }
-                    }
-                    
-                    accounts.push(accountInfo);
+        // קריאת תאריך לידה אם קיים
+        if (typeof taarichLeyda !== 'undefined' && taarichLeyda) {
+            const age = this.calculateAge(taarichLeyda);
+            if (age) {
+                clientAnalysisData.profile.age = age;
+            }
+        }
+        
+        // ניתוח מ-pirteiHeshbon (פרטי חשבונות)
+        if (typeof pirteiHeshbon !== 'undefined' && Array.isArray(pirteiHeshbon)) {
+            for (const account of pirteiHeshbon) {
+                const accountInfo = {
+                    provider: account.shemGoofMenahel || account.shemHevra || 'לא ידוע',
+                    product: account.sugKupa || account.teurSugYeshut || 'לא ידוע',
+                    accountNumber: account.msTik || account.misparTik || '',
+                    balance: parseFloat(account.yitratZchuyot || account.zchuyotIshiyot || 0),
+                    managementFee: parseFloat(account.shiurDmeyNihulMizchuyot || account.dmeyNihul || 0),
+                    pathways: []
+                };
+                
+                // הוסף למאזן כולל
+                totalValue += accountInfo.balance;
+                
+                // עדכן פילוח לפי מוצר
+                productBreakdown[accountInfo.product] = 
+                    (productBreakdown[accountInfo.product] || 0) + accountInfo.balance;
+                
+                // עדכן פילוח לפי ספק
+                providerBreakdown[accountInfo.provider] = 
+                    (providerBreakdown[accountInfo.provider] || 0) + accountInfo.balance;
+                
+                accounts.push(accountInfo);
+            }
+        }
+        
+        // ניתוח מסלולי השקעה מ-masluleiHashkaa
+        if (typeof masluleiHashkaa !== 'undefined' && Array.isArray(masluleiHashkaa)) {
+            for (const pathway of masluleiHashkaa) {
+                const pathwayInfo = {
+                    name: pathway.shemMasulHashkaa || pathway.teurMaslul || 'לא ידוע',
+                    value: parseFloat(pathway.schumBemislul || pathway.yitratMaslul || 0),
+                    return12m: parseFloat(pathway.shiurTsua || pathway.achuzTsua || 0),
+                    type: this.identifyPathwayType(pathway.shemMasulHashkaa || pathway.teurMaslul)
+                };
+                
+                // עדכן פילוח מסלולים
+                pathwayBreakdown[pathwayInfo.type] = 
+                    (pathwayBreakdown[pathwayInfo.type] || 0) + pathwayInfo.value;
+                
+                // הוסף למסלולי החשבון המתאים
+                const relatedAccount = accounts.find(acc => 
+                    acc.accountNumber === pathway.msTik || acc.accountNumber === pathway.misparTik
+                );
+                if (relatedAccount) {
+                    relatedAccount.pathways.push(pathwayInfo);
                 }
             }
+        }
+        
+        // אם לא מצאנו נתונים מפרטי חשבון, נסה מ-yitrotLefiMutzar
+        if (totalValue === 0 && typeof yitrotLefiMutzar !== 'undefined') {
+            Object.entries(yitrotLefiMutzar).forEach(([product, value]) => {
+                totalValue += parseFloat(value) || 0;
+                productBreakdown[product] = parseFloat(value) || 0;
+            });
         }
         
         // עדכן את הנתונים
@@ -187,6 +208,28 @@ const PortfolioAnalyzer = {
         AnalysisStorage.save();
         console.log(`✅ נותחו ${accounts.length} חשבונות, סך: ₪${totalValue.toLocaleString('he-IL')}`);
         return true;
+    },
+    
+    // חישוב גיל מתאריך לידה
+    calculateAge: function(birthDateString) {
+        if (!birthDateString) return null;
+        
+        try {
+            // ניסיון לפרסר תאריך במספר פורמטים
+            const birthDate = new Date(birthDateString);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            
+            return age > 0 && age < 120 ? age : null;
+        } catch (error) {
+            console.warn('שגיאה בחישוב גיל:', error);
+            return null;
+        }
     },
     
     // זיהוי סוג מסלול

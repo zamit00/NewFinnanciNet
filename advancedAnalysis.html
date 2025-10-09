@@ -865,7 +865,52 @@
                     });
                 });
             }
+            
+            // ניתוח אוטומטי של נתונים קיימים בעת טעינת הדף
+            setTimeout(function() {
+                if (typeof PortfolioAnalyzer !== 'undefined') {
+                    const hasData = PortfolioAnalyzer.analyzeFromGlobalData();
+                    if (hasData) {
+                        console.log('✅ נתוני תיק נטענו מהדף הראשי');
+                        updateStep1Display();
+                    } else {
+                        console.log('ℹ️ לא נמצאו נתונים - נא להעלות קבצי מסלקה בדף הבית');
+                    }
+                }
+            }, 500);
         });
+        
+        // עדכון תצוגת שלב 1 עם נתונים קיימים
+        function updateStep1Display() {
+            // אם יש גיל, הצג אותו
+            if (clientAnalysisData.profile.age) {
+                document.getElementById('clientAge').value = clientAnalysisData.profile.age;
+            }
+            
+            // הצג הודעה שנתונים זמינים
+            if (clientAnalysisData.portfolio.totalValue > 0) {
+                const portfolioStructure = document.getElementById('portfolioStructure');
+                if (portfolioStructure) {
+                    portfolioStructure.innerHTML = `
+                        <div class="analysis-card" style="text-align: center;">
+                            <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--success); margin-bottom: 15px;"></i>
+                            <h3>נתונים זמינים!</h3>
+                            <div class="metric">
+                                <span class="metric-label">סך התיק:</span>
+                                <span class="metric-value">${AnalysisUtils.formatCurrency(clientAnalysisData.portfolio.totalValue)}</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">מספר חשבונות:</span>
+                                <span class="metric-value">${clientAnalysisData.portfolio.accounts.length}</span>
+                            </div>
+                            <p style="color: var(--text-light); margin-top: 15px;">
+                                הנתונים נטענו מקבצי המסלקה שהעלית בדף הבית
+                            </p>
+                        </div>
+                    `;
+                }
+            }
+        }
         
         // Placeholder function for PDF generation
         function generatePDFReport() {
