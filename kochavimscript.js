@@ -120,10 +120,7 @@ async function maslulim(t,moz,hevra){
         // שנה את ה- onclick ב-a
         a.setAttribute('onclick', 'maslulim(1,0,0); if(typeof backtop === \"function\") backtop(); if(typeof showMabaatar === \"function\") showMabaatar(); if(typeof hideMabaatarSpecific === \"function\") hideMabaatarSpecific();');
         // שנה את הטקסט של ה-a
-        a.textContent = 'חזור';
-        a.className='spanHish back';
-        a.style.color="green";
-        a.style.fontWeight = "bold";
+        
     }
     } 
     var typamas;

@@ -244,7 +244,6 @@ if(typeof hidkot === 'function') hidkot();
 
     const table = x.closest("table"); // מקבל את אלמנט הטבלה
     const mhkupaf = x.parentNode.firstElementChild.textContent.trim(); ;// מקבל את הערך מהתא הראשון בשורה
-    console.log(mhkupaf);
     
     const rows = table.getElementsByTagName('tr'); // כל השורות בטבלה
     for (let i = 0; i < rows.length; i++) {
