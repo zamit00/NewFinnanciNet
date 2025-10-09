@@ -83,6 +83,28 @@
             font-size: 1.1rem;
         }
 
+        .data-date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .data-date-badge i {
+            font-size: 1.1rem;
+        }
+
+        .data-date-badge strong {
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
         /* Product Selection Buttons */
         .product-buttons-container {
             display: flex;
@@ -398,8 +420,24 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Load JSON data
             if (typeof loadalldata === 'function') {
-                loadalldata();
+                loadalldata().then(() => {
+                    // Update tkofa display after data loads
+                    if (typeof tkofa !== 'undefined' && tkofa) {
+                        document.getElementById('tkofaDisplay').textContent = tkofa;
+                    }
+                });
             }
+            
+            // Poll for tkofa if not immediately available
+            let attempts = 0;
+            const checkTkofa = setInterval(() => {
+                if (typeof tkofa !== 'undefined' && tkofa) {
+                    document.getElementById('tkofaDisplay').textContent = tkofa;
+                    clearInterval(checkTkofa);
+                }
+                attempts++;
+                if (attempts > 20) clearInterval(checkTkofa); // Stop after 10 seconds
+            }, 500);
         });
 
         // Load Product based on selection
@@ -874,6 +912,10 @@
     <div class="page-header">
         <h1>📊 מוצרים ותשואות</h1>
         <p>בחר מוצר כדי לצפות בתשואות לפי מסלולים</p>
+        <div class="data-date-badge" id="dataDateBadge">
+            <i class="fas fa-calendar-alt"></i>
+            <span>נתונים נכונים ל: <strong id="tkofaDisplay">טוען...</strong></span>
+        </div>
     </div>
 
     <!-- Product Selection Buttons -->

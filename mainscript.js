@@ -1,6 +1,6 @@
 var datanetunimKlaliXM;var datanetunimKlaliXB;var datanetunimKlaliXP;
 var clickStatus;let dataIndicators = [];
-var tkofa;let tkofa;
+var tkofa;
 const gufmosdixA = [
     'הראל פנסיה וגמל', 'כלל פנסיה וגמל',
     'מגדל מקפת קרנות פנסיה וקופות גמל', 'מנורה מבטחים פנסיה וגמל',
@@ -51,13 +51,14 @@ async function loadalldata() {
         ]);
         //console.log('כל הנתונים נטענו בהצלחה');
         await indications(); 
-        const tkofaItem = datanetunimKlaliXM.filter(item=>item.mh==='579')[0];
-        if (tkofaItem && tkofaItem.tesua12) {
-            tkofa = tkofaItem.tesua12.split('=')[1]; // מקבל רק את התקופה אחרי ה-=
-            console.log('תקופת נתונים:', tkofa); // יציג 202508
+        const tkofaItem = datanetunimKlaliXM.filter(item=>item.mh==='579')[0].tesua12
+        ;
+        if (tkofaItem) {
+           tkofa = tkofaItem.split('=')[1].slice(4,6) +"/"+tkofaItem.split('=')[1].slice(0,4)
+            
         } else {
-            console.error('לא נמצא פריט עם mh=579');
-        }fa
+           console.error('לא נמצא פריט עם mh=579');
+        }
   } catch (error) {
         console.error("שגיאה בטעינת הנתונים:", error);
   }
