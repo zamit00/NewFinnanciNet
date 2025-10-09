@@ -538,67 +538,97 @@
             </button>
         </div>
         
-        <!-- Step 1: Client Profile -->
+        <!-- Step 1: Client Data -->
         <div class="step-panel active" id="step-1">
             <div class="panel-header">
-                <h2>שלב 1: זיהוי מאפייני לקוח</h2>
-                <p>המידע הבסיסי שלך הוא הבסיס לכל החלטה פיננסית</p>
+                <h2>שלב 1: נתוני לקוח</h2>
+                <p>סקירת המידע הבסיסי והנכסים הפנסיוניים שלך</p>
             </div>
             
-            <div class="form-group">
-                <label>גיל <span style="color: red;">*</span></label>
-                <input type="number" id="clientAge" placeholder="הזן את גילך" min="18" max="120">
+            <!-- נתוני לקוח בסיסיים -->
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <h3><i class="fas fa-user"></i> פרטים אישיים</h3>
+                    <div class="metric">
+                        <span class="metric-label">גיל נוכחי:</span>
+                        <span class="metric-value" id="displayAge">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">גיל פרישה:</span>
+                        <span class="metric-value">67</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">שנים עד פרישה:</span>
+                        <span class="metric-value" id="displayYearsToRetirement">-</span>
+                    </div>
+                </div>
+                
+                <div class="analysis-card">
+                    <h3><i class="fas fa-briefcase"></i> מצב תעסוקתי</h3>
+                    <div class="form-group">
+                        <select id="employmentStatus" style="width: 100%;">
+                            <option value="">בחר מצב תעסוקתי</option>
+                            <option value="שכיר">שכיר</option>
+                            <option value="עצמאי">עצמאי</option>
+                            <option value="פרוש">פורש</option>
+                            <option value="אחר">אחר</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label>מצב תעסוקתי <span style="color: red;">*</span></label>
-                <select id="employmentStatus">
-                    <option value="">בחר מצב תעסוקתי</option>
-                    <option value="שכיר">שכיר</option>
-                    <option value="עצמאי">עצמאי</option>
-                    <option value="פרוש">פרוש</option>
-                    <option value="אחר">אחר</option>
-                </select>
+            <!-- חלוקת נכסים -->
+            <h3 style="color: var(--primary); margin: 30px 0 20px 0;">
+                <i class="fas fa-chart-pie"></i>
+                חלוקת הנכסים
+            </h3>
+            
+            <div class="analysis-grid">
+                <div class="analysis-card" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white;">
+                    <h3 style="color: white; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 10px;">
+                        <i class="fas fa-coins"></i>
+                        מוצרים הוניים
+                    </h3>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div style="font-size: 2.5rem; font-weight: bold;" id="displayEquityTotal">₪0</div>
+                        <div style="opacity: 0.9; font-size: 0.9rem; margin-top: 5px;">גמל השקעה + השתלמות + חסכון</div>
+                    </div>
+                </div>
+                
+                <div class="analysis-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <h3 style="color: white; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 10px;">
+                        <i class="fas fa-umbrella"></i>
+                        מוצרי קצבה
+                    </h3>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div style="font-size: 2.5rem; font-weight: bold;" id="displayPensionTotal">₪0</div>
+                        <div style="opacity: 0.9; font-size: 0.9rem; margin-top: 5px;">פנסיה + ביטוח מנהלים + גמל</div>
+                    </div>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label>טווח השקעה</label>
-                <select id="investmentHorizon">
-                    <option value="קצר">קצר טווח (0-5 שנים)</option>
-                    <option value="בינוני">בינוני טווח (5-10 שנים)</option>
-                    <option value="ארוך" selected>ארוך טווח (10+ שנים)</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>מטרת הכסף</label>
-                <select id="moneyGoal">
-                    <option value="קצבה">קצבה בפרישה</option>
-                    <option value="הון">צבירת הון</option>
-                    <option value="נזיל">חיסכון נזיל</option>
-                    <option value="משולב">משולב</option>
-                </select>
-            </div>
-            
+            <!-- שאלון סיכון -->
             <div class="analysis-card" style="margin-top: 30px;">
-                <h3>🎲 הערכת אופי סיכון</h3>
+                <h3><i class="fas fa-chart-line"></i> הערכת אופי סיכון</h3>
                 <p style="margin-bottom: 15px; color: var(--text-light);">
                     כדי לקבל המלצות מותאמות, מומלץ לענות על שאלון הסיכון
                 </p>
-                <button class="btn btn-primary" onclick="openRiskQuestModal()">
+                <button class="btn btn-primary" onclick="openRiskQuestModalAndReturn()">
                     <i class="fas fa-clipboard-list"></i>
                     מלא שאלון סיכון
                 </button>
                 <div id="riskResult" style="margin-top: 15px; display: none;">
-                    <strong>תוצאה:</strong> 
-                    <span class="status-badge" id="riskBadge"></span>
+                    <div class="metric">
+                        <span class="metric-label">רמת סיכון מומלצת:</span>
+                        <span class="status-badge" id="riskBadge"></span>
+                    </div>
                 </div>
             </div>
             
             <div class="step-actions">
                 <div></div>
                 <button class="btn btn-primary" onclick="saveStep1AndContinue()">
-                    המשך
+                    המשך לניתוח איכות
                     <i class="fas fa-arrow-left"></i>
                 </button>
             </div>
@@ -858,66 +888,135 @@
         
         // עדכון תצוגת שלב 1 עם נתונים קיימים
         function updateStep1Display() {
-            // אם יש גיל, הצג אותו
+            // הצגת גיל
             if (clientAnalysisData.profile.age) {
-                document.getElementById('clientAge').value = clientAnalysisData.profile.age;
+                const ageEl = document.getElementById('displayAge');
+                if (ageEl) {
+                    ageEl.textContent = clientAnalysisData.profile.age;
+                }
+                
+                // הצגת שנים עד פרישה
+                const yearsEl = document.getElementById('displayYearsToRetirement');
+                if (yearsEl && clientAnalysisData.profile.yearsToRetirement !== undefined) {
+                    yearsEl.textContent = clientAnalysisData.profile.yearsToRetirement + ' שנים';
+                }
             }
             
-            // הצג הודעה שנתונים זמינים
-            if (clientAnalysisData.portfolio.totalValue > 0) {
-                const portfolioStructure = document.getElementById('portfolioStructure');
-                if (portfolioStructure) {
-                    portfolioStructure.innerHTML = `
-                        <div class="analysis-card" style="text-align: center;">
-                            <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--success); margin-bottom: 15px;"></i>
-                            <h3>נתונים זמינים!</h3>
-                            <div class="metric">
-                                <span class="metric-label">סך התיק:</span>
-                                <span class="metric-value">${AnalysisUtils.formatCurrency(clientAnalysisData.portfolio.totalValue)}</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">מספר חשבונות:</span>
-                                <span class="metric-value">${clientAnalysisData.portfolio.accounts.length}</span>
-                            </div>
-                            <p style="color: var(--text-light); margin-top: 15px;">
-                                הנתונים נטענו מקבצי המסלקה שהעלית בדף הבית
-                            </p>
-                        </div>
-                    `;
+            // הצגת סכומי מוצרים
+            if (clientAnalysisData.portfolio.equityTotal !== undefined) {
+                const equityEl = document.getElementById('displayEquityTotal');
+                if (equityEl) {
+                    equityEl.textContent = AnalysisUtils.formatCurrency(clientAnalysisData.portfolio.equityTotal);
                 }
+            }
+            
+            if (clientAnalysisData.portfolio.pensionTotal !== undefined) {
+                const pensionEl = document.getElementById('displayPensionTotal');
+                if (pensionEl) {
+                    pensionEl.textContent = AnalysisUtils.formatCurrency(clientAnalysisData.portfolio.pensionTotal);
+                }
+            }
+        }
+        
+        // פתיחת שאלון סיכון והחזרת תוצאה
+        function openRiskQuestModalAndReturn() {
+            if (typeof openRiskQuestModal === 'function') {
+                openRiskQuestModal();
+                
+                // האזנה לסיום השאלון
+                window.addEventListener('riskQuestComplete', function(event) {
+                    if (event.detail && event.detail.riskLevel) {
+                        const riskLevel = event.detail.riskLevel;
+                        
+                        // שמירת רמת הסיכון
+                        clientAnalysisData.profile.riskProfile = riskLevel;
+                        clientAnalysisData.profile.riskScore = event.detail.score || 0;
+                        AnalysisStorage.save();
+                        
+                        // הצגת התוצאה
+                        const riskResult = document.getElementById('riskResult');
+                        const riskBadge = document.getElementById('riskBadge');
+                        
+                        if (riskResult && riskBadge) {
+                            riskResult.style.display = 'block';
+                            riskBadge.textContent = riskLevel;
+                            
+                            // צביעה לפי רמה
+                            if (riskLevel === 'נמוך') {
+                                riskBadge.className = 'status-badge status-good';
+                            } else if (riskLevel === 'בינוני') {
+                                riskBadge.className = 'status-badge status-warning';
+                            } else {
+                                riskBadge.className = 'status-badge status-danger';
+                            }
+                        }
+                        
+                        console.log('✅ רמת סיכון נשמרה:', riskLevel);
+                    }
+                }, { once: true });
+            } else {
+                Swal.fire({
+                    title: 'שאלון סיכון',
+                    text: 'שאלון הסיכון לא זמין כרגע',
+                    icon: 'warning'
+                });
             }
         }
         
         // שמירת נתוני שלב 1 והמשך
         function saveStep1AndContinue() {
-            const age = document.getElementById('clientAge').value;
             const employmentStatus = document.getElementById('employmentStatus').value;
-            const investmentHorizon = document.getElementById('investmentHorizon').value;
-            const moneyGoal = document.getElementById('moneyGoal').value;
             
             // בדיקת שדות חובה
-            if (!age || !employmentStatus) {
+            if (!employmentStatus) {
                 Swal.fire({
-                    title: 'שדות חובה',
-                    text: 'נא למלא את הגיל ומצב התעסוקתי',
+                    title: 'שדה חובה',
+                    text: 'נא לבחור מצב תעסוקתי',
                     icon: 'warning',
                     confirmButtonText: 'הבנתי'
                 });
                 return;
             }
             
+            // בדיקה אם מילא שאלון סיכון
+            if (!clientAnalysisData.profile.riskProfile) {
+                Swal.fire({
+                    title: 'שאלון סיכון',
+                    text: 'מומלץ למלא את שאלון הסיכון לפני המשך',
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonText: 'אמלא עכשיו',
+                    cancelButtonText: 'המשך בלי שאלון'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        openRiskQuestModalAndReturn();
+                    } else {
+                        proceedToStep2();
+                    }
+                });
+                return;
+            }
+            
+            proceedToStep2();
+        }
+        
+        function proceedToStep2() {
             // שמירת הנתונים
+            const employmentStatus = document.getElementById('employmentStatus').value;
             ClientProfile.updateProfile({
-                age: parseInt(age),
-                employmentStatus,
-                investmentHorizon,
-                moneyGoal
+                employmentStatus
             });
             
             console.log('✅ נתוני לקוח נשמרו:', clientAnalysisData.profile);
             
+            // החזרת רמת סיכון (אם קיימת)
+            const riskLevel = clientAnalysisData.profile.riskProfile || 'לא הוגדר';
+            console.log('🎲 רמת סיכון:', riskLevel);
+            
             // מעבר לשלב הבא
             goToStep(2);
+            
+            return riskLevel;
         }
         
         // פונקציה לניתוח איכות

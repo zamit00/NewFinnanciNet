@@ -6,6 +6,8 @@ const clientAnalysisData = {
     // מאפייני לקוח בסיסיים
     profile: {
         age: null,
+        retirementAge: 67,
+        yearsToRetirement: null,
         employmentStatus: null,
         investmentHorizon: 'ארוך',
         moneyGoal: 'קצבה',
@@ -16,6 +18,8 @@ const clientAnalysisData = {
     // נתוני תיק ההשקעות
     portfolio: {
         totalValue: 0,
+        equityTotal: 0,      // סך מוצרים הוניים
+        pensionTotal: 0,     // סך מוצרי קצבה
         accounts: [],
         productBreakdown: {}, // פילוח לפי מוצר
         providerBreakdown: {}, // פילוח לפי ספק
@@ -129,12 +133,19 @@ const PortfolioAnalyzer = {
         const providerBreakdown = {};
         const pathwayBreakdown = {};
         
-        // קריאת תאריך לידה אם קיים
-        if (typeof taarichLeyda !== 'undefined' && taarichLeyda) {
-            const age = this.calculateAge(taarichLeyda);
-            if (age) {
-                clientAnalysisData.profile.age = age;
-            }
+        // קריאת גיל לקוח מ-DataAll
+        if (DataAll[0] && DataAll[0].gil) {
+            clientAnalysisData.profile.age = parseInt(DataAll[0].gil);
+            console.log(`📅 גיל לקוח: ${clientAnalysisData.profile.age}`);
+        }
+        
+        // הגדרת גיל פרישה
+        clientAnalysisData.profile.retirementAge = 67;
+        
+        // חישוב שנים עד פרישה
+        if (clientAnalysisData.profile.age) {
+            clientAnalysisData.profile.yearsToRetirement = 
+                Math.max(0, 67 - clientAnalysisData.profile.age);
         }
         
         // ניתוח מ-pirteiHeshbon (פרטי חשבונות)
@@ -196,17 +207,50 @@ const PortfolioAnalyzer = {
             });
         }
         
+        // חישוב מוצרים הוניים ומוצרי קצבה
+        const equityProducts = [
+            'קופת גמל להשקעה',
+            'קרנות השתלמות',
+            'פוליסות חסכון',
+            'פוליסת חיסכון'
+        ];
+        
+        const pensionProducts = [
+            'קרן פנסיה',
+            'פוליסת ביטוח חיים משולב חסכון',
+            'קופת גמל',
+            'תגמולים ואישית לפיצויים'
+        ];
+        
+        let equityTotal = 0;
+        let pensionTotal = 0;
+        
+        Object.entries(productBreakdown).forEach(([product, value]) => {
+            const normalizedProduct = product.trim();
+            
+            if (equityProducts.some(eq => normalizedProduct.includes(eq) || eq.includes(normalizedProduct))) {
+                equityTotal += value;
+            } else if (pensionProducts.some(pen => normalizedProduct.includes(pen) || pen.includes(normalizedProduct))) {
+                pensionTotal += value;
+            }
+        });
+        
         // עדכן את הנתונים
         clientAnalysisData.portfolio = {
             totalValue,
             accounts,
             productBreakdown,
             providerBreakdown,
-            pathwayBreakdown
+            pathwayBreakdown,
+            equityTotal,        // סך מוצרים הוניים
+            pensionTotal        // סך מוצרי קצבה
         };
         
         AnalysisStorage.save();
-        console.log(`✅ נותחו ${accounts.length} חשבונות, סך: ₪${totalValue.toLocaleString('he-IL')}`);
+        console.log(`✅ נותחו ${accounts.length} חשבונות`);
+        console.log(`   סך כולל: ₪${totalValue.toLocaleString('he-IL')}`);
+        console.log(`   מוצרים הוניים: ₪${equityTotal.toLocaleString('he-IL')}`);
+        console.log(`   מוצרי קצבה: ₪${pensionTotal.toLocaleString('he-IL')}`);
         return true;
     },
     
