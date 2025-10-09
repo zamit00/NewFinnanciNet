@@ -98,6 +98,17 @@
         margin-left: 8px;
     }
     
+    .whatsapp-mobile a {
+        text-decoration: none !important;
+    }
+    
+    .whatsapp-mobile a::before,
+    .whatsapp-mobile a::after {
+        display: none !important;
+        content: none !important;
+        width: 0 !important;
+    }
+    
     .whatsapp-mobile i {
         font-size: 1.6rem !important;
     }
