@@ -740,7 +740,7 @@
          <div id='mas'  style='width:clamp(300px,90vw,600px);height:100vh;z-index:1000;background-color:white;display:none;' ></div> 
         <div class="row">
             <label>בחר מוצר:</label>
-            <select id="sugMMen" style="margin-right: 7px;text-align: center;" onchange="clearform();addMaslulim()">
+            <select id="sugMMen" class="selectShemkupa" style="text-align: center;" onchange="clearform();addMaslulim()">
                 <option value="" disabled selected>בחר מוצר</option>
                 <option value='קרנות השתלמות'>קרנות השתלמות</option>
 				<option value='תגמולים ואישית לפיצויים'>קופות גמל</option>
@@ -771,7 +771,7 @@
                 <tr>
                     <th class="tdmaslul">מסלול</th>
                     <th class="tdshiur">שיעור</th>
-                    <th class="tdbitul"></th>
+                    <th class="tdbitul"><i class="fas fa-trash-alt"></i></th>
                 </tr>
             </table>
         </div>
@@ -803,16 +803,16 @@
 
 
     <script>
-  const gufmosdixA = [
-    'הראל פנסיה וגמל', 'כלל פנסיה וגמל',
-    'מגדל מקפת קרנות פנסיה וקופות גמל', 'מנורה מבטחים פנסיה וגמל',
-    'הפניקס פנסיה וגמל', 'אלטשולר שחם גמל ופנסיה',
-    'אנליסט קופות גמל', 'ילין לפידות ניהול קופות גמל', 'מור גמל ופנסיה',
-    'מיטב גמל ופנסיה', 'אינפיניטי השתלמות, גמל ופנסיה '
-];  
-
- 
- function addMaslulim () {
+  // Define clearform first so it can be called from onchange
+  function clearform(){
+    const btn=document.getElementById('btndo'); 
+    const btnclear=document.getElementById('btnclear'); 
+    if (btn) btn.style.display='block';
+    if (btnclear) btnclear.style.display='none';
+    if (typeof chngTik === 'function') chngTik();
+  }
+  
+  function addMaslulim () {
         const selectedProduct = document.getElementById('sugMMen').value;
         console.log('Selected product:', selectedProduct);
         
@@ -821,7 +821,7 @@
                 <tr>
                     <th class="tdmaslul">מסלול</th>
                     <th class="tdshiur">שיעור</th>
-                    <th class="tdbitul"></th>
+                    <th class="tdbitul"><i class="fas fa-trash-alt"></i></th>
                 </tr>
         `
         const allSelects = document.querySelectorAll('.selectShemkupa');
@@ -878,7 +878,7 @@ function chngTik(){
     <tr>
         <th class="tdmaslul">מסלול</th>
         <th class="tdshiur">שיעור</th>
-        <th class="tdbitul"></th>
+        <th class="tdbitul"><i class="fas fa-trash-alt"></i></th>
     </tr>
 `
     document.getElementById('notar').innerHTML='';
@@ -1049,14 +1049,6 @@ function validateSum() {
            return bt;
         }
 
-function clearform(){
-    const btn=document.getElementById('btndo'); 
-    const btnclear=document.getElementById('btnclear'); 
-    btn.style.display='block' ;
-    btnclear.style.display='none'
-    chngTik();
-
-}
 async function submitForm() {
     const btn=document.getElementById('btndo')
    const btnclear=document.getElementById('btnclear');
@@ -1109,7 +1101,18 @@ async function submitForm() {
         abc= await fetchdataJasonBA()
     } else if (selectedProduct==='קרנות חדשות' ){
         
-    abc= await fetchdataJasonPA(); }
+    abc= await fetchdataJasonPA(); 
+    } else {
+        console.error('Unknown product type:', selectedProduct);
+        alert('מוצר לא נתמך');
+        return;
+    }
+
+    if (!abc || !Array.isArray(abc)) {
+        console.error('Data not loaded properly');
+        alert('שגיאה בטעינת נתונים');
+        return;
+    }
 
     abc=abc.filter(item=>item.mozar===selectedProduct)
     
