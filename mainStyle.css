@@ -74,6 +74,12 @@
     transition: transform 0.3s ease;
 }
 
+/* Remove underline effect from WhatsApp links */
+.whatsapp-mobile a::after,
+.whatsapp-desktop a::after {
+    display: none !important;
+}
+
 .whatsapp-mobile a:hover,
 .whatsapp-desktop a:hover {
     transform: scale(1.1);
