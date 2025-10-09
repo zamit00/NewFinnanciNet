@@ -601,7 +601,7 @@
             
             <div class="step-actions">
                 <div></div>
-                <button class="btn btn-primary" onclick="goToStep(2)">
+                <button class="btn btn-primary" onclick="saveStep1AndContinue()">
                     המשך
                     <i class="fas fa-arrow-left"></i>
                 </button>
@@ -616,13 +616,7 @@
             </div>
             
             <div id="portfolioStructure">
-                <div style="text-align: center; padding: 40px; color: var(--text-light);">
-                    <i class="fas fa-upload" style="font-size: 3rem; margin-bottom: 20px;"></i>
-                    <p>נא להעלות את קבצי המסלקה שלך בדף הבית</p>
-                    <button class="btn btn-primary" onclick="window.location.href='index.html#fileUpload'">
-                        עבור להעלאת קבצים
-                    </button>
-                </div>
+                <!-- יאוכלס דינמית עם נתוני התיק -->
             </div>
             
             <div class="step-actions">
@@ -771,6 +765,17 @@
             // Set active button
             document.querySelector(`.step-btn[data-step="${stepNumber}"]`).classList.add('active');
             
+            // קריאה לפונקציות ספציפיות לכל שלב
+            if (stepNumber === 2) {
+                analyzePortfolioStructure();
+            } else if (stepNumber === 3) {
+                analyzeQuality();
+            } else if (stepNumber === 4) {
+                analyzeGaps();
+            } else if (stepNumber === 5) {
+                generateRecommendations();
+            }
+            
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -910,6 +915,189 @@
                     `;
                 }
             }
+        }
+        
+        // פונקציה להצגת ניתוח מבנה התיק
+        function analyzePortfolioStructure() {
+            const container = document.getElementById('portfolioStructure');
+            
+            if (!clientAnalysisData.portfolio.totalValue || clientAnalysisData.portfolio.totalValue === 0) {
+                container.innerHTML = `
+                    <div class="analysis-card" style="text-align: center;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--warning); margin-bottom: 20px;"></i>
+                        <h3>אין נתונים זמינים</h3>
+                        <p style="color: var(--text-light); margin: 20px 0;">
+                            נא להעלות את קבצי המסלקה שלך בדף הבית כדי לראות ניתוח מפורט
+                        </p>
+                        <button class="btn btn-primary" onclick="window.location.href='index.html#fileUpload'">
+                            <i class="fas fa-upload"></i>
+                            עבור להעלאת קבצים
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // הצגת סיכום כללי
+            const summary = PortfolioAnalyzer.getSummary();
+            let html = `
+                <div class="analysis-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 30px;">
+                    <h3 style="color: white; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 15px; margin-bottom: 20px;">
+                        <i class="fas fa-briefcase"></i>
+                        סיכום התיק
+                    </h3>
+                    <div class="analysis-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                        <div style="text-align: center; padding: 15px;">
+                            <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">
+                                ${AnalysisUtils.formatCurrency(summary.totalValue)}
+                            </div>
+                            <div style="opacity: 0.9;">סך הצבירה</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px;">
+                            <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">
+                                ${summary.accountsCount}
+                            </div>
+                            <div style="opacity: 0.9;">חשבונות</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px;">
+                            <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">
+                                ${summary.productCount}
+                            </div>
+                            <div style="opacity: 0.9;">מוצרים</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px;">
+                            <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">
+                                ${summary.providerCount}
+                            </div>
+                            <div style="opacity: 0.9;">ספקים</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="color: var(--primary); margin: 30px 0 20px 0;">
+                    <i class="fas fa-chart-pie"></i>
+                    פילוח לפי מוצרים
+                </h3>
+                <div class="analysis-grid">
+            `;
+            
+            // פילוח לפי מוצרים
+            Object.entries(clientAnalysisData.portfolio.productBreakdown).forEach(([product, value]) => {
+                const percentage = (value / summary.totalValue * 100).toFixed(1);
+                html += `
+                    <div class="analysis-card">
+                        <h3><i class="fas fa-box"></i> ${product}</h3>
+                        <div class="metric">
+                            <span class="metric-label">סכום:</span>
+                            <span class="metric-value">${AnalysisUtils.formatCurrency(value)}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">אחוז מהתיק:</span>
+                            <span class="metric-value">${percentage}%</span>
+                        </div>
+                        <div style="margin-top: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div style="width: ${percentage}%; height: 100%; background: white; opacity: 0.8; transition: width 1s ease;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                </div>
+                
+                <h3 style="color: var(--primary); margin: 30px 0 20px 0;">
+                    <i class="fas fa-building"></i>
+                    פילוח לפי ספקים
+                </h3>
+                <div class="analysis-grid">
+            `;
+            
+            // פילוח לפי ספקים
+            Object.entries(clientAnalysisData.portfolio.providerBreakdown).forEach(([provider, value]) => {
+                const percentage = (value / summary.totalValue * 100).toFixed(1);
+                html += `
+                    <div class="analysis-card">
+                        <h3><i class="fas fa-university"></i> ${provider}</h3>
+                        <div class="metric">
+                            <span class="metric-label">סכום:</span>
+                            <span class="metric-value">${AnalysisUtils.formatCurrency(value)}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">אחוז מהתיק:</span>
+                            <span class="metric-value">${percentage}%</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            
+            container.innerHTML = html;
+        }
+        
+        // שמירת נתוני שלב 1 והמשך
+        function saveStep1AndContinue() {
+            const age = document.getElementById('clientAge').value;
+            const employmentStatus = document.getElementById('employmentStatus').value;
+            const investmentHorizon = document.getElementById('investmentHorizon').value;
+            const moneyGoal = document.getElementById('moneyGoal').value;
+            
+            // בדיקת שדות חובה
+            if (!age || !employmentStatus) {
+                Swal.fire({
+                    title: 'שדות חובה',
+                    text: 'נא למלא את הגיל ומצב התעסוקתי',
+                    icon: 'warning',
+                    confirmButtonText: 'הבנתי'
+                });
+                return;
+            }
+            
+            // שמירת הנתונים
+            ClientProfile.updateProfile({
+                age: parseInt(age),
+                employmentStatus,
+                investmentHorizon,
+                moneyGoal
+            });
+            
+            console.log('✅ נתוני לקוח נשמרו:', clientAnalysisData.profile);
+            
+            // מעבר לשלב הבא
+            goToStep(2);
+        }
+        
+        // פונקציה לניתוח איכות
+        function analyzeQuality() {
+            const container = document.getElementById('qualityAnalysis');
+            container.innerHTML = '<div class="analysis-card" style="text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i><p style="margin-top: 20px; color: var(--text-light);">מעבד ניתוח איכות...</p></div>';
+            
+            // כאן יבוא הקוד לניתוח איכות
+            setTimeout(() => {
+                container.innerHTML = '<div class="analysis-card"><h3><i class="fas fa-check"></i> ניתוח איכות הושלם</h3><p>תוצאות יוצגו כאן בקרוב</p></div>';
+            }, 500);
+        }
+        
+        // פונקציה לזיהוי פערים
+        function analyzeGaps() {
+            const container = document.getElementById('gapAnalysis');
+            container.innerHTML = '<div class="analysis-card" style="text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i><p style="margin-top: 20px; color: var(--text-light);">מזהה פערים והזדמנויות...</p></div>';
+            
+            // כאן יבוא הקוד לזיהוי פערים
+            setTimeout(() => {
+                container.innerHTML = '<div class="analysis-card"><h3><i class="fas fa-check"></i> ניתוח פערים הושלם</h3><p>תוצאות יוצגו כאן בקרוב</p></div>';
+            }, 500);
+        }
+        
+        // פונקציה ליצירת המלצות
+        function generateRecommendations() {
+            const container = document.getElementById('recommendationsReport');
+            container.innerHTML = '<div class="analysis-card" style="text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i><p style="margin-top: 20px; color: var(--text-light);">מייצר המלצות מותאמות אישית...</p></div>';
+            
+            // כאן יבוא הקוד להמלצות
+            setTimeout(() => {
+                container.innerHTML = '<div class="analysis-card"><h3><i class="fas fa-check"></i> דוח המלצות הושלם</h3><p>תוצאות יוצגו כאן בקרוב</p></div>';
+            }, 500);
         }
         
         // Placeholder function for PDF generation
