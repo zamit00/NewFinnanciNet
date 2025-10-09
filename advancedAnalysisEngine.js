@@ -133,20 +133,19 @@ const PortfolioAnalyzer = {
         const providerBreakdown = {};
         const pathwayBreakdown = {};
         
-        // קריאת גיל לקוח מ-DataAll
-        if (DataAll[0] && DataAll[0].gil) {
-            clientAnalysisData.profile.age = parseInt(DataAll[0].gil);
+        // קריאת נתוני לקוח מהמשתנים הגלובליים המוכנים
+        if (typeof gilForAdvancedAnalysis !== 'undefined' && gilForAdvancedAnalysis > 0) {
+            clientAnalysisData.profile.age = gilForAdvancedAnalysis;
             console.log(`📅 גיל לקוח: ${clientAnalysisData.profile.age}`);
+        }
+        
+        if (typeof ageToRetirementForAdvancedAnalysis !== 'undefined') {
+            clientAnalysisData.profile.yearsToRetirement = ageToRetirementForAdvancedAnalysis;
+            console.log(`⏰ שנים עד פרישה: ${clientAnalysisData.profile.yearsToRetirement}`);
         }
         
         // הגדרת גיל פרישה
         clientAnalysisData.profile.retirementAge = 67;
-        
-        // חישוב שנים עד פרישה
-        if (clientAnalysisData.profile.age) {
-            clientAnalysisData.profile.yearsToRetirement = 
-                Math.max(0, 67 - clientAnalysisData.profile.age);
-        }
         
         // ניתוח מ-pirteiHeshbon (פרטי חשבונות)
         if (typeof pirteiHeshbon !== 'undefined' && Array.isArray(pirteiHeshbon)) {
@@ -207,33 +206,19 @@ const PortfolioAnalyzer = {
             });
         }
         
-        // חישוב מוצרים הוניים ומוצרי קצבה
-        const equityProducts = [
-            'קופת גמל להשקעה',
-            'קרנות השתלמות',
-            'פוליסות חסכון',
-            'פוליסת חיסכון'
-        ];
-        
-        const pensionProducts = [
-            'קרן פנסיה',
-            'פוליסת ביטוח חיים משולב חסכון',
-            'קופת גמל',
-            'תגמולים ואישית לפיצויים'
-        ];
-        
+        // קריאת סכומי מוצרים הוניים וקצבה מהמשתנים המוכנים
         let equityTotal = 0;
         let pensionTotal = 0;
         
-        Object.entries(productBreakdown).forEach(([product, value]) => {
-            const normalizedProduct = product.trim();
-            
-            if (equityProducts.some(eq => normalizedProduct.includes(eq) || eq.includes(normalizedProduct))) {
-                equityTotal += value;
-            } else if (pensionProducts.some(pen => normalizedProduct.includes(pen) || pen.includes(normalizedProduct))) {
-                pensionTotal += value;
-            }
-        });
+        if (typeof sumHonForAdvancedAnalysis !== 'undefined') {
+            equityTotal = sumHonForAdvancedAnalysis;
+            console.log(`💰 מוצרים הוניים: ₪${equityTotal.toLocaleString('he-IL')}`);
+        }
+        
+        if (typeof sumKitzvaForAdvancedAnalysis !== 'undefined') {
+            pensionTotal = sumKitzvaForAdvancedAnalysis;
+            console.log(`🏦 מוצרי קצבה: ₪${pensionTotal.toLocaleString('he-IL')}`);
+        }
         
         // עדכן את הנתונים
         clientAnalysisData.portfolio = {
