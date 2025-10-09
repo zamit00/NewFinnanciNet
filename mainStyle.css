@@ -1,0 +1,58 @@
+#accessibility-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  direction: rtl;
+  font-family: "Varela Round", sans-serif;
+  z-index: 99999;
+}
+
+#acc-toggle {
+  background: #005cbf;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+#acc-menu {
+  display: none;
+  background: white;
+  border-radius: 12px;
+  padding: 10px;
+  margin-top: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+#acc-menu.open {
+  display: block;
+}
+
+#acc-menu button {
+  display: block;
+  width: 100%;
+  margin: 4px 0;
+  background: #f2f2f2;
+  border: none;
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+#acc-menu button:hover {
+  background: #e0e0e0;
+}
+
+.high-contrast {
+  background: black !important;
+  color: yellow !important;
+}
+
+.highlight-links a {
+  text-decoration: underline !important;
+  color: #ff3300 !important;
+}
