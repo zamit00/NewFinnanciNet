@@ -102,7 +102,7 @@ async function maslulim(t,moz,hevra){
     if(moz!==0 && sugmuzar!==moz){continue}
     const msll=`<h2 id="h2Hish" name="h2Hish" style="font-size:1rem;
     line-height:1.8rem;vertical-align:middle; margin-top:15px;text-align:right;
-    padding-right:5px;">${mozA}<a onclick=" maslulim(30,'${sugmuzar}',0);"
+    padding-right:5px;">${mozA} <a onclick=" maslulim(30,'${sugmuzar}',0);"
     class="txta" id="spanHish" name="spanHish">כל המסלולים</a></h2>`
     allTheTables.innerHTML+=msll;
     const mesanen=document.getElementById('sanenMosdy')
@@ -219,7 +219,8 @@ async function maslulim(t,moz,hevra){
   } 
 
     addclick(); tablerek()
-    if(t!==30 && typeof maslulimP === 'function'){await maslulimP(1,0,0)};
+    // Don't auto-load pension data when showing all routes (t=30)
+    // if(t!==30 && typeof maslulimP === 'function'){await maslulimP(1,0,0)};
     document.querySelectorAll('[class^="klalikoch"] td').forEach(td => {
       let text = td.textContent.trim();
       if (text.startsWith("-")) {

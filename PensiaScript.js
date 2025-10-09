@@ -40,7 +40,7 @@ async function maslulimP(t,moz,hev){
     const sugmuzar=mozkochX[0];const sugmozP='קרנות פנסיה - מקיפה'
     const msll=`<h2 id="h2Hish" name="h2Hish" style="font-size:1rem;
     line-height:1.8rem;vertical-align:middle; margin-top:15px;text-align:right;
-    padding-right:5px;">${sugmozP}<a onclick="maslulimP(30,'${sugmuzar}',0)"
+    padding-right:5px;">${sugmozP} <a onclick="maslulimP(30,'${sugmuzar}',0)"
     class="txta" id="spanHish" name="spanHish">כל המסלולים</a></h2>`
     allTheTables.innerHTML+=msll;
     const mesanen=document.getElementById('sanenMosdy')

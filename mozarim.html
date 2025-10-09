@@ -389,13 +389,13 @@
 
                 if (productType === 'קרנות פנסיה חדשות') {
                     if (typeof maslulimP === 'function') {
-                        await maslulimP(1, internalName, 0);
+                        await maslulimP(30, internalName, 0);
                     } else {
                         throw new Error('maslulimP function not found');
                     }
                 } else {
                     if (typeof maslulim === 'function') {
-                        await maslulim(1, internalName, 0);
+                        await maslulim(30, internalName, 0);
                     } else {
                         throw new Error('maslulim function not found');
                     }
