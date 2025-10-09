@@ -1192,6 +1192,15 @@
         
         // פתיחת שאלון סיכון והחזרת תוצאה
         function openRiskQuestModalAndReturn() {
+            const ageEl = document.getElementById('displayAge');
+            if(!ageEl || !ageEl.textContent || ageEl.textContent === '-') {
+                Swal.fire({
+                    title: 'חסרים נתונים',
+                    text: 'נא להעלות קבצי מסלקה בדף הבית תחילה',
+                    icon: 'warning'
+                });
+                return;
+            }
             if (typeof openRiskQuestModal === 'function') {
                 openRiskQuestModal();
                 

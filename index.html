@@ -6641,17 +6641,8 @@
 
             tableDiv.innerHTML = tableHTML;
             
-            // חישוב סכומים לניתוח מתקדם - מריצה על שורות הטבלה
+            // חישוב סכומים לניתוח מתקדם
             setTimeout(() => {
-                const table = tableDiv.querySelector('table tbody');
-                if (!table) {
-                    console.warn('⚠️ לא נמצאה טבלה');
-                    return;
-                }
-                
-                const rows = table.querySelectorAll('tr');
-                console.log(`📋 מספר שורות בטבלה: ${rows.length}`);
-                
                 let sumHon = 0;
                 let sumKitzva = 0;
                 
@@ -6660,36 +6651,70 @@
                 // מוצרי קצבה - מילות מפתח
                 const pensionKeywords = ['ביטוח חיים', 'פנסיה', 'קופת גמל'];
                 
-                // רוץ על כל השורות (מהראשונה)
-                for (let i = 0; i < rows.length; i++) {
-                    console.log(`🔍 בודק שורה ${i}:`, rows[i].textContent);
-                    const cells = rows[i].children;
-                    if (cells.length < 2) continue;
+                // בדיקה אם זה מובייל (כרטיסיות) או דסקטופ (טבלה)
+                const isMobile = window.innerWidth <= 768;
+                
+                if (isMobile) {
+                    // קריאה מכרטיסיות במובייל
+                    const cards = tableDiv.querySelectorAll('.product-card-mobile');
+                    console.log(`📱 מצב מובייל - ${cards.length} כרטיסים`);
                     
-                    const productName = cells[0].textContent.trim(); // עמודה ראשונה - שם מוצר
-                    const amountText = cells[1].textContent.trim();  // עמודה שניה - סכום
-                    
-                    // דלג על כותרת או שורות ריקות
-                    if (!productName || productName === 'סוג מוצר' || !amountText) {
-                        console.log(`  ⏭️ מדלג על שורה ${i} (כותרת או ריקה)`);
-                        continue;
+                    cards.forEach((card, index) => {
+                        const productName = card.querySelector('h4').textContent.trim();
+                        const amountElement = card.querySelector('.card-row .card-value');
+                        if (!amountElement) return;
+                        
+                        const amountText = amountElement.textContent.trim();
+                        const amount = parseFloat(amountText.replace(/[₪,\s]/g, '')) || 0;
+                        
+                        // סיווג לפי מילות מפתח
+                        const isEquity = equityKeywords.some(keyword => productName.includes(keyword));
+                        const isPension = pensionKeywords.some(keyword => productName.includes(keyword));
+                        
+                        if (isEquity) {
+                            sumHon += amount;
+                            console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → הוני`);
+                        } else if (isPension) {
+                            sumKitzva += amount;
+                            console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → קצבה`);
+                        }
+                    });
+                } else {
+                    // קריאה מטבלה בדסקטופ
+                    const table = tableDiv.querySelector('table tbody');
+                    if (!table) {
+                        console.warn('⚠️ לא נמצאה טבלה');
+                        return;
                     }
                     
-                    // המרת הסכום למספר (הסרת ₪ ופסיקים)
-                    const amount = parseFloat(amountText.replace(/[₪,\s]/g, '')) || 0;
+                    const rows = table.querySelectorAll('tr');
+                    console.log(`💻 מצב דסקטופ - ${rows.length} שורות`);
                     
-                    // סיווג לפי מילות מפתח בשם המוצר
-                    const isEquity = equityKeywords.some(keyword => productName.includes(keyword));
-                    const isPension = pensionKeywords.some(keyword => productName.includes(keyword));
-                    
-                    if (isEquity) {
-                        sumHon += amount;
-                        console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → הוני`);
-                    } else if (isPension) {
-                        sumKitzva += amount;
-                        console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → קצבה`);
-                    } else if (amount > 0) {
-                        console.log(`  ⚠️ ${productName}: ₪${amount.toLocaleString('he-IL')} → לא מסווג`);
+                    for (let i = 0; i < rows.length; i++) {
+                        const cells = rows[i].children;
+                        if (cells.length < 2) continue;
+                        
+                        const productName = cells[0].textContent.trim();
+                        const amountText = cells[1].textContent.trim();
+                        
+                        // דלג על כותרת
+                        if (!productName || productName === 'סוג מוצר' || !amountText) {
+                            continue;
+                        }
+                        
+                        const amount = parseFloat(amountText.replace(/[₪,\s]/g, '')) || 0;
+                        
+                        // סיווג לפי מילות מפתח
+                        const isEquity = equityKeywords.some(keyword => productName.includes(keyword));
+                        const isPension = pensionKeywords.some(keyword => productName.includes(keyword));
+                        
+                        if (isEquity) {
+                            sumHon += amount;
+                            console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → הוני`);
+                        } else if (isPension) {
+                            sumKitzva += amount;
+                            console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → קצבה`);
+                        }
                     }
                 }
                 
