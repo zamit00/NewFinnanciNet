@@ -1,40 +1,53 @@
 // Terms Consent - Shows only on first visit
 
+// Debug function - you can delete this later
+// To reset and see the consent again, run: resetTermsConsent()
+function resetTermsConsent() {
+    localStorage.removeItem('termsAccepted');
+    localStorage.removeItem('termsAcceptedDate');
+    console.log('Terms consent reset - refresh page to see overlay');
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    const overlay = document.getElementById('termsConsentOverlay');
-    const acceptBtn = document.getElementById('acceptTermsBtn');
-    
-    // Check if user already accepted terms
-    const hasAcceptedTerms = localStorage.getItem('termsAccepted');
-    
-    if (!hasAcceptedTerms) {
-        // Show overlay on first visit
-        if (overlay) {
+    // Wait a bit for the HTML to be loaded via fetch
+    setTimeout(function() {
+        const overlay = document.getElementById('termsConsentOverlay');
+        const acceptBtn = document.getElementById('acceptTermsBtn');
+        
+        // Check if user already accepted terms
+        const hasAcceptedTerms = localStorage.getItem('termsAccepted');
+        
+        console.log('Terms accepted:', hasAcceptedTerms); // Debug
+        
+        if (!hasAcceptedTerms && overlay) {
+            // Show overlay on first visit
             overlay.classList.remove('hidden');
-        }
-    } else {
-        // Hide overlay if already accepted
-        if (overlay) {
+            console.log('Showing terms consent overlay'); // Debug
+        } else if (overlay) {
+            // Hide overlay if already accepted
             overlay.classList.add('hidden');
+            console.log('Terms already accepted, hiding overlay'); // Debug
         }
-    }
-    
-    // Handle accept button click
-    if (acceptBtn) {
-        acceptBtn.addEventListener('click', function() {
-            // Save acceptance to localStorage
-            localStorage.setItem('termsAccepted', 'true');
-            localStorage.setItem('termsAcceptedDate', new Date().toISOString());
-            
-            // Hide overlay with animation
-            if (overlay) {
-                overlay.style.animation = 'fadeOut 0.3s ease';
-                setTimeout(() => {
-                    overlay.classList.add('hidden');
-                }, 300);
-            }
-        });
-    }
+        
+        // Handle accept button click
+        if (acceptBtn) {
+            acceptBtn.addEventListener('click', function() {
+                // Save acceptance to localStorage
+                localStorage.setItem('termsAccepted', 'true');
+                localStorage.setItem('termsAcceptedDate', new Date().toISOString());
+                
+                console.log('Terms accepted, saving to localStorage'); // Debug
+                
+                // Hide overlay with animation
+                if (overlay) {
+                    overlay.style.animation = 'fadeOut 0.3s ease';
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                    }, 300);
+                }
+            });
+        }
+    }, 500); // Wait 500ms for fetch to complete
     
     // Allow opening terms modal from consent box
     const termsLinks = document.querySelectorAll('.terms-link');
