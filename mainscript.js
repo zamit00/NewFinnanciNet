@@ -1,5 +1,5 @@
 var datanetunimKlaliXM;var datanetunimKlaliXB;var datanetunimKlaliXP;
-var clickStatus;let dataIndicators = [];
+var clickStatus;let dataIndicators = [];let tkofa;
 const gufmosdixA = [
     'הראל פנסיה וגמל', 'כלל פנסיה וגמל',
     'מגדל מקפת קרנות פנסיה וקופות גמל', 'מנורה מבטחים פנסיה וגמל',
@@ -50,6 +50,8 @@ async function loadalldata() {
         ]);
         console.log('כל הנתונים נטענו בהצלחה');
         await indications(); 
+        tkofa=datanetunimKlaliXM.filter(item=>Number(item.mh)===579)[0]['tesua12']
+        console.log(tkofa)
   } catch (error) {
         console.error("שגיאה בטעינת הנתונים:", error);
   }
