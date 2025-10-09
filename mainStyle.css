@@ -1,7 +1,7 @@
 #accessibility-panel {
   position: fixed;
   top: 20%;
-  right:15%;
+  left:15%;
   direction: rtl;
   font-family: "Varela Round", sans-serif;
   z-index: 99999;
