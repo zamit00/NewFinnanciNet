@@ -469,8 +469,20 @@
             const dropdown = document.getElementById('mozarimProductsDropdown');
             const link = event.target;
             
+            // Close other dropdowns and reset their text
             document.querySelectorAll('.dropdown-content.show').forEach(d => {
-                if (d !== dropdown) d.classList.remove('show');
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink) {
+                        if (d.id === 'mozarimCalculatorDropdown') {
+                            parentLink.innerHTML = 'מחשבונים ▼';
+                        } else if (d.id === 'mozarimToolsDropdown') {
+                            parentLink.innerHTML = 'כלי השוואה ▼';
+                        }
+                    }
+                }
             });
             
             if (dropdown.classList.contains('show')) {
@@ -489,8 +501,20 @@
             const dropdown = document.getElementById('mozarimCalculatorDropdown');
             const link = event.target;
             
+            // Close other dropdowns and reset their text
             document.querySelectorAll('.dropdown-content.show').forEach(d => {
-                if (d !== dropdown) d.classList.remove('show');
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink) {
+                        if (d.id === 'mozarimProductsDropdown') {
+                            parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                        } else if (d.id === 'mozarimToolsDropdown') {
+                            parentLink.innerHTML = 'כלי השוואה ▼';
+                        }
+                    }
+                }
             });
             
             if (dropdown.classList.contains('show')) {
@@ -509,8 +533,20 @@
             const dropdown = document.getElementById('mozarimToolsDropdown');
             const link = event.target;
             
+            // Close other dropdowns and reset their text
             document.querySelectorAll('.dropdown-content.show').forEach(d => {
-                if (d !== dropdown) d.classList.remove('show');
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink) {
+                        if (d.id === 'mozarimProductsDropdown') {
+                            parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                        } else if (d.id === 'mozarimCalculatorDropdown') {
+                            parentLink.innerHTML = 'מחשבונים ▼';
+                        }
+                    }
+                }
             });
             
             if (dropdown.classList.contains('show')) {
