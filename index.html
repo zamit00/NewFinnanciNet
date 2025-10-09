@@ -6327,28 +6327,28 @@
             const total = data.reduce((a, b) => a + b, 0);
             const chartContainer = document.getElementById('pieChart').parentElement;
             
-            // הוספת הסכום הכולל באמצע הגרף
+            // הוספת הסכום הכולל מתחת למקרא
             const chartCanvas = document.getElementById('pieChart');
             const totalDiv = document.createElement('div');
+            
             if(window.innerWidth > 768){
-            totalDiv.style.cssText = `
-                position: absolute;
-                top: 37%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                text-align: center;
-                font-size: 0.5rem;
-                font-weight: normal;
-                color: #333;
-                background: none;
-                padding: 10px;
-                z-index: 10;
-                pointer-events: none;
-            `;
-            totalDiv.innerHTML = `
-                <div style="font-size: 1.8rem; color: #667eea; font-weight: bold;">₪${total.toLocaleString('he-IL')}</div>
-                <div style="font-size: 1rem; color: #666; margin-top: 5px;">סכום כולל</div>
-            `;
+                totalDiv.style.cssText = `
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 15px;
+                    margin-top: 20px;
+                    text-align: center;
+                    padding: 15px 20px;
+                    background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+                    border-radius: 12px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                `;
+                totalDiv.innerHTML = `
+                    <span style="font-size: 1.1rem; color: #667eea; font-weight: bold;">סכום כולל:</span>
+                    <span style="font-size: 1.5rem; color: #667eea; font-weight: bold;">₪${total.toLocaleString('he-IL')}</span>
+                `;
             }else{
                 totalDiv.style.cssText = `
                     position: relative;
@@ -6367,16 +6367,6 @@
                 <span style="font-size: 14px; color: #667eea; font-weight: bold;">סכום כולל:</span>
                 <span style="font-size: 16px; color: #667eea; font-weight: bold;">₪${total.toLocaleString('he-IL')}</span>
             `;
-            }
-            
-
-            // הוספת הסכום הכולל לגרף
-            if(window.innerWidth > 768){
-                chartCanvas.parentElement.style.position = 'relative';
-                chartCanvas.parentElement.appendChild(totalDiv);
-            }else{
-                // במסכים קטנים - הוסף מתחת לגרף ומעל המקרא
-                chartCanvas.parentElement.insertAdjacentElement('afterend', totalDiv);
             }
 
             // יצירת אלמנט למקרא
@@ -6424,6 +6414,9 @@
             });
 
             chartContainer.appendChild(legendDiv);
+            
+            // הוספת הסכום הכולל מתחת למקרא
+            chartContainer.appendChild(totalDiv);
         }
 
         // פונקציה ליצירת טבלה מפורטת
