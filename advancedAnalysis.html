@@ -1510,45 +1510,54 @@
             container.innerHTML = html;
         }
         
-        // מיפוי סוגי מסלולים לרמת סיכון (מבוסס על ofihashkaa.xml)
-        const maslulRiskMap = {
-            'כללי': 'בינונית',
-            'מניות': 'גבוהה',
-            'עוקב מדד': 'גבוהה',
-            'אשראי ואג"ח': 'נמוכה עד בינונית',
-            'אג"ח': 'נמוכה עד בינונית',
-            'כספי': 'נמוכה מאוד',
-            'שקלי': 'נמוכה מאוד',
-            'הלכה': 'בינונית - תלוי בהרכב האפיקים שנבחרו',
-            'משולב': 'בינונית',
-            'משולב מניות': 'בינונית עד גבוהה',
-            'עד 50': 'גבוהה',
-            '50-60': 'בינוני',
-            '60 ומעלה': 'נמוך',
-            'חיסכון לילד': 'גבוהה' // ברירת מחדל
-        };
-        
         // פונקציה לחיפוש ramatsikon לפי שם המסלול
+        // משתמשת ב-sikonData שנטען מ-ofihashkaa.xml בעליית האתר
         function findRamatsikonByName(shemMaslul) {
             if (!shemMaslul) return null;
             
-            // שימוש בפונקציה הקיימת לזיהוי סוג המסלול
-            const maslulType = typeof getMaslulType === 'function' ? getMaslulType(shemMaslul) : null;
-            
-            if (!maslulType || maslulType === 'לא ידוע') {
-                console.log(`⚠️ לא זוהה סוג מסלול עבור: ${shemMaslul}`);
+            // בדיקה אם sikonData זמין
+            if (typeof sikonData === 'undefined' || !Array.isArray(sikonData) || sikonData.length === 0) {
+                console.warn('⚠️ sikonData לא זמין או ריק');
                 return null;
             }
             
-            // חיפוש רמת סיכון במיפוי
-            const sikon = maslulRiskMap[maslulType];
+            const shemLower = shemMaslul.toLowerCase().trim();
             
-            if (sikon) {
-                console.log(`✅ נמצא סיכון "${sikon}" עבור מסלול "${shemMaslul}" (סוג: ${maslulType})`);
-                return sikon;
+            // ניסיון 1: חיפוש התאמה ישירה של שם המסלול המלא
+            let sikonItem = sikonData.find(item => 
+                item.name && item.name.toLowerCase().trim() === shemLower
+            );
+            
+            if (sikonItem && sikonItem.risk) {
+                console.log(`✅ נמצא סיכון "${sikonItem.risk}" עבור "${shemMaslul}" (התאמה ישירה)`);
+                return sikonItem.risk;
             }
             
-            console.log(`⚠️ לא נמצאה רמת סיכון עבור סוג מסלול: ${maslulType}`);
+            // ניסיון 2: חיפוש התאמה חלקית - אם שם המסלול מכיל את השם מ-sikonData
+            sikonItem = sikonData.find(item => 
+                item.name && shemLower.includes(item.name.toLowerCase().trim())
+            );
+            
+            if (sikonItem && sikonItem.risk) {
+                console.log(`✅ נמצא סיכון "${sikonItem.risk}" עבור "${shemMaslul}" (התאמה חלקית: ${sikonItem.name})`);
+                return sikonItem.risk;
+            }
+            
+            // ניסיון 3: זיהוי סוג המסלול ע"י getMaslulType וחיפוש לפי הסוג
+            const maslulType = typeof getMaslulType === 'function' ? getMaslulType(shemMaslul) : null;
+            
+            if (maslulType && maslulType !== 'לא ידוע') {
+                sikonItem = sikonData.find(item => 
+                    item.name && item.name.toLowerCase() === maslulType.toLowerCase()
+                );
+                
+                if (sikonItem && sikonItem.risk) {
+                    console.log(`✅ נמצא סיכון "${sikonItem.risk}" עבור "${shemMaslul}" (לפי סוג: ${maslulType})`);
+                    return sikonItem.risk;
+                }
+            }
+            
+            console.log(`⚠️ לא נמצאה רמת סיכון ב-sikonData עבור: ${shemMaslul}`);
             return null;
         }
         
