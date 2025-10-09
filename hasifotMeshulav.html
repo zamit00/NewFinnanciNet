@@ -596,6 +596,9 @@
             }
         }
     </style>
+    
+    <!-- External Modal Styles -->
+    <link rel="stylesheet" href="about-modal.css">
 
 </head>
 <body dir="rtl">
@@ -623,7 +626,7 @@
                         <a href="#">ציון משקל תשואה לשארפ</a>
                     </div>
                 </li>
-                <li><a href="index.html#about">אודות</a></li>
+                <li><a href="#" onclick="openAboutModal(); return false;">אודות</a></li>
                 <li><a href="index.html" onclick="openConsultationForm(); return false;">צור קשר</a></li>
             </nav>
             <div class="logo" onclick="window.location.href='index.html'"> 
@@ -835,6 +838,21 @@
                 }, 100);
             });
         });
+    </script>
+
+    <!-- Modal Container -->
+    <div id="modals-container"></div>
+
+    <!-- External Modal Scripts -->
+    <script src="about-modal.js"></script>
+    <script>
+        // Load About Modal HTML
+        fetch('about-modal.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modals-container').innerHTML += html;
+            })
+            .catch(err => console.error('Error loading modal:', err));
     </script>
 
 </body>

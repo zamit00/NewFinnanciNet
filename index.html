@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-3d@latest/dist/chartjs-chart-3d.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -2718,6 +2718,10 @@
         }
         
     </style>
+    
+    <!-- External Modal Styles -->
+    <link rel="stylesheet" href="about-modal.css">
+    <link rel="stylesheet" href="consultation-form.css">
 </head>
 
 <body dir="rtl">
@@ -2744,7 +2748,7 @@
                         <a href="#">ציון משקל תשואה לשארפ</a>
                     </div>
                 </li>
-                <li><a href="#about">אודות</a></li>
+                <li><a href="#" onclick="openAboutModal(); return false;">אודות</a></li>
                 <li><a href="#contact" onclick="openConsultationForm(); return false;">צור קשר</a></li>
                 
             </nav>
@@ -2912,42 +2916,6 @@
     </section>
 
     <!-- טופס ייעוץ פנסיוני -->
-    <div id="consultationFormModal">
-        <div style="background: white; border-radius: 20px; padding: 40px; max-width: 500px; width: 90%; max-height: 70vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative;">
-            <i  class="fas fa-times" style="font-size: 2rem; cursor: pointer; color: #dc3545; margin-bottom: 2rem;" onclick="closeConsultationForm()"></i>
-            
-            
-            <form style='max-height:90%;margin-bottom:5%;' id="consultationForm" dir="rtl" style="text-align: right;">
-                   <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; color: #333; font-weight: bold;">שם מלא *</label>
-                    <input type="text" id="fullName" required style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 10px; font-size: 1rem; transition: border-color 0.3s ease;" placeholder="הכנס את שמך המלא">
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; color: #333; font-weight: bold;">מספר טלפון *</label>
-                    <input type="tel" id="phoneNumber" required style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 10px; font-size: 1rem; transition: border-color 0.3s ease;" placeholder="050-1234567">
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; color: #333; font-weight: bold;">כתובת אימייל</label>
-                    <input type="email" id="email" style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 10px; font-size: 1rem; transition: border-color 0.3s ease;" placeholder="example@email.com">
-                </div>
-                
-                <div style="margin-bottom: 25px;">
-                    <label style="display: block; margin-bottom: 8px; color: #333; font-weight: bold;">הודעה (אופציונלי)</label>
-                    <textarea id="message" rows="4" style="width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 10px; font-size: 1rem; transition: border-color 0.3s ease; resize: vertical;" placeholder="ספר לנו על הצרכים הפנסיוניים שלך..."></textarea>
-                </div>
-                
-                <div style="display: flex; gap: 15px; justify-content: center;">
-                    <button type="submit" style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; flex: 1;">
-                        📤 שלח בקשה
-                    </button>
-                    
-                </div>
-            </form>
-        </div>
-    </div>
-
    <!-- Advanced Analysis Section -->
    <section class="advanced-analysis-section" id="advancedAnalysis" style="display: none;">
     <div class="container">
@@ -7110,8 +7078,32 @@
         }
 
         // פונקציה לסגירת התצוגה
-       
+
     </script>
+
+    <!-- Modal Container -->
+    <div id="modals-container"></div>
+
+    <!-- External Modal Scripts -->
+    <script src="about-modal.js"></script>
+    <script src="consultation-form.js"></script>
+    <script>
+        // Load Modal HTML files
+        fetch('about-modal.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modals-container').innerHTML += html;
+            })
+            .catch(err => console.error('Error loading about modal:', err));
+        
+        fetch('consultation-form.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modals-container').innerHTML += html;
+            })
+            .catch(err => console.error('Error loading consultation form:', err));
+    </script>
+
 </body>
 </html>
 <!-- <section dir="rtl" class="hero" id="home">

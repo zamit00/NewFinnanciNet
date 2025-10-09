@@ -577,6 +577,9 @@
         }
         .closewindow{color:black;margin-top: 10px;margin-right: 30px;}
     </style>
+    
+    <!-- External Modal Styles -->
+    <link rel="stylesheet" href="about-modal.css">
 </head>
 <body>
     
@@ -604,9 +607,8 @@
               <a href="#">ציון משקל תשואה לשארפ</a>
             </div>
           </li>
-          <li><a href="index.html#about">אודות</a></li>
+          <li><a href="#" onclick="openAboutModal(); return false;">אודות</a></li>
           <li><a href="index.html#contact">צור קשר</a></li>
-          <li><a href="index.html#consultation" class="cta-button" onclick="openConsultationForm()">ליעוץ אישי</a></li>
         </nav>
         <div class="logo"> <img class="logoimg" src="logoxnew.png" onclick="window.location.href='index.html'"/></div>
         <div class="hamburger" id="hamburger" style="padding: 10px;">
@@ -1089,5 +1091,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
     </script>
+
+    <!-- Modal Container -->
+    <div id="modals-container"></div>
+
+    <!-- External Modal Scripts -->
+    <script src="about-modal.js"></script>
+    <script>
+        // Load About Modal HTML
+        fetch('about-modal.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modals-container').innerHTML += html;
+            })
+            .catch(err => console.error('Error loading modal:', err));
+    </script>
+
 </body>
 </html>
