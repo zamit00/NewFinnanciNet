@@ -28,11 +28,12 @@ const fieldsToCompare = [
   
 
 async function bring(data,mikom) {
-    
+  
     const mhkupa = data[0].mh;
     const muzar = data[0].mozar; 
     const shemkupa = data[0].shemkupa;
-    const maslul = data[0].mas;
+    const maslul = getMaslulType(shemkupa);
+    console.log(maslul);
     
 var menahelet = data[0].menahelet;
    
@@ -107,7 +108,6 @@ kupaInfo.innerHTML +=`<h3 style="text-align:center; color:blue;margin:10px auto"
 	</table>`
 const tableTesuot = document.querySelector('#tableTesuot tbody');
 const analysisScore= analyzeMaslulAgainstAverage(data[0]);
-console.log(analysisScore);
 tableTesuot.innerHTML += `
     <tr>
         <td style="background:aliceblue;color:#333;padding:8px; border:1px solid #ccc;text-align:center">נושא</td>
@@ -320,6 +320,7 @@ if (existingChart) {
 // פונקציות tesua ו-maslultype ללא שינוי
 
 async function maslultype(y) {
+  
     try {
         const response = await fetch('ofihashkaa.xml');
         if (!response.ok) {
@@ -457,10 +458,18 @@ function analyzeMaslulAgainstAverage(maslulData) {
     return analysis;
   }
 
+  // Use getMaslulType to identify the track type from the full track name
+  const maslulType = typeof getMaslulType === 'function' 
+    ? getMaslulType(maslulData.shemkupa) 
+    : maslulData.mas;
+  
+  console.log('Track name:', maslulData.shemkupa, '→ Track type:', maslulType);
+
   var averageData = dataIndicators.find(item =>
-    item.maslul === maslulData.mas && item.mozar === maslulData.mozar);
+    item.maslul === maslulType && item.mozar === maslulData.mozar);
   if (!averageData) {
-    console.warn('No average data found for:', maslulData.mas, maslulData.mozar);
+    console.warn('No average data found for:', maslulType, maslulData.mozar);
+    console.log('Available tracks in dataIndicators:', dataIndicators.map(i => ({maslul: i.maslul, mozar: i.mozar})));
     return analysis;
   }
   if (averageData["tesuam36"] && averageData["stiya36"] && averageData["stiya36"] !== 0) {
