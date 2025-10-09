@@ -5062,6 +5062,7 @@
                     sessionStorage.removeItem('ageToRetirementForAdvancedAnalysis');
                     sessionStorage.removeItem('sumHonForAdvancedAnalysis');
                     sessionStorage.removeItem('sumKitzvaForAdvancedAnalysis');
+                    sessionStorage.removeItem('advancedAnalysisData');
                     console.log('🗑️ נתוני ניתוח מתקדם נמחקו מ-sessionStorage');
                     
                     // השבת את כפתור הניתוח המתקדם
@@ -6722,10 +6723,21 @@
                 console.log(`💰 סך הוני: ₪${sumHon.toLocaleString('he-IL')}`);
                 console.log(`🏦 סך קצבה: ₪${sumKitzva.toLocaleString('he-IL')}`);
                 
-                // שמירה ב-sessionStorage
+                // שמירת סכומים בסיסיים
                 sessionStorage.setItem('sumHonForAdvancedAnalysis', sumHon);
                 sessionStorage.setItem('sumKitzvaForAdvancedAnalysis', sumKitzva);
-                console.log('💾 נשמר ב-sessionStorage');
+                
+                // שמירת נתונים מפורטים לניתוח מתקדם
+                const advancedAnalysisData = {
+                    sumSugMutzar: sumSugMutzar,          // פירוט לפי מוצר
+                    pirteiHeshbon: pirteiHeshbon || [],   // פרטי חשבונות
+                    masluleiHashkaa: masluleiHashkaa || [], // מסלולי השקעה
+                    yitrotLefiMutzar: yitrotLefiMutzar || {}, // יתרות לפי מוצר
+                    pratimIshim: pratimIshim || {}        // פרטים אישיים
+                };
+                
+                sessionStorage.setItem('advancedAnalysisData', JSON.stringify(advancedAnalysisData));
+                console.log('💾 כל הנתונים לניתוח מתקדם נשמרו ב-sessionStorage');
             }, 100);
         }
 
