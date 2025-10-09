@@ -1450,21 +1450,14 @@
                     // ניסיון לקבל ramatsikon מהמסלול עצמו
                     let ramatsikon = maslul.ramatsikon;
                     
-                    // אם אין ramatsikon, חפש בנתונים הגלובליים
+                    // אם אין ramatsikon, חפש לפי שם המסלול
                     if (!ramatsikon || ramatsikon === 'לא ידוע' || ramatsikon === '') {
-                        const foundRamatsikon = findRamatsikonInData(
-                            maslul.kodMislaka || heshbon.kodMislaka,
-                            pathwayName,
-                            heshbon.sugMutzar
-                        );
+                        const foundRamatsikon = findRamatsikonByName(pathwayName);
                         if (foundRamatsikon) {
                             ramatsikon = foundRamatsikon;
+                        } else {
+                            ramatsikon = 'לא ידוע';
                         }
-                    }
-                    
-                    // אם עדיין אין, השתמש בברירת מחדל
-                    if (!ramatsikon) {
-                        ramatsikon = 'לא ידוע';
                     }
                     
                     // זיהוי רמת סיכון לפי ramatsikon
@@ -1494,8 +1487,11 @@
                                 </div>
                             </div>
                             ${match ? 
-                                `<div style="margin-top: 10px; padding: 8px; background: ${match.isMatch ? 'rgba(40, 167, 69, 0.1)' : 'rgba(220, 53, 69, 0.1)'}; border-radius: 5px; text-align: center;">
-                                    ${match.isMatch ? '✅' : '⚠️'} ${match.message}
+                                `<div style="margin-top: 10px; padding: 10px; background: white; border-radius: 6px;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <i class="fas ${match.icon}" style="color: ${match.color}; font-size: 1.2rem;"></i>
+                                        <span style="color: ${match.color}; font-weight: 500;">${match.message}</span>
+                                    </div>
                                 </div>` : 
                                 `<div style="margin-top: 10px; padding: 8px; background: rgba(108, 117, 125, 0.1); border-radius: 5px; text-align: center;">
                                     ℹ️ לא ניתן לקבוע התאמה - נא למלא שאלון סיכון
@@ -1514,49 +1510,46 @@
             container.innerHTML = html;
         }
         
-        // פונקציה לחיפוש ramatsikon בנתונים הגלובליים
-        function findRamatsikonInData(kodMislaka, shemMaslul, sugMutzar) {
-            // בחירת מקור הנתונים לפי סוג המוצר
-            let dataSource = null;
-            let dataSourceName = '';
+        // מיפוי סוגי מסלולים לרמת סיכון (מבוסס על ofihashkaa.xml)
+        const maslulRiskMap = {
+            'כללי': 'בינונית',
+            'מניות': 'גבוהה',
+            'עוקב מדד': 'גבוהה',
+            'אשראי ואג"ח': 'נמוכה עד בינונית',
+            'אג"ח': 'נמוכה עד בינונית',
+            'כספי': 'נמוכה מאוד',
+            'שקלי': 'נמוכה מאוד',
+            'הלכה': 'בינונית - תלוי בהרכב האפיקים שנבחרו',
+            'משולב': 'בינונית',
+            'משולב מניות': 'בינונית עד גבוהה',
+            'עד 50': 'גבוהה',
+            '50-60': 'בינוני',
+            '60 ומעלה': 'נמוך',
+            'חיסכון לילד': 'גבוהה' // ברירת מחדל
+        };
+        
+        // פונקציה לחיפוש ramatsikon לפי שם המסלול
+        function findRamatsikonByName(shemMaslul) {
+            if (!shemMaslul) return null;
             
-            // קרנות פנסיה חדשות
-            if (sugMutzar === 'קרן פנסיה חדשה' || sugMutzar === 'קרן פנסיה' || sugMutzar === 5) {
-                dataSource = typeof datanetunimKlaliXP !== 'undefined' ? datanetunimKlaliXP : null;
-                dataSourceName = 'datanetunimKlaliXP';
-            }
-            // ביטוח (גמל, פוליסות)
-            else if (sugMutzar === 'קופת גמל' || sugMutzar === 'קופת גמל להשקעה' || 
-                     sugMutzar === 'פוליסת ביטוח חיים משולב חסכון' || 
-                     sugMutzar === 2 || sugMutzar === '2_1' || sugMutzar === '2_2' || sugMutzar === 3) {
-                dataSource = typeof datanetunimKlaliXB !== 'undefined' ? datanetunimKlaliXB : null;
-                dataSourceName = 'datanetunimKlaliXB';
-            }
-            // השתלמות, חסכון לילד, גמל להשקעה
-            else {
-                dataSource = typeof datanetunimKlaliXM !== 'undefined' ? datanetunimKlaliXM : null;
-                dataSourceName = 'datanetunimKlaliXM';
-            }
+            // שימוש בפונקציה הקיימת לזיהוי סוג המסלול
+            const maslulType = typeof getMaslulType === 'function' ? getMaslulType(shemMaslul) : null;
             
-            if (!dataSource || !Array.isArray(dataSource)) {
-                console.log(`⚠️ ${dataSourceName} לא זמין עבור ${sugMutzar}`);
+            if (!maslulType || maslulType === 'לא ידוע') {
+                console.log(`⚠️ לא זוהה סוג מסלול עבור: ${shemMaslul}`);
                 return null;
             }
             
-            // חיפוש המסלול לפי קוד מסלקה ושם מסלול
-            const maslulData = dataSource.find(item => 
-                item.kodmislaka === kodMislaka && 
-                item.shemkupa && shemMaslul && 
-                item.shemkupa.trim() === shemMaslul.trim()
-            );
+            // חיפוש רמת סיכון במיפוי
+            const sikon = maslulRiskMap[maslulType];
             
-            if (maslulData && maslulData.ramatsikon) {
-                console.log(`✅ נמצא ramatsikon ב-${dataSourceName}: ${maslulData.ramatsikon} עבור ${shemMaslul}`);
-                return maslulData.ramatsikon;
-            } else {
-                console.log(`❌ לא נמצא ramatsikon ב-${dataSourceName} עבור ${shemMaslul} (קוד: ${kodMislaka})`);
-                return null;
+            if (sikon) {
+                console.log(`✅ נמצא סיכון "${sikon}" עבור מסלול "${shemMaslul}" (סוג: ${maslulType})`);
+                return sikon;
             }
+            
+            console.log(`⚠️ לא נמצאה רמת סיכון עבור סוג מסלול: ${maslulType}`);
+            return null;
         }
         
         // פונקציה לזיהוי רמת סיכון מ-ramatsikon
@@ -1589,20 +1582,29 @@
             
             const isMatch = clientRisk === pathwayRisk;
             
-            let message;
+            let message, color, icon;
+            
             if (isMatch) {
                 message = 'מתאים לפרופיל הסיכון שלך';
+                color = '#28a745';
+                icon = 'fa-check-circle';
             } else {
                 if (clientRisk === 'נמוך' && pathwayRisk === 'גבוה') {
                     message = 'סיכון גבוה מדי עבורך';
+                    color = '#dc3545';
+                    icon = 'fa-exclamation-triangle';
                 } else if (clientRisk === 'גבוה' && pathwayRisk === 'נמוך') {
                     message = 'סיכון נמוך מדי - פוטנציאל צמיחה מוגבל';
+                    color = '#ffc107';
+                    icon = 'fa-info-circle';
                 } else {
                     message = 'אי-התאמה חלקית';
+                    color = '#ff9800';
+                    icon = 'fa-exclamation-circle';
                 }
             }
             
-            return { isMatch, message };
+            return { isMatch, message, color, icon };
         }
         
         // פונקציה לזיהוי פערים
