@@ -6644,9 +6644,14 @@
             // חישוב סכומים לניתוח מתקדם - מריצה על שורות הטבלה
             setTimeout(() => {
                 const table = tableDiv.querySelector('table tbody');
-                if (!table) return;
+                if (!table) {
+                    console.warn('⚠️ לא נמצאה טבלה');
+                    return;
+                }
                 
                 const rows = table.querySelectorAll('tr');
+                console.log(`📋 מספר שורות בטבלה: ${rows.length}`);
+                
                 let sumHon = 0;
                 let sumKitzva = 0;
                 
@@ -6655,8 +6660,9 @@
                 // מוצרי קצבה
                 const pensionProducts = ['פוליסת ביטוח חיים משולב חסכון', 'קרן פנסיה', 'קופת גמל'];
                 
-                // רוץ על השורות (החל מהשנייה - דלג על הכותרת)
-                for (let i = 1; i < rows.length; i++) {
+                // רוץ על כל השורות (מהראשונה)
+                for (let i = 0; i < rows.length; i++) {
+                    console.log(`🔍 בודק שורה ${i}:`, rows[i].textContent);
                     const cells = rows[i].children;
                     if (cells.length < 2) continue;
                     
