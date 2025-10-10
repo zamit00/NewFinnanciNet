@@ -1619,16 +1619,200 @@
             const analysisContainer = document.getElementById('analysisContent');
             if (!analysisContainer) return;
             
-            analysisContainer.innerHTML = `
-                <div class="analysis-card" style="text-align: center; padding: 40px;">
-                    <i class="fas fa-tools" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
-                    <h3 style="color: var(--text-dark); margin-bottom: 15px;">בקרוב: ניתוח דמי ניהול</h3>
-                    <p style="color: var(--text-light); max-width: 500px; margin: 0 auto;">
-                        מערכת ניתוח דמי הניהול תכלול בדיקה האם דמי הניהול נמצאים בטווח הסביר
-                        לעומת מוצרים דומים בשוק
+            const detailedData = clientAnalysisData.detailedData;
+            const pirteiHeshbon = detailedData.pirteiHeshbon;
+            
+            let html = `
+                <div class="analysis-card" style="background: #f8f9fa; margin-bottom: 20px; padding: 20px;">
+                    <h4 style="color: var(--primary); margin: 0 0 10px 0;">
+                        <i class="fas fa-info-circle"></i>
+                        מידע
+                    </h4>
+                    <p style="color: var(--text); margin: 0;">
+                        בדיקה האם דמי הניהול שלך נמוכים, בממוצע, או גבוהים ביחס לממוצע השוק
                     </p>
+                    <div style="margin-top: 15px; padding: 12px; background: white; border-radius: 8px; border-right: 4px solid var(--primary);">
+                        <strong>נוסחה:</strong> דמי ניהול משוקלל = (דמי ניהול מהפקדה ÷ 10) + דמי ניהול מצבירה
+                    </div>
                 </div>
             `;
+            
+            // עבור על כל חשבון ומסלוליו
+            pirteiHeshbon.forEach((heshbon, heshbonIndex) => {
+                const maslulim = heshbon.mafyenMaslulim || [];
+                
+                if (maslulim.length === 0) return;
+                
+                html += `
+                    <div class="analysis-card" style="border-right: 4px solid var(--primary); margin-bottom: 20px;">
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: var(--primary); margin: 0 0 5px 0; font-size: 1.2rem;">
+                                <i class="fas fa-briefcase"></i>
+                                ${heshbon.shemTochnit || 'חשבון #' + (heshbonIndex + 1)}
+                            </h4>
+                            <div style="color: var(--text-light); font-size: 0.9rem;">
+                                <i class="fas fa-building"></i> ${heshbon.shemMaasik || 'לא צוין'}
+                            </div>
+                        </div>
+                `;
+                
+                maslulim.forEach((maslul, maslulIndex) => {
+                    const pathwayName = maslul.shemMaslulHashkaa || maslul.shemMaslul || 'מסלול ' + (maslulIndex + 1);
+                    const pathwayAmount = parseFloat(maslul.schumTzvira || 0);
+                    
+                    if (pathwayAmount <= 0) return;
+                    
+                    // דמי ניהול של הלקוח
+                    const feeFromDeposit = parseFloat(maslul.sheurDmeyNihulHafkadMivne || 0);
+                    const feeFromBalance = parseFloat(maslul.sheurDmeyNihulHisachonMivne || 0);
+                    const weightedFee = (feeFromDeposit / 10) + feeFromBalance;
+                    
+                    // זיהוי סוג המסלול למציאת ממוצעים
+                    let maslulType = 'כללי';
+                    if (pathwayName && typeof getMaslulType === 'function') {
+                        const detectedType = getMaslulType(pathwayName);
+                        if (detectedType && detectedType !== 'לא ידוע') {
+                            maslulType = detectedType;
+                        }
+                    }
+                    
+                    // מציאת דמי ניהול ממוצעים
+                    const avgFees = getAverageFees(maslulType, heshbon.sugMutzar);
+                    
+                    // השוואה
+                    const comparison = compareFees(weightedFee, avgFees.weighted);
+                    
+                    html += `
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid ${comparison.color};">
+                            <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                                <div style="flex: 1; min-width: 200px;">
+                                    <div style="font-weight: bold; color: var(--text-dark); margin-bottom: 5px;">
+                                        ${pathwayName}
+                                    </div>
+                                    <div style="color: var(--text-light); font-size: 0.9rem;">
+                                        <i class="fas fa-route"></i> ${maslulType}
+                                    </div>
+                                </div>
+                                <div style="text-align: left;">
+                                    <div style="font-weight: bold; color: var(--primary); font-size: 1.1rem;">
+                                        ₪${pathwayAmount.toLocaleString('he-IL')}
+                                    </div>
+                                    <div style="color: var(--text-light); font-size: 0.85rem;">
+                                        צבירה
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px;">
+                                <div style="background: white; padding: 10px; border-radius: 6px;">
+                                    <small style="color: var(--text-light); display: block; margin-bottom: 3px;">מהפקדה</small>
+                                    <strong style="color: var(--text-dark);">${feeFromDeposit.toFixed(2)}%</strong>
+                                    <small style="color: var(--text-light); display: block; margin-top: 2px;">ממוצע: ${avgFees.deposit.toFixed(2)}%</small>
+                                </div>
+                                <div style="background: white; padding: 10px; border-radius: 6px;">
+                                    <small style="color: var(--text-light); display: block; margin-bottom: 3px;">מצבירה</small>
+                                    <strong style="color: var(--text-dark);">${feeFromBalance.toFixed(2)}%</strong>
+                                    <small style="color: var(--text-light); display: block; margin-top: 2px;">ממוצע: ${avgFees.balance.toFixed(2)}%</small>
+                                </div>
+                                <div style="background: white; padding: 10px; border-radius: 6px;">
+                                    <small style="color: var(--text-light); display: block; margin-bottom: 3px;">משוקלל</small>
+                                    <strong style="color: ${comparison.color};">${weightedFee.toFixed(2)}%</strong>
+                                    <small style="color: var(--text-light); display: block; margin-top: 2px;">ממוצע: ${avgFees.weighted.toFixed(2)}%</small>
+                                </div>
+                            </div>
+                            
+                            <div style="padding: 10px; background: white; border-radius: 6px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <i class="fas ${comparison.icon}" style="color: ${comparison.color}; font-size: 1.2rem;"></i>
+                                    <span style="color: ${comparison.color}; font-weight: 500;">${comparison.message}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            });
+            
+            analysisContainer.innerHTML = html;
+        }
+        
+        // פונקציה למציאת דמי ניהול ממוצעים
+        function getAverageFees(maslulType, sugMutzar) {
+            // ברירות מחדל
+            let avgDeposit = 0;
+            let avgBalance = 0.7;
+            let avgWeighted = 0.7;
+            
+            // קרן פנסיה - ברירת מחדל מיוחדת
+            if (sugMutzar === 'קרן פנסיה חדשה' || sugMutzar === 'קרן פנסיה' || sugMutzar === 5 || sugMutzar === '5') {
+                avgDeposit = 1.6;
+                avgBalance = 0.16;
+                avgWeighted = 0.25;
+            }
+            // פוליסת חסכון
+            else if (sugMutzar === 'פוליסת ביטוח חיים משולב חסכון' || sugMutzar === 3 || sugMutzar === '3' || sugMutzar === '2_2') {
+                avgDeposit = 0;
+                avgBalance = 0.85;
+                avgWeighted = 0.85;
+            }
+            
+            // חיפוש ב-dataIndicators
+            if (typeof dataIndicators !== 'undefined' && Array.isArray(dataIndicators)) {
+                const indicator = dataIndicators.find(item => 
+                    item.maslul && maslulType && 
+                    item.maslul.toLowerCase() === maslulType.toLowerCase()
+                );
+                
+                if (indicator) {
+                    if (indicator.dmeyNihul) avgBalance = parseFloat(indicator.dmeyNihul);
+                    if (indicator.dmeyNihulHafada) avgDeposit = parseFloat(indicator.dmeyNihulHafada);
+                    if (indicator.dmeyNihulMeshuklal && parseFloat(indicator.dmeyNihulMeshuklal) > 0) {
+                        avgWeighted = parseFloat(indicator.dmeyNihulMeshuklal);
+                    } else {
+                        // אם משוקלל = 0, חשב מחדש
+                        avgWeighted = (avgDeposit / 10) + avgBalance;
+                    }
+                }
+            }
+            
+            return {
+                deposit: avgDeposit,
+                balance: avgBalance,
+                weighted: avgWeighted
+            };
+        }
+        
+        // פונקציה להשוואת דמי ניהול
+        function compareFees(clientFee, avgFee) {
+            const diff = clientFee - avgFee;
+            const diffPercent = avgFee > 0 ? (diff / avgFee) * 100 : 0;
+            
+            let color, icon, message;
+            
+            if (diffPercent <= -10) {
+                // נמוך משמעותית מהממוצע - מצוין!
+                color = '#28a745';
+                icon = 'fa-check-circle';
+                message = `מצוין! דמי הניהול נמוכים ב-${Math.abs(diffPercent).toFixed(0)}% מהממוצע`;
+            } else if (diffPercent < 5) {
+                // בממוצע או מעט מתחת
+                color = '#28a745';
+                icon = 'fa-check';
+                message = 'דמי ניהול סבירים - קרוב לממוצע השוק';
+            } else if (diffPercent < 15) {
+                // מעט מעל הממוצע
+                color = '#ffc107';
+                icon = 'fa-exclamation-circle';
+                message = `דמי ניהול מעט גבוהים (${diffPercent.toFixed(0)}% מעל הממוצע)`;
+            } else {
+                // גבוה משמעותית
+                color = '#dc3545';
+                icon = 'fa-exclamation-triangle';
+                message = `דמי ניהול גבוהים! ${diffPercent.toFixed(0)}% מעל הממוצע - מומלץ לבדוק אפשרויות`;
+            }
+            
+            return { color, icon, message, diff, diffPercent };
         }
         
         // פונקציה להצגת ניתוח תשואות
