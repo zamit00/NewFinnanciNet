@@ -1763,22 +1763,34 @@
         
         // פונקציה למציאת דמי ניהול ממוצעים
         function getAverageFees(maslulType, sugMutzar) {
+            console.log(`📊 getAverageFees - maslulType: "${maslulType}", sugMutzar: "${sugMutzar}"`);
+            
             // ברירות מחדל
             let avgDeposit = 0;
             let avgBalance = 0.7;
             let avgWeighted = 0.7;
             
             // קרן פנסיה - ברירת מחדל מיוחדת
-            if (sugMutzar === 'קרן פנסיה חדשה' || sugMutzar === 'קרן פנסיה' || sugMutzar === 5 || sugMutzar === '5') {
+            if (sugMutzar === 'קרן פנסיה חדשה' || sugMutzar === 'קרן פנסיה' || 
+                sugMutzar === '2' || sugMutzar === 2 || 
+                sugMutzar === '2_1' || sugMutzar === '2_2' ||
+                sugMutzar === 5 || sugMutzar === '5') {
+                console.log('  ✅ זוהה כקרן פנסיה');
                 avgDeposit = 1.6;
                 avgBalance = 0.16;
                 avgWeighted = 0.25;
             }
             // פוליסת חסכון
-            else if (sugMutzar === 'פוליסת ביטוח חיים משולב חסכון' || sugMutzar === 3 || sugMutzar === '3' || sugMutzar === '2_2') {
+            else if (sugMutzar === 'פוליסת ביטוח חיים משולב חסכון' || 
+                     sugMutzar === '1' || sugMutzar === 1 ||
+                     sugMutzar === 3 || sugMutzar === '3') {
+                console.log('  ✅ זוהה כפוליסת חסכון');
                 avgDeposit = 0;
                 avgBalance = 0.85;
                 avgWeighted = 0.85;
+            }
+            else {
+                console.log('  ℹ️ ברירת מחדל: קרן השתלמות/גמל');
             }
             
             // חיפוש ב-dataIndicators
