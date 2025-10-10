@@ -4167,6 +4167,9 @@
 
                                 // ----- דמי ניהול (ריבוי רשומות) -----
                                 let dmeyNihulSet = new Set();
+                                let actualFeeFromDeposit = 0;
+                                let actualFeeFromBalance = 0;
+                                
                                 const perutHotzaot = p.getElementsByTagName('PerutHotzaot')[0];
                                 const mivneDmeiNihul = perutHotzaot ? perutHotzaot.getElementsByTagName('MivneDmeiNihul')[0] : null;
                                 const dmeyElements = mivneDmeiNihul ? mivneDmeiNihul.getElementsByTagName('PerutMivneDmeiNihul') : [];
@@ -4179,7 +4182,18 @@
                                     const kayemetHatava = cleanVal(getElementText(d, 'KAYEMET-HATAVA')) || '';
                                     const sugHatava = cleanVal(getElementText(d, 'SUG-HATAVA')) || '';
                                     const achozHatava = cleanVal(getElementText(d, 'ACHOZ-HATAVA')) || '';
-                                    dmeyNihulSet.add(`${sugHotzaa}-${dmeiNihulAchidim}-${sheurDmeiNihul}`)
+                                    dmeyNihulSet.add(`${sugHotzaa}-${dmeiNihulAchidim}-${sheurDmeiNihul}`);
+                                    
+                                    // אם dmeiNihulAchidim = 1 (באחוזים)
+                                    if (dmeiNihulAchidim === '1' || dmeiNihulAchidim === 1) {
+                                        if (sugHotzaa === '1' || sugHotzaa === 1) {
+                                            // דמי ניהול מצבירה
+                                            actualFeeFromBalance = parseFloat(sheurDmeiNihul) || 0;
+                                        } else if (sugHotzaa === '2' || sugHotzaa === 2) {
+                                            // דמי ניהול מהפקדה
+                                            actualFeeFromDeposit = parseFloat(sheurDmeiNihul) || 0;
+                                        }
+                                    }
                                 }
 
 
@@ -4196,8 +4210,14 @@
                                     const shemMaslulHashkaa = cleanVal(getElementText(maslul,'SHEM-MASLUL-HASHKAA')) || '';
                                     const schumTzvira = parseFloat(cleanVal(getElementText(maslul,'SCHUM-TZVIRA-BAMASLUL')) || 0);
                                     if(schumTzvira==0){continue;}
-                                    const sheurDmeyNihulHafkadMivne = cleanVal(getElementText(maslul,'SHEUR-DMEI-NIHUL-HAFKADA-MIVNE')) || '';
-                                    const sheurDmeyNihulHisachonMivne = cleanVal(getElementText(maslul,'SHEUR-DMEI-NIHUL-HISACHON-MIVNE')) || '';
+                                    
+                                    // דמי ניהול - אחידים לכל המסלולים באותו חשבון מ-PerutMivneDmeiNihul
+                                    // רק אם אין שם נתונים, ניקח מהמסלול עצמו
+                                    const sheurDmeyNihulHafkadMivne = actualFeeFromDeposit || 
+                                        parseFloat(cleanVal(getElementText(maslul,'SHEUR-DMEI-NIHUL-HAFKADA-MIVNE')) || 0);
+                                    const sheurDmeyNihulHisachonMivne = actualFeeFromBalance || 
+                                        parseFloat(cleanVal(getElementText(maslul,'SHEUR-DMEI-NIHUL-HISACHON-MIVNE')) || 0);
+                                    
                                     const tesuaNeto = cleanVal(getElementText(maslul,'TSUA-NETO')) || '';
                                     const shiurAlotShnatitZpuiaLmslulHashkah = cleanVal(getElementText(maslul,'SHIUR-ALUT-SHNATIT-ZPUIA-LMSLUL-HASHKAH')) || '';
                                     const kodSugMaslul = cleanVal(getElementText(maslul,'KOD-SUG-MASLUL')) || '';
@@ -4222,6 +4242,13 @@
                                                 pensiaVatikaOHadasha, 
                                                 count: 1
                                             });
+                                             if(sugMutzar=='2' || sugMutzar==2){
+                                                 console.log('📊 קרן פנסיה - דמי ניהול שנשמרו במסלול:');
+                                                 console.log('   מהפקדה (actualFeeFromDeposit):', actualFeeFromDeposit);
+                                                 console.log('   מצבירה (actualFeeFromBalance):', actualFeeFromBalance);
+                                                 console.log('   מהפקדה (sheurDmeyNihulHafkadMivne):', sheurDmeyNihulHafkadMivne);
+                                                 console.log('   מצבירה (sheurDmeyNihulHisachonMivne):', sheurDmeyNihulHisachonMivne);
+                                             } 
                                         }
                                     }
                                 }
