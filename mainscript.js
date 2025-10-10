@@ -54,6 +54,7 @@ async function loadalldata() {
         //console.log('📊 מעבד ממוצעים...');
         await indications();
         await fetchInvestmentData();
+        console.log(dataIndicators)
         //console.log(`📈 נוצרו ${dataIndicators.length} רשומות ממוצע`);
         const tkofaItem = datanetunimKlaliXM.filter(item=>item.mh==='579')[0].tesua12
         ;

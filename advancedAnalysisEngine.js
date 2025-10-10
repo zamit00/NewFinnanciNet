@@ -23,7 +23,7 @@ function importAndClearSessionData() {
     if (detailedDataStr) {
         try {
             detailedData = JSON.parse(detailedDataStr);
-            console.log('✅ נתונים מפורטים נטענו:', Object.keys(detailedData));
+            //console.log('✅ נתונים מפורטים נטענו:', Object.keys(detailedData));
         } catch (error) {
             console.error('❌ שגיאה בפענוח נתונים מפורטים:', error);
         }
@@ -37,7 +37,7 @@ function importAndClearSessionData() {
     sessionStorage.removeItem('riskProfile');
     sessionStorage.removeItem('riskScore');
     sessionStorage.removeItem('advancedAnalysisData');
-    console.log('🗑️ נתונים נמחקו מ-sessionStorage');
+    //console.log('🗑️ נתונים נמחקו מ-sessionStorage');
     
     return {
         age: gil ? parseInt(gil) : null,
@@ -105,7 +105,7 @@ const AnalysisStorage = {
         try {
             clientAnalysisData.lastUpdated = new Date().toISOString();
             localStorage.setItem('clientAnalysisData', JSON.stringify(clientAnalysisData));
-            console.log('✅ נתוני ניתוח נשמרו בהצלחה');
+            //console.log('✅ נתוני ניתוח נשמרו בהצלחה');
             return true;
         } catch (error) {
             console.error('❌ שגיאה בשמירת נתונים:', error);
