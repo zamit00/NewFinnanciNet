@@ -54,8 +54,6 @@ async function loadalldata() {
         //console.log('📊 מעבד ממוצעים...');
         await indications();
         await fetchInvestmentData();
-       
-       //console.log('✅ עיבוד ממוצעים הושלם');
         //console.log(`📈 נוצרו ${dataIndicators.length} רשומות ממוצע`);
         const tkofaItem = datanetunimKlaliXM.filter(item=>item.mh==='579')[0].tesua12
         ;
@@ -197,11 +195,12 @@ async function indications(){
         obj[field] !== undefined &&
         obj[field] !== null &&
         obj[field] !== '' &&
-        !isNaN(obj[field])
+        !isNaN(obj[field]) &&
+        parseFloat(obj[field]) !== 0  // לא לספור אפסים - מי שאין לו נתון לא משתתף בממוצע
       );
       const total = validItems.reduce((sum, obj) => sum + parseFloat(obj[field]), 0);
       const avg = validItems.length > 0 ? total / validItems.length : 0;
-      result[field] = avg.toFixed(2); 
+      result[field] = avg.toFixed(2);
     }
       
     // חישוב דמי ניהול משוקלל

@@ -108,18 +108,25 @@ function getMaslulType(shemkupa) {
         return 'עוקב מדדי אג"ח עם מניות';
     }
     
-    // 50-60
-    if (name.includes('50') && name.includes('60')) {
+    // 50-60 (כולל ווריאציות: "לבני 50 עד 60", "בני 50-60", "50 עד 60")
+    if ((name.includes('50') && name.includes('60')) || 
+        name.includes('לבני 50') || 
+        name.includes('בני 50') ||
+        name.includes('50-60')) {
         return '50-60';
     }
     
-    // עד 50 (ללא עוקב ו-60)
-    if (name.includes('50') && !name.includes('עוקב') && !name.includes('60')) {
+    // עד 50 (ללא עוקב ו-60) (כולל ווריאציות: "עד גיל 50", "עד 50")
+    if ((name.includes('50') && !name.includes('עוקב') && !name.includes('60')) ||
+        name.includes('עד גיל 50') ||
+        name.includes('עד 50')) {
         return 'עד 50';
     }
     
-    // 60 ומעלה (ללא 50)
-    if (!name.includes('50') && name.includes('60')) {
+    // 60 ומעלה (ללא 50) (כולל ווריאציות: "מגיל 60", "בני 60")
+    if ((!name.includes('50') && name.includes('60')) ||
+        name.includes('מגיל 60') ||
+        name.includes('בני 60 ומעלה')) {
         return '60 ומעלה';
     }
     
@@ -430,52 +437,48 @@ async function filterMaslul(mas, moza,hevra){
          data.sort((a, b) => b.tesuam - a.tesuam);    
          return data;
          }
-         else if(mas==="50-60"){
-             data = dataforfilter.filter(item => 
-                 item.mozar === moza && 
-                  item.tesuam !== undefined &&  
-                  Number(item.tesuam)!==0 &&
-                 item.shemkupa.includes("50") &&
-                 item.shemkupa.includes("60") 
-                 && (hevra !== 0 ? item.menahelet.includes(hevra):true)  
-                
- 
-  
-             );
-         data.sort((a, b) => b.tesuam - a.tesuam);    
-         return data;
-         }
-         else if(mas==="עד 50"){
-             data = dataforfilter.filter(item => 
-                 item.mozar === moza && 
-                  item.tesuam !== undefined &&  
-                  Number(item.tesuam)!==0 &&
-                 item.shemkupa.includes("50") &&
-                 !item.shemkupa.includes('עוקב') &&
-                 !item.shemkupa.includes("60") 
-                 && (hevra !== 0 ? item.menahelet.includes(hevra):true)  
+        else if(mas==="50-60"){
+            data = dataforfilter.filter(item => 
+                item.mozar === moza && 
+                 item.tesuam !== undefined &&  
+                 Number(item.tesuam)!==0 &&
+                getMaslulType(item.shemkupa) === "50-60"
+                && (hevra !== 0 ? item.menahelet.includes(hevra):true)  
                
  
-  
-             );
-         data.sort((a, b) => b.tesuam - a.tesuam);    
-         return data;
-         }
-         else if(mas==="60 ומעלה"){
-             data = dataforfilter.filter(item => 
-                 item.mozar === moza && 
-                  item.tesuam !== undefined &&  
-                  Number(item.tesuam)!==0 &&
-                 !item.shemkupa.includes("50") &&
-                 item.shemkupa.includes("60") 
-                 && (hevra !== 0 ? item.menahelet.includes(hevra):true)  
-                
  
-  
-             );
-         data.sort((a, b) => b.tesuam - a.tesuam);    
-         return data;
-         }
+            );
+        data.sort((a, b) => b.tesuam - a.tesuam);    
+        return data;
+        }
+        else if(mas==="עד 50"){
+            data = dataforfilter.filter(item => 
+                item.mozar === moza && 
+                 item.tesuam !== undefined &&  
+                 Number(item.tesuam)!==0 &&
+                getMaslulType(item.shemkupa) === "עד 50"
+                && (hevra !== 0 ? item.menahelet.includes(hevra):true)  
+               
+ 
+ 
+            );
+        data.sort((a, b) => b.tesuam - a.tesuam);    
+        return data;
+        }
+        else if(mas==="60 ומעלה"){
+            data = dataforfilter.filter(item => 
+                item.mozar === moza && 
+                 item.tesuam !== undefined &&  
+                 Number(item.tesuam)!==0 &&
+                getMaslulType(item.shemkupa) === "60 ומעלה"
+                && (hevra !== 0 ? item.menahelet.includes(hevra):true)  
+               
+ 
+ 
+            );
+        data.sort((a, b) => b.tesuam - a.tesuam);    
+        return data;
+        }
          else if(mas==='סיכון מוגבר'){
              data = dataforfilter.filter(item => 
                  item.mozar === moza && 

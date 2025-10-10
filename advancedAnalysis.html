@@ -1158,8 +1158,8 @@
             // טעינת כל הנתונים הגלובליים (dataIndicators)
             if (typeof loadalldata === 'function') {
                 loadalldata().then(() => {
-                    console.log('✅ dataIndicators זמין:', typeof dataIndicators !== 'undefined');
-                    console.log('📊 מספר רשומות:', dataIndicators?.length || 0);
+                   // console.log('✅ dataIndicators זמין:', typeof dataIndicators !== 'undefined');
+                   // console.log('📊 מספר רשומות:', dataIndicators?.length || 0);
                 });
             }
             
@@ -1204,9 +1204,9 @@
                     
                     // שמירת הנתונים המפורטים
                     clientAnalysisData.detailedData = importedData.detailedData;
-                    console.log('💾 נתונים מפורטים נשמרו ב-clientAnalysisData:', clientAnalysisData.detailedData);
-                    console.log('  יש pirteiHeshbon?', clientAnalysisData.detailedData?.pirteiHeshbon?.length || 0);
-                    console.log('  יש masluleiHashkaa?', clientAnalysisData.detailedData?.masluleiHashkaa?.length || 0);
+                    //console.log('💾 נתונים מפורטים נשמרו ב-clientAnalysisData:', clientAnalysisData.detailedData);
+                    //console.log('  יש pirteiHeshbon?', clientAnalysisData.detailedData?.pirteiHeshbon?.length || 0);
+                    //console.log('  יש masluleiHashkaa?', clientAnalysisData.detailedData?.masluleiHashkaa?.length || 0);
                     
                     // טעינת רמת סיכון אם קיימת
                     if (importedData.riskProfile) {
@@ -1234,8 +1234,8 @@
                     
                     AnalysisStorage.save();
                     
-                    console.log('✅ נתוני לקוח נטענו:', clientAnalysisData.profile);
-                    console.log('✅ נתוני תיק נטענו:', clientAnalysisData.portfolio);
+                    //console.log('✅ נתוני לקוח נטענו:', clientAnalysisData.profile);
+                    //console.log('✅ נתוני תיק נטענו:', clientAnalysisData.portfolio);
                     
                     // עדכון התצוגה
                     updateStep1Display();
@@ -1676,11 +1676,8 @@
                         }
                     }
                     
-                    // מציאת דמי ניהול ממוצעים
+                    // מציאת דמי ניהול ממוצעים - שימוש בפונקציה הנכונה
                     const avgFees = getAverageFees(maslulType, heshbon.sugMutzar);
-                    
-                    console.log(`💰 דמי ניהול ממוצעים עבור "${pathwayName}":`, avgFees);
-                    console.log(`   סוג מסלול: ${maslulType}, סוג מוצר: ${heshbon.sugMutzar}`);
                     
                     // השוואה
                     const comparison = compareFees(weightedFee, avgFees.weighted);
