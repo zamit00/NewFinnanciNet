@@ -1,6 +1,54 @@
 // Advanced Analysis Engine - Data Management and Analysis
 // מנוע ניתוח מתקדם - ניהול ואיחסון נתונים
 
+const fieldsToAverageForAdvancedAnalysis = [
+  "dmeyNihul","dmeyNihulHafkad"     
+];
+let dataIndicatorsforadvancedanalysis = [];
+async function indicationsforadvancedanalysis(mozar,maslul){ 
+   
+    const sugmuzar=mozar 
+   
+      const dataY = await filterMaslul(maslul, sugmuzar, 0);
+      if (dataY.length === 0) return;
+      const result = {
+        mozar: sugmuzar,
+        maslul: maslul
+      };
+      
+      for (const field of fieldsToAverageForAdvancedAnalysis) {
+        const validItems = dataY.filter(obj =>
+          obj[field] !== undefined &&
+          obj[field] !== null &&
+          obj[field] !== '' &&
+          !isNaN(obj[field]) &&
+          parseFloat(obj[field]) !== 0  // לא לספור אפסים - מי שאין לו נתון לא משתתף בממוצע
+        );
+        const total = validItems.reduce((sum, obj) => sum + parseFloat(obj[field]), 0);
+        const avg = validItems.length > 0 ? total / validItems.length : 0;
+        result[field] = avg.toFixed(2); 
+      }
+        
+      // חישוב דמי ניהול משוקלל
+      if(result['dmeyNihulHafkad'] && result['dmeyNihul']){
+          result['dmeyNihulMeshuklal'] = (Number(result['dmeyNihulHafkad'])/10 + Number(result['dmeyNihul'])).toFixed(2);
+      }
+      
+      // חישוב יחסי תשואה לסטייה
+      
+    
+    
+      
+      // בדיקה שלא קיים כבר שילוב של mozar+maslul זהה
+      const isDuplicate = dataIndicators.some(item => 
+          item.mozar === result.mozar && item.maslul === result.maslul
+      );
+      
+      if (!isDuplicate) {
+          dataIndicatorsforadvancedanalysis.push(result);
+      }
+      return dataIndicatorsforadvancedanalysis;
+    };
 // ייבוא נתונים מ-sessionStorage ומחיקה מיידית
 function importAndClearSessionData() {
     const gil = sessionStorage.getItem('gilForAdvancedAnalysis');
