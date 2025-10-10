@@ -200,7 +200,7 @@ async function indications(){
       );
       const total = validItems.reduce((sum, obj) => sum + parseFloat(obj[field]), 0);
       const avg = validItems.length > 0 ? total / validItems.length : 0;
-      result[field] = avg.toFixed(2);
+      result[field] = avg.toFixed(2); 
     }
       
     // חישוב דמי ניהול משוקלל
