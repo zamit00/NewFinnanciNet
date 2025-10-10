@@ -4174,6 +4174,7 @@
                                 const mivneDmeiNihul = perutHotzaot ? perutHotzaot.getElementsByTagName('MivneDmeiNihul')[0] : null;
                                 const dmeyElements = mivneDmeiNihul ? mivneDmeiNihul.getElementsByTagName('PerutMivneDmeiNihul') : [];
                                 const dmey = Array.from(dmeyElements);
+                                
                                 for (const d of dmey) {
                                     const sugHotzaa = cleanVal(getElementText(d, 'SUG-HOTZAA')) || 0;
                                     const sheurDmeiNihul = cleanVal(getElementText(d, 'SHEUR-DMEI-NIHUL')) || '';
@@ -4242,13 +4243,7 @@
                                                 pensiaVatikaOHadasha, 
                                                 count: 1
                                             });
-                                             if(sugMutzar=='2' || sugMutzar==2){
-                                                 console.log('📊 קרן פנסיה - דמי ניהול שנשמרו במסלול:');
-                                                 console.log('   מהפקדה (actualFeeFromDeposit):', actualFeeFromDeposit);
-                                                 console.log('   מצבירה (actualFeeFromBalance):', actualFeeFromBalance);
-                                                 console.log('   מהפקדה (sheurDmeyNihulHafkadMivne):', sheurDmeyNihulHafkadMivne);
-                                                 console.log('   מצבירה (sheurDmeyNihulHisachonMivne):', sheurDmeyNihulHisachonMivne);
-                                             } 
+                                              
                                         }
                                     }
                                 }
@@ -6718,7 +6713,7 @@
                     }
                     
                     const rows = table.querySelectorAll('tr');
-                    console.log(`💻 מצב דסקטופ - ${rows.length} שורות`);
+                    //console.log(`💻 מצב דסקטופ - ${rows.length} שורות`);
                     
                     for (let i = 0; i < rows.length; i++) {
                         const cells = rows[i].children;
@@ -6740,17 +6735,17 @@
                         
                         if (isEquity) {
                             sumHon += amount;
-                            console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → הוני`);
+                           // console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → הוני`);
                         } else if (isPension) {
                             sumKitzva += amount;
-                            console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → קצבה`);
+                           // console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → קצבה`);
                         }
                     }
                 }
                 
-                console.log('━━━━━━━━━━━━━━━━━━━━━━');
-                console.log(`💰 סך הוני: ₪${sumHon.toLocaleString('he-IL')}`);
-                console.log(`🏦 סך קצבה: ₪${sumKitzva.toLocaleString('he-IL')}`);
+                //console.log('━━━━━━━━━━━━━━━━━━━━━━');
+                //console.log(`💰 סך הוני: ₪${sumHon.toLocaleString('he-IL')}`);
+                //console.log(`🏦 סך קצבה: ₪${sumKitzva.toLocaleString('he-IL')}`);
                 
                 // שמירת סכומים בסיסיים
                 sessionStorage.setItem('sumHonForAdvancedAnalysis', sumHon);

@@ -11,12 +11,12 @@ function importAndClearSessionData() {
     const riskScore = sessionStorage.getItem('riskScore');
     const detailedDataStr = sessionStorage.getItem('advancedAnalysisData');
     
-    console.log('📥 מייבא נתונים מ-sessionStorage...');
+    /*console.log('📥 מייבא נתונים מ-sessionStorage...');
     console.log('  גיל:', gil);
     console.log('  שנים לפרישה:', yearsToRetirement);
     console.log('  סך הוני:', equitySum);
     console.log('  סך קצבה:', pensionSum);
-    console.log('  רמת סיכון:', riskProfile);
+    console.log('  רמת סיכון:', riskProfile);*/
     
     // פענוח נתונים מפורטים
     let detailedData = null;
@@ -291,10 +291,11 @@ const PortfolioAnalyzer = {
         };
         
         AnalysisStorage.save();
-        console.log(`✅ נותחו ${accounts.length} חשבונות`);
+        /*console.log(`✅ נותחו ${accounts.length} חשבונות`);
         console.log(`   סך כולל: ₪${totalValue.toLocaleString('he-IL')}`);
         console.log(`   מוצרים הוניים: ₪${equityTotal.toLocaleString('he-IL')}`);
         console.log(`   מוצרי קצבה: ₪${pensionTotal.toLocaleString('he-IL')}`);
+        */
         return true;
     },
     

@@ -721,7 +721,7 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 12px;
             cursor: pointer;
-            color: white;
+            color: lightgray;
             font-weight: 600;
             font-size: 1rem;
             transition: all 0.3s ease;
@@ -1425,14 +1425,14 @@
             console.log('  sikonData זמין?', typeof sikonData !== 'undefined' && sikonData?.length > 0);
             console.log('  sikonData length:', typeof sikonData !== 'undefined' ? sikonData?.length : 'undefined');
             if (pirteiHeshbon && pirteiHeshbon[0]) {
-                console.log('  דוגמה לחשבון ראשון:', pirteiHeshbon[0]);
-                console.log('  מסלולים בחשבון ראשון:', pirteiHeshbon[0].mafyenMaslulim);
+                //console.log('  דוגמה לחשבון ראשון:', pirteiHeshbon[0]);
+                //console.log('  מסלולים בחשבון ראשון:', pirteiHeshbon[0].mafyenMaslulim);
                 if (pirteiHeshbon[0].mafyenMaslulim && pirteiHeshbon[0].mafyenMaslulim[0]) {
-                    console.log('  שם מסלול ראשון:', pirteiHeshbon[0].mafyenMaslulim[0].shemMaslul);
-                    console.log('  ramatsikon במסלול:', pirteiHeshbon[0].mafyenMaslulim[0].ramatsikon);
+                    //console.log('  שם מסלול ראשון:', pirteiHeshbon[0].mafyenMaslulim[0].shemMaslul);
+                    //console.log('  ramatsikon במסלול:', pirteiHeshbon[0].mafyenMaslulim[0].ramatsikon);
                 }
             }
-            console.log('  clientRisk:', clientRisk);
+            //console.log('  clientRisk:', clientRisk);
             
             // יצירת כותרת עם כפתורי ניתוח
             let html = `
@@ -1546,7 +1546,7 @@
             // שלב 2: הצגת הנתונים המרוכזים
             const sortedEntries = Object.values(productMaslulMap).sort((a, b) => b.totalAmount - a.totalAmount);
             
-            console.log(`📊 נמצאו ${sortedEntries.length} קומבינציות מוצר+מסלול`);
+            //console.log(`📊 נמצאו ${sortedEntries.length} קומבינציות מוצר+מסלול`);
             
             sortedEntries.forEach((entry) => {
                 // חיפוש ramatsikon לפי סוג המסלול
@@ -1766,64 +1766,76 @@
         
         // פונקציה למציאת דמי ניהול ממוצעים
         function getAverageFees(maslulType, sugMutzar) {
-            console.log(`📊 getAverageFees - maslulType: "${maslulType}", sugMutzar: "${sugMutzar}"`);
             
             // ברירות מחדל
             let avgDeposit = 0;
             let avgBalance = 0.7;
             let avgWeighted = 0.7;
             
-            // קרן פנסיה - ברירת מחדל מיוחדת
-            if (sugMutzar === 'קרן פנסיה חדשה' || sugMutzar === 'קרן פנסיה' || 
-                sugMutzar === '2' || sugMutzar === 2 || 
-                sugMutzar === '2_1' || sugMutzar === '2_2' ||
-                sugMutzar === 5 || sugMutzar === '5') {
-                console.log('  ✅ זוהה כקרן פנסיה');
-                avgDeposit = 1.6;
-                avgBalance = 0.16;
-                avgWeighted = 0.25;
-            }
-            // פוליסת חסכון
-            else if (sugMutzar === 'פוליסת ביטוח חיים משולב חסכון' || 
-                     sugMutzar === '1' || sugMutzar === 1 ||
-                     sugMutzar === 3 || sugMutzar === '3') {
-                console.log('  ✅ זוהה כפוליסת חסכון');
-                avgDeposit = 0;
-                avgBalance = 0.85;
-                avgWeighted = 0.85;
-            }
-            else {
-                console.log('  ℹ️ ברירת מחדל: קרן השתלמות/גמל');
+            // מיפוי sugMutzar לשם המוצר ב-dataIndicators
+            let productName = '';
+            switch(sugMutzar) {
+                case '4':
+                case 4:
+                    productName = 'קרן השתלמות';
+                    break;
+                case '5':
+                case 5:
+                    productName = 'תגמולים ואישית לפיצויים';
+                    break;
+                case '9':
+                case 9:
+                    productName = 'קופת גמל להשקעה';
+                    break;
+                case '10':
+                case 10:
+                    productName = 'חסכון לילד';
+                    break;
+                case '2':
+                case 2:
+                case '2_1':
+                case '2_2':
+                    productName = 'קרנות חדשות';
+                    avgDeposit = 1.6;
+                    avgBalance = 0.16;
+                    avgWeighted = 0.25;
+                    break;
+                case '1':
+                case 1:
+                case '3':
+                case 3:
+                    productName = 'פוליסת חסכון';
+                    avgDeposit = 0;
+                    avgBalance = 0.85;
+                    avgWeighted = 0.85;
+                    break;
             }
             
-            // חיפוש ב-dataIndicators - רק אם זה לא קרן פנסיה (כי אין לה נתונים שם)
+            // חיפוש ב-dataIndicators - רק אם זה לא קרן פנסיה או פוליסה (כי להן יש ברירות מחדל קבועות)
             const isPensionFund = sugMutzar === '2' || sugMutzar === 2 || 
                                   sugMutzar === '2_1' || sugMutzar === '2_2';
+            const isPolisa = sugMutzar === '1' || sugMutzar === 1 || 
+                            sugMutzar === '3' || sugMutzar === '3';
             
-            if (!isPensionFund && typeof dataIndicators !== 'undefined' && Array.isArray(dataIndicators)) {
+            if (!isPensionFund && !isPolisa && typeof dataIndicators !== 'undefined' && Array.isArray(dataIndicators)) {
+                // סינון לפי גם מוצר וגם מסלול
                 const indicator = dataIndicators.find(item => 
+                    item.mozar && productName && item.mozar === productName &&
                     item.maslul && maslulType && 
                     item.maslul.toLowerCase() === maslulType.toLowerCase()
                 );
                 
                 if (indicator) {
-                    console.log(`  📈 נמצא ב-dataIndicators:`, indicator);
                     if (indicator.dmeyNihul) avgBalance = parseFloat(indicator.dmeyNihul);
-                    if (indicator.dmeyNihulHafada) avgDeposit = parseFloat(indicator.dmeyNihulHafada);
+                    if (indicator.dmeyNihulHafkad) avgDeposit = parseFloat(indicator.dmeyNihulHafkad);
                     if (indicator.dmeyNihulMeshuklal && parseFloat(indicator.dmeyNihulMeshuklal) > 0) {
                         avgWeighted = parseFloat(indicator.dmeyNihulMeshuklal);
                     } else {
                         // אם משוקלל = 0, חשב מחדש
                         avgWeighted = (avgDeposit / 10) + avgBalance;
                     }
-                } else {
-                    console.log(`  ℹ️ לא נמצא ב-dataIndicators, משתמש בברירת מחדל`);
                 }
-            } else if (isPensionFund) {
-                console.log(`  ℹ️ קרן פנסיה - דילוג על dataIndicators, שימוש בברירת מחדל קבועה`);
             }
-            
-            console.log(`  📤 מחזיר: deposit=${avgDeposit}, balance=${avgBalance}, weighted=${avgWeighted}`);
             
             return {
                 deposit: avgDeposit,
@@ -1904,7 +1916,7 @@
             );
             
             if (sikonItem && sikonItem.risk) {
-                console.log(`✅ נמצא סיכון "${sikonItem.risk}" עבור "${shemMaslul}" (התאמה ישירה)`);
+                //console.log(`✅ נמצא סיכון "${sikonItem.risk}" עבור "${shemMaslul}" (התאמה ישירה)`);
                 return sikonItem.risk;
             }
             
