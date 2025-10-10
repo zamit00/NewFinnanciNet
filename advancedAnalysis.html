@@ -1679,6 +1679,9 @@
                     // מציאת דמי ניהול ממוצעים
                     const avgFees = getAverageFees(maslulType, heshbon.sugMutzar);
                     
+                    console.log(`💰 דמי ניהול ממוצעים עבור "${pathwayName}":`, avgFees);
+                    console.log(`   סוג מסלול: ${maslulType}, סוג מוצר: ${heshbon.sugMutzar}`);
+                    
                     // השוואה
                     const comparison = compareFees(weightedFee, avgFees.weighted);
                     
@@ -1793,14 +1796,18 @@
                 console.log('  ℹ️ ברירת מחדל: קרן השתלמות/גמל');
             }
             
-            // חיפוש ב-dataIndicators
-            if (typeof dataIndicators !== 'undefined' && Array.isArray(dataIndicators)) {
+            // חיפוש ב-dataIndicators - רק אם זה לא קרן פנסיה (כי אין לה נתונים שם)
+            const isPensionFund = sugMutzar === '2' || sugMutzar === 2 || 
+                                  sugMutzar === '2_1' || sugMutzar === '2_2';
+            
+            if (!isPensionFund && typeof dataIndicators !== 'undefined' && Array.isArray(dataIndicators)) {
                 const indicator = dataIndicators.find(item => 
                     item.maslul && maslulType && 
                     item.maslul.toLowerCase() === maslulType.toLowerCase()
                 );
                 
                 if (indicator) {
+                    console.log(`  📈 נמצא ב-dataIndicators:`, indicator);
                     if (indicator.dmeyNihul) avgBalance = parseFloat(indicator.dmeyNihul);
                     if (indicator.dmeyNihulHafada) avgDeposit = parseFloat(indicator.dmeyNihulHafada);
                     if (indicator.dmeyNihulMeshuklal && parseFloat(indicator.dmeyNihulMeshuklal) > 0) {
@@ -1809,8 +1816,14 @@
                         // אם משוקלל = 0, חשב מחדש
                         avgWeighted = (avgDeposit / 10) + avgBalance;
                     }
+                } else {
+                    console.log(`  ℹ️ לא נמצא ב-dataIndicators, משתמש בברירת מחדל`);
                 }
+            } else if (isPensionFund) {
+                console.log(`  ℹ️ קרן פנסיה - דילוג על dataIndicators, שימוש בברירת מחדל קבועה`);
             }
+            
+            console.log(`  📤 מחזיר: deposit=${avgDeposit}, balance=${avgBalance}, weighted=${avgWeighted}`);
             
             return {
                 deposit: avgDeposit,
