@@ -1688,8 +1688,28 @@
             
             container.innerHTML = html;
             
+            // הצג loading לכל הטאבים
+            document.getElementById('riskAnalysisContent').innerHTML = `
+                <div class="analysis-card" style="text-align: center; padding: 60px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--primary);">מחשב ניתוח סיכון...</h3>
+                </div>
+            `;
+            document.getElementById('feesAnalysisContent').innerHTML = `
+                <div class="analysis-card" style="text-align: center; padding: 60px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--primary);">מחשב דמי ניהול...</h3>
+                </div>
+            `;
+            document.getElementById('returnsAnalysisContent').innerHTML = `
+                <div class="analysis-card" style="text-align: center; padding: 60px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--primary);">מחשב תשואות...</h3>
+                </div>
+            `;
+            
             // הרץ את כל 3 הניתוחים מיד (אסינכרוני)
-            console.log('🔄 מריץ את כל הניתוחים...');
+            console.log('🔄 מריץ את כל הניתוחים מחדש...');
             Promise.all([
                 showRiskAnalysis(),
                 showFeesAnalysis(),
@@ -1698,6 +1718,8 @@
                 console.log('✅ כל הניתוחים הושלמו!');
                 // גם להריץ את ניתוח הפערים אוטומטית
                 analyzeGaps();
+            }).catch(error => {
+                console.error('❌ שגיאה בחישוב הניתוחים:', error);
             });
         }
         
