@@ -923,15 +923,44 @@
             <div class="analysis-card" style="margin-top: 30px;">
                 <h3><i class="fas fa-chart-line"></i> הערכת אופי סיכון</h3>
                 <p style="margin-bottom: 15px; color: var(--text-light);">
-                    כדי לקבל המלצות מותאמות, מומלץ לענות על שאלון הסיכון
+                    בחר רמת סיכון ידנית או מלא שאלון להערכה מדויקת
                 </p>
-                <button class="btn btn-primary" onclick="openRiskQuestModalAndReturn()">
+                
+                <!-- בחירה ידנית -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-dark);">
+                        <i class="fas fa-hand-pointer"></i>
+                        בחירה ידנית:
+                    </label>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn" onclick="setManualRisk('נמוך')" id="riskBtnLow" 
+                                style="flex: 1; min-width: 100px; background: #e8f5e9; color: #2e7d32; border: 2px solid #4caf50;">
+                            נמוך
+                        </button>
+                        <button class="btn" onclick="setManualRisk('בינוני')" id="riskBtnMedium"
+                                style="flex: 1; min-width: 100px; background: #fff3e0; color: #e65100; border: 2px solid #ff9800;">
+                            בינוני
+                        </button>
+                        <button class="btn" onclick="setManualRisk('גבוה')" id="riskBtnHigh"
+                                style="flex: 1; min-width: 100px; background: #ffebee; color: #c62828; border: 2px solid #f44336;">
+                            גבוה
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 15px 0; color: var(--text-light); font-weight: 500;">
+                    או
+                </div>
+                
+                <!-- שאלון -->
+                <button class="btn btn-primary" onclick="openRiskQuestModalAndReturn()" style="width: 100%; justify-content: center;">
                     <i class="fas fa-clipboard-list"></i>
-                    מלא שאלון סיכון
+                    מלא שאלון סיכון מקצועי
                 </button>
+                
                 <div id="riskResult" style="margin-top: 15px; display: none;">
                     <div class="metric">
-                        <span class="metric-label">רמת סיכון מומלצת:</span>
+                        <span class="metric-label">רמת סיכון שנבחרה:</span>
                         <span class="status-badge" id="riskBadge"></span>
                     </div>
                 </div>
@@ -1282,6 +1311,60 @@
             }
         }
         
+        // פונקציה לקביעת רמת סיכון ידנית
+        function setManualRisk(riskLevel) {
+            // שמירת רמת הסיכון
+            clientAnalysisData.profile.riskProfile = riskLevel;
+            clientAnalysisData.profile.riskScore = null; // אין ציון כי זה ידני
+            AnalysisStorage.save();
+            
+            // עדכון כפתורים
+            document.querySelectorAll('#riskBtnLow, #riskBtnMedium, #riskBtnHigh').forEach(btn => {
+                btn.style.opacity = '0.5';
+                btn.style.transform = 'scale(1)';
+            });
+            
+            const selectedBtn = document.getElementById(
+                riskLevel === 'נמוך' ? 'riskBtnLow' : 
+                riskLevel === 'בינוני' ? 'riskBtnMedium' : 
+                'riskBtnHigh'
+            );
+            if (selectedBtn) {
+                selectedBtn.style.opacity = '1';
+                selectedBtn.style.transform = 'scale(1.05)';
+                selectedBtn.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.4)';
+            }
+            
+            // הצגת התוצאה
+            const riskResult = document.getElementById('riskResult');
+            const riskBadge = document.getElementById('riskBadge');
+            
+            if (riskResult && riskBadge) {
+                riskResult.style.display = 'block';
+                riskBadge.textContent = riskLevel + ' (בחירה ידנית)';
+                
+                // צביעה לפי רמה
+                if (riskLevel === 'נמוך') {
+                    riskBadge.className = 'status-badge status-good';
+                } else if (riskLevel === 'בינוני') {
+                    riskBadge.className = 'status-badge status-warning';
+                } else {
+                    riskBadge.className = 'status-badge status-danger';
+                }
+            }
+            
+            console.log('✅ רמת סיכון נקבעה ידנית:', riskLevel);
+            
+            // הודעת הצלחה
+            Swal.fire({
+                title: 'נשמר!',
+                text: `רמת הסיכון שלך נקבעה ל: ${riskLevel}`,
+                icon: 'success',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+        
         // פתיחת שאלון סיכון והחזרת תוצאה
         function openRiskQuestModalAndReturn() {
             const ageEl = document.getElementById('displayAge');
@@ -1316,7 +1399,7 @@
                         
                         if (riskResult && riskBadge) {
                             riskResult.style.display = 'block';
-                            riskBadge.textContent = riskLevel;
+                            riskBadge.textContent = riskLevel + ' (שאלון מקצועי)';
                             
                             // צביעה לפי רמה
                             if (riskLevel === 'נמוך') {
@@ -1355,21 +1438,14 @@
                 return;
             }
             
-            // בדיקה אם מילא שאלון סיכון
+            // בדיקה אם מילא שאלון סיכון - חובה!
             if (!clientAnalysisData.profile.riskProfile || clientAnalysisData.profile.riskProfile === "") {
                 Swal.fire({
-                    title: 'שאלון סיכון',
-                    text: 'מומלץ למלא את שאלון הסיכון לפני המשך',
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonText: 'אמלא עכשיו',
-                    cancelButtonText: 'המשך בלי שאלון'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        openRiskQuestModalAndReturn();
-                    } else {
-                        proceedToStep2();
-                    }
+                    title: 'רמת סיכון נדרשת',
+                    text: 'לא ניתן להמשיך ללא מילוי שאלון סיכון או בחירת רמת הסיכון',
+                    icon: 'warning',
+                    confirmButtonText: 'הבנתי',
+                    allowOutsideClick: false
                 });
                 return;
             }
