@@ -6,7 +6,8 @@ const fieldsToAverageForAdvancedAnalysis = [
   "tesuaMitchilatshana",
   "dmeyNihul","dmeyNihulHafkad"        
 ];
-async function indicationsforadvancedanalysis(mozar,maslul){ 
+async function indicationsforadvancedanalysis(mozar,maslul){
+    
     let sugmuzar='' 
     if(mozar==='פוליסת ביטוח חיים משולב חיסכון'){
         sugmuzar='פוליסות חסכון';
@@ -14,6 +15,7 @@ async function indicationsforadvancedanalysis(mozar,maslul){
         sugmuzar=mozar;
     }
       const dataY = await filterMaslul(maslul, sugmuzar, 0);
+      
       if (dataY.length === 0) return;
       const result = {
         mozar: sugmuzar,
@@ -21,6 +23,7 @@ async function indicationsforadvancedanalysis(mozar,maslul){
       };
       
       for (const field of fieldsToAverageForAdvancedAnalysis) {
+       
         const validItems = dataY.filter(obj =>
           obj[field] !== undefined &&
           obj[field] !== null &&
@@ -28,14 +31,17 @@ async function indicationsforadvancedanalysis(mozar,maslul){
           !isNaN(obj[field]) &&
           parseFloat(obj[field]) !== 0  // לא לספור אפסים - מי שאין לו נתון לא משתתף בממוצע
         );
-        if(mozar!=='קרנות חדשות'){
-        const total = validItems.reduce((sum, obj) => sum + parseFloat(obj[field]), 0);
-        const avg = validItems.length > 0 ? total / validItems.length : 0;
-        result[field] = avg.toFixed(2);
-        
-        if(result['dmeyNihulHafkad'] && result['dmeyNihul']){
-            result['dmeyNihulMeshuklal'] = (Number(result['dmeyNihulHafkad'])/10 + Number(result['dmeyNihul'])).toFixed(2);
+
+        if(field==='tesuam' || field==='tesuam36' || field==='tesuam60' || field==='tesuaMitchilatshana'){
+            const total = validItems.reduce((sum, obj) => sum + parseFloat(obj[field]), 0);
+            const avg = validItems.length > 0 ? total / validItems.length : 0;
+            result[field] = avg.toFixed(2); 
         }
+        else if(mozar!=='קרנות חדשות' && field==='dmeyNihulHafkad'){
+        
+            if(result['dmeyNihulHafkad'] && result['dmeyNihul']){
+                result['dmeyNihulMeshuklal'] = (Number(result['dmeyNihulHafkad'])/10 + Number(result['dmeyNihul'])).toFixed(2);
+            }
         } else {
             result['dmeyNihulHafkad'] = 0.16;
             result['dmeyNihul'] = 1.6;

@@ -2261,12 +2261,15 @@
                                 <i class="fas fa-briefcase"></i>
                                 ${heshbon.shemTochnit || 'חשבון #' + (heshbonIndex + 1)}
                             </h4>
-                            <div style="color: var(--text-light); font-size: clamp(0.8rem, 2vw, 0.9rem); word-wrap: break-word;">
-                                <i class="fas fa-building"></i> ${heshbon.shemMaasik || 'לא צוין'}
-                            </div>
+                           
                         </div>
+                        
                 `;
                 
+                        //<div style="color: var(--text-light); font-size: clamp(0.8rem, 2vw, 0.9rem); word-wrap: break-word;">
+                        //    <i class="fas fa-building"></i> ${heshbon.shemMaasik || 'לא צוין'}
+                       //     </div>
+
                 for (let maslulIndex = 0; maslulIndex < maslulim.length; maslulIndex++) {
                     const maslul = maslulim[maslulIndex];
                     const pathwayName = maslul.shemMaslulHashkaa || maslul.shemMaslul || 'מסלול ' + (maslulIndex + 1);
@@ -2275,7 +2278,8 @@
                     if (pathwayAmount <= 0) continue;
                     
                     // חילוץ קוד המסלול
-                    const kodMaslul =Number(heshbon.mafyenMaslulim[0].kodMaslolHashkaa.slice(23,30)).toString();
+                    console.log(heshbon.mafyenMaslulim);
+                    const kodMaslul =Number(heshbon.mafyenMaslulim[maslulIndex].kodMaslolHashkaa.slice(23,30)).toString();
                                      
                     // זיהוי סוג המסלול למציאת ממוצעים
                     maslulType = getMaslulType(pathwayName);
@@ -2325,6 +2329,7 @@
                     if(getMaslul.length===0){
                         getMaslul=datanetunimKlaliXB.filter(item=>item.mh===kodMaslul.toString());
                     }
+                    
                     
                      // חיפוש התשואות של המסלול בנתונים הגלובליים
                     let clientReturnYTD = 0, clientReturn = 0, clientReturn3Y = 0, clientReturn5Y = 0;
