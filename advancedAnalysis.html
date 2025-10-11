@@ -804,7 +804,10 @@
     <div class="main-content">
         
         <!-- Page Header -->
-        <div class="page-header">
+        <div class="page-header" style="position: relative;">
+            <button onclick="closeAdvancedAnalysis()" style="position: absolute; top: 10px; left: 10px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3); transition: all 0.3s ease; z-index: 10;" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 12px rgba(220, 53, 69, 0.5)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(220, 53, 69, 0.3)';">
+                <i class="fas fa-times"></i>
+            </button>
             <h1>🎯 ניתוח תיק השקעות מתקדם</h1>
             <p>קבל ניתוח מקצועי ומותאם אישית של תיק ההשקעות הפנסיוני שלך</p>
             <div class="subtitle">
@@ -1819,6 +1822,14 @@
                                     <i class="fas ${comparison.icon}" style="color: ${comparison.color}; font-size: 1.2rem; flex-shrink: 0;"></i>
                                     <span style="color: ${comparison.color}; font-weight: 500; font-size: clamp(0.85rem, 2vw, 1rem); word-break: break-word;">${avgWeighted==='קופה מפעלית' ? 'קופה מפעלית' : comparison.message}</span>
                                 </div>
+                                ${heshbon.mekademGilPrishaTzafuy ? `
+                                    <div style="margin-top: 8px; padding: 8px; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 6px; border-right: 3px solid #4caf50;">
+                                        <div style="display: flex; align-items: center; gap: 6px;">
+                                            <i class="fas fa-shield-alt" style="color: #4caf50; font-size: 1rem;"></i>
+                                            <span style="color: #2e7d32; font-weight: 600; font-size: clamp(0.8rem, 2vw, 0.9rem);">מקדם מובטח: ${heshbon.mekademGilPrishaTzafuy}%</span>
+                                        </div>
+                                    </div>
+                                ` : ''}
                             </div>
                         </div>
                     `;
@@ -2098,6 +2109,47 @@
                 title: 'הורדת דוח',
                 text: 'הדוח בתהליך הכנה...',
                 icon: 'info'
+            });
+        }
+        
+        // פונקציה לסגירת ניתוח מתקדם ומחיקת נתונים
+        function closeAdvancedAnalysis() {
+            Swal.fire({
+                title: '<strong style="color: #dc3545;">האם לסגור את הניתוח?</strong>',
+                html: '<p style="color: #666; font-size: 1rem;">כל הנתונים של הניתוח המתקדם יימחקו</p>' +
+                      '<p style="color: #999; font-size: 0.9rem; margin-top: 10px;">תוכל לבצע ניתוח חדש בכל עת מדף הבית</p>',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="fas fa-check"></i> כן, סגור ומחק',
+                cancelButtonText: '<i class="fas fa-times"></i> ביטול',
+                reverseButtons: true,
+                customClass: {
+                    popup: 'swal2-rtl'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // מחיקת כל נתוני הניתוח מ-sessionStorage
+                    sessionStorage.removeItem('gilForAdvancedAnalysis');
+                    sessionStorage.removeItem('sumHonForAdvancedAnalysis');
+                    sessionStorage.removeItem('sumKitzvaForAdvancedAnalysis');
+                    sessionStorage.removeItem('ageToRetirementForAdvancedAnalysis');
+                    sessionStorage.removeItem('riskProfile');
+                    sessionStorage.removeItem('riskScore');
+                    sessionStorage.removeItem('advancedAnalysisData');
+                    
+                    // הצגת הודעת אישור
+                    Swal.fire({
+                        title: 'הנתונים נמחקו',
+                        text: 'חוזר לדף הבית...',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = 'index.html';
+                    });
+                }
             });
         }
     </script>

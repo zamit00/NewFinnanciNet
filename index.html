@@ -3915,6 +3915,7 @@
                 let sumSugMutzarGilPrishaLeloPremiyot = {};
                 let kitzvaSugMutzarGilPrishaTzafuy = {};
                 let kitzvaSugMutzarGilPrishaLeloPremiyot = {};
+                
                 for (const file of uploadedFiles) {
                     const xmlString = await readFileAsText(file);
                     const result = new DOMParser().parseFromString(xmlString, "text/xml");
@@ -3969,6 +3970,7 @@
                         const heshbonotElements = heshbonotOPolisot ? heshbonotOPolisot.getElementsByTagName('HeshbonOPolisa') : [];
                         const heshbonot = Array.from(heshbonotElements);
                         for (const heshbon of heshbonot) {
+                            let mekademGilPrishaTzafuy = '';
                             if(taarichNechnut==='') {taarichNechnut = sliceDate8(cleanVal(getElementText(heshbon, 'TAARICH-NECHONUT')))};
                             if(sugMutzar==='2') {pensiaVatikaOHadasha = cleanVal(getElementText(heshbon, 'PENSIA-VATIKA-O-HADASHA'))};
                             
@@ -4015,7 +4017,7 @@
                                     const kitzvaTzfuya = parseFloat(cleanVal(getElementText(yitraLefiGilPrisha, 'KITZVAT-HODSHIT-TZFUYA')) || 0);
                                     const schumKitzvat = parseFloat(cleanVal(kupa ? getElementText(kupa, 'SCHUM-KITZVAT-ZIKNA') : '') || 0);
                                     const gilPrisha = cleanVal(getElementText(yitraLefiGilPrisha, 'GIL-PRISHA')) || '';
-                                    
+                                    mekademGilPrishaTzafuy=cleanVal(getElementText(yitraLefiGilPrisha, 'MEKADEM-MOVTACH-LEPRISHA')) || '';
                                     // הוספת הערכים לאובייקטים המתאימים
                                     const mutzarKey = sugMutzar === '2' ? sugMutzar + '_' + pensiaVatikaOHadasha : sugMutzar;
                                     sumSugMutzar[mutzarKey][1] = sumSugMutzar[mutzarKey][1] + tzviratLeloPremiyot;
@@ -4231,7 +4233,7 @@
                                     } else {
                                         // מסלול חדש - הוסף למפה
                                        if(totalChisachon>0){
-                                            maslulMap.set(kodMaslolHashkaa, {
+                                            maslulMap.set(kodMaslolHashkaa,{
                                                 kodMaslolHashkaa,
                                                 shemMaslulHashkaa,
                                                 schumTzvira,
@@ -4257,6 +4259,7 @@
                                 pirteiHeshbon.push(
                                  {
                                   misparPolisaOHeshbon:misparPolisaOHeshbon,
+                                  mekademGilPrishaTzafuy:mekademGilPrishaTzafuy,
                                   sugMutzar:sugMutzar,
                                   shemTochnit:shemTochnit,
                                   taarichHitztarfutMutzar:taarichHitztarfutMutzar,
@@ -4268,8 +4271,9 @@
                                   mafyenMaslulim:maslulDetails,
                                   yitrotKaspeyPizoyim:yitrotKaspeyPizoyim?yitrotKaspeyPizoyim:0,
                                 }
-
+                                
                                );
+                               mekademGilPrishaTzafuy? console.log(mekademGilPrishaTzafuy):'';
                                yitrotKaspeyPizoyim=[];
                             }
                            
