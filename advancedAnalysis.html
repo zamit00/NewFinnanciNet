@@ -1090,8 +1090,10 @@
             }
             
             // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+            window.scrollTo({
+  top: (document.body.scrollHeight - window.innerHeight) / 2,
+  behavior: 'smooth'
+});   }
         
         // Step buttons click handler
         document.querySelectorAll('.step-btn').forEach(btn => {
