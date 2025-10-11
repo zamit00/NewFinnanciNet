@@ -2247,48 +2247,88 @@
                 </div>
             `;
             
-            // עבור על כל חשבון ומסלוליו
+            // קיבוץ תכניות ומסלולים
+            const tochnitMap = {};
+            
+            // שלב 1: קיבוץ לפי תכנית ומסלול
             for (let heshbonIndex = 0; heshbonIndex < pirteiHeshbon.length; heshbonIndex++) {
                 const heshbon = pirteiHeshbon[heshbonIndex];
                 const maslulim = heshbon.mafyenMaslulim || [];
                 
                 if (maslulim.length === 0) continue;
                 
+                const tochnitKey = heshbon.shemTochnit || `חשבון_${heshbonIndex}`;
+                const isPensionFund = heshbon.sugMutzar === '2' || heshbon.sugMutzar === 2 || 
+                                     heshbon.sugMutzar === '2_1' || heshbon.sugMutzar === '2_2';
+                
+                if (!tochnitMap[tochnitKey]) {
+                    tochnitMap[tochnitKey] = {
+                        shemTochnit: heshbon.shemTochnit,
+                        shemMaasik: heshbon.shemMaasik,
+                        sugMutzar: heshbon.sugMutzar,
+                        isPension: isPensionFund,
+                        maslulim: {}
+                    };
+                }
+                
+                for (let maslulIndex = 0; maslulIndex < maslulim.length; maslulIndex++) {
+                    const maslul = maslulim[maslulIndex];
+                    const pathwayAmount = parseFloat(maslul.schumTzvira || 0);
+                    
+                    if (pathwayAmount <= 0) continue;
+                    
+                    const kodMaslul = Number(maslul.kodMaslolHashkaa.slice(23,30)).toString();
+                    
+                    if (isPensionFund) {
+                        // קרנות פנסיה - איחוד לפי קוד מסלול תחת אותה תכנית
+                        if (!tochnitMap[tochnitKey].maslulim[kodMaslul]) {
+                            tochnitMap[tochnitKey].maslulim[kodMaslul] = {
+                                kodMaslul: kodMaslul,
+                                pathwayName: maslul.shemMaslulHashkaa || maslul.shemMaslul,
+                                totalAmount: 0
+                            };
+                        }
+                        tochnitMap[tochnitKey].maslulim[kodMaslul].totalAmount += pathwayAmount;
+                    } else {
+                        // מוצרים אחרים - כל מסלול בנפרד
+                        const uniqueKey = `${kodMaslul}_${maslulIndex}`;
+                        tochnitMap[tochnitKey].maslulim[uniqueKey] = {
+                            kodMaslul: kodMaslul,
+                            pathwayName: maslul.shemMaslulHashkaa || maslul.shemMaslul,
+                            totalAmount: pathwayAmount
+                        };
+                    }
+                }
+            }
+            
+            // שלב 2: הצגת התכניות והמסלולים
+            for (const [tochnitKey, tochnitData] of Object.entries(tochnitMap)) {
                 html += `
                     <div class="analysis-card" style="border-right: 4px solid var(--primary); margin-bottom: 20px;">
                         <div style="margin-bottom: 20px;">
                             <h4 style="color: var(--primary); margin: 0 0 5px 0; font-size: clamp(1rem, 3vw, 1.2rem); word-wrap: break-word; overflow-wrap: break-word;">
                                 <i class="fas fa-briefcase"></i>
-                                ${heshbon.shemTochnit || 'חשבון #' + (heshbonIndex + 1)}
+                                ${tochnitData.shemTochnit || 'תכנית'}
                             </h4>
-                           
+                            <div style="color: var(--text-light); font-size: clamp(0.8rem, 2vw, 0.9rem); word-wrap: break-word;">
+                                <i class="fas fa-building"></i> ${tochnitData.shemMaasik || 'לא צוין'}
+                            </div>
                         </div>
-                        
                 `;
                 
-                        //<div style="color: var(--text-light); font-size: clamp(0.8rem, 2vw, 0.9rem); word-wrap: break-word;">
-                        //    <i class="fas fa-building"></i> ${heshbon.shemMaasik || 'לא צוין'}
-                       //     </div>
-
-                for (let maslulIndex = 0; maslulIndex < maslulim.length; maslulIndex++) {
-                    const maslul = maslulim[maslulIndex];
-                    const pathwayName = maslul.shemMaslulHashkaa || maslul.shemMaslul || 'מסלול ' + (maslulIndex + 1);
-                    const pathwayAmount = parseFloat(maslul.schumTzvira || 0);
+                // הצגת כל המסלולים תחת התכנית
+                for (const [maslulKey, maslulData] of Object.entries(tochnitData.maslulim)) {
+                    const kodMaslul = maslulData.kodMaslul;
+                    const pathwayName = maslulData.pathwayName;
+                    const pathwayAmount = maslulData.totalAmount;
                     
-                    if (pathwayAmount <= 0) continue;
+                    // זיהוי סוג המסלול
+                    const maslulType = getMaslulType(pathwayName);
                     
-                    // חילוץ קוד המסלול
-                    console.log(heshbon.mafyenMaslulim);
-                    const kodMaslul =Number(heshbon.mafyenMaslulim[maslulIndex].kodMaslolHashkaa.slice(23,30)).toString();
-                                     
-                    // זיהוי סוג המסלול למציאת ממוצעים
-                    maslulType = getMaslulType(pathwayName);
-                    
-                    // זיהוי שם המוצר והמערך הנכון
+                    // זיהוי שם המוצר
                     let productName = '';
-                    let dataSource = null;
                     
-                    switch(heshbon.sugMutzar) {
+                    switch(tochnitData.sugMutzar) {
                         case '4':
                         case 4:
                             productName = 'קרנות השתלמות';
