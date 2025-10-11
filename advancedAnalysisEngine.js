@@ -4,11 +4,13 @@
 const fieldsToAverageForAdvancedAnalysis = [
   "dmeyNihul","dmeyNihulHafkad"     
 ];
-let dataIndicatorsforadvancedanalysis = [];
 async function indicationsforadvancedanalysis(mozar,maslul){ 
-   
-    const sugmuzar=mozar 
-   
+    let sugmuzar='' 
+    if(mozar==='פוליסת ביטוח חיים משולב חיסכון'){
+        sugmuzar='פוליסות חסכון';
+    }else{
+        sugmuzar=mozar;
+    }
       const dataY = await filterMaslul(maslul, sugmuzar, 0);
       if (dataY.length === 0) return;
       const result = {
@@ -24,30 +26,20 @@ async function indicationsforadvancedanalysis(mozar,maslul){
           !isNaN(obj[field]) &&
           parseFloat(obj[field]) !== 0  // לא לספור אפסים - מי שאין לו נתון לא משתתף בממוצע
         );
+        if(mozar!=='קרנות חדשות'){
         const total = validItems.reduce((sum, obj) => sum + parseFloat(obj[field]), 0);
         const avg = validItems.length > 0 ? total / validItems.length : 0;
-        result[field] = avg.toFixed(2); 
+        result[field] = avg.toFixed(2);
+        if(result['dmeyNihulHafkad'] && result['dmeyNihul']){
+            result['dmeyNihulMeshuklal'] = (Number(result['dmeyNihulHafkad'])/10 + Number(result['dmeyNihul'])).toFixed(2);
+        }
+        } else {
+            result['dmeyNihulHafkad'] = 0.16;
+            result['dmeyNihul'] = 1.6;
+            result['dmeyNihulMeshuklal'] = 0.25;
+        }
       }
-        
-      // חישוב דמי ניהול משוקלל
-      if(result['dmeyNihulHafkad'] && result['dmeyNihul']){
-          result['dmeyNihulMeshuklal'] = (Number(result['dmeyNihulHafkad'])/10 + Number(result['dmeyNihul'])).toFixed(2);
-      }
-      
-      // חישוב יחסי תשואה לסטייה
-      
-    
-    
-      
-      // בדיקה שלא קיים כבר שילוב של mozar+maslul זהה
-      const isDuplicate = dataIndicators.some(item => 
-          item.mozar === result.mozar && item.maslul === result.maslul
-      );
-      
-      if (!isDuplicate) {
-          dataIndicatorsforadvancedanalysis.push(result);
-      }
-      return dataIndicatorsforadvancedanalysis;
+      return result;
     };
 // ייבוא נתונים מ-sessionStorage ומחיקה מיידית
 function importAndClearSessionData() {
