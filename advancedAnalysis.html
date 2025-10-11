@@ -1665,50 +1665,85 @@
                         ניתוח איכות תיק
                     </h3>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button class="analysis-tab-btn active" onclick="showRiskAnalysis()" id="riskAnalysisBtn">
+                        <button class="analysis-tab-btn active" onclick="switchAnalysisTab('risk')" id="riskAnalysisBtn">
                             <i class="fas fa-shield-alt"></i>
                             רמת סיכון
                         </button>
-                        <button class="analysis-tab-btn" onclick="showFeesAnalysis()" id="feesAnalysisBtn">
+                        <button class="analysis-tab-btn" onclick="switchAnalysisTab('fees')" id="feesAnalysisBtn">
                             <i class="fas fa-money-bill-wave"></i>
                             דמי ניהול
                         </button>
-                        <button class="analysis-tab-btn" onclick="showReturnsAnalysis()" id="returnsAnalysisBtn">
+                        <button class="analysis-tab-btn" onclick="switchAnalysisTab('returns')" id="returnsAnalysisBtn">
                             <i class="fas fa-chart-bar"></i>
                             תשואות
                         </button>
                     </div>
                 </div>
                 
-                <div id="analysisContent"></div>
+                <!-- כל הניתוחים במקביל, רק אחד מוצג בכל פעם -->
+                <div id="riskAnalysisContent" class="analysis-content-tab" style="display: block;"></div>
+                <div id="feesAnalysisContent" class="analysis-content-tab" style="display: none;"></div>
+                <div id="returnsAnalysisContent" class="analysis-content-tab" style="display: none;"></div>
             `;
             
             container.innerHTML = html;
             
-            // הצג ניתוח סיכון כברירת מחדל
-            showRiskAnalysis();
+            // הרץ את כל 3 הניתוחים מיד (אסינכרוני)
+            console.log('🔄 מריץ את כל הניתוחים...');
+            Promise.all([
+                showRiskAnalysis(),
+                showFeesAnalysis(),
+                showReturnsAnalysis()
+            ]).then(() => {
+                console.log('✅ כל הניתוחים הושלמו!');
+                // גם להריץ את ניתוח הפערים אוטומטית
+                analyzeGaps();
+            });
+        }
+        
+        // פונקציה להחלפת טאבים (רק החלפת תצוגה, ללא חישובים)
+        function switchAnalysisTab(tabName) {
+            // הסתר את כל הטאבים
+            document.querySelectorAll('.analysis-content-tab').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // הסר active מכל הכפתורים
+            document.querySelectorAll('.analysis-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // הצג את הטאב המבוקש
+            if (tabName === 'risk') {
+                document.getElementById('riskAnalysisContent').style.display = 'block';
+                document.getElementById('riskAnalysisBtn').classList.add('active');
+            } else if (tabName === 'fees') {
+                document.getElementById('feesAnalysisContent').style.display = 'block';
+                document.getElementById('feesAnalysisBtn').classList.add('active');
+            } else if (tabName === 'returns') {
+                document.getElementById('returnsAnalysisContent').style.display = 'block';
+                document.getElementById('returnsAnalysisBtn').classList.add('active');
+            }
         }
         
         // פונקציה להצגת ניתוח סיכון
-        function showRiskAnalysis() {
+        async function showRiskAnalysis() {
             // בדיקה אם יש רמת סיכון
             if (!clientAnalysisData.profile.riskProfile || clientAnalysisData.profile.riskProfile === "") {
-                Swal.fire({
-                    title: 'רמת סיכון נדרשת',
-                    text: 'נא לחזור לשלב 1 ולבחור רמת סיכון או למלא שאלון',
-                    icon: 'warning',
-                    confirmButtonText: 'חזור לשלב 1'
-                }).then(() => {
-                    goToStep(1);
-                });
+                const analysisContainer = document.getElementById('riskAnalysisContent');
+                if (analysisContainer) {
+                    analysisContainer.innerHTML = `
+                        <div class="analysis-card" style="text-align: center; padding: 40px;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ff9800;"></i>
+                            <h3 style="color: #e65100;">רמת סיכון נדרשת</h3>
+                            <p>נא לחזור לשלב 1 ולבחור רמת סיכון</p>
+                        </div>
+                    `;
+                }
                 return;
             }
             
-            // עדכון כפתורים
-            document.querySelectorAll('.analysis-tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('riskAnalysisBtn')?.classList.add('active');
-            
-            const analysisContainer = document.getElementById('analysisContent');
+            const analysisContainer = document.getElementById('riskAnalysisContent');
             if (!analysisContainer) return;
             
             const detailedData = clientAnalysisData.detailedData;
@@ -1857,22 +1892,20 @@
         async function showFeesAnalysis() {
             // בדיקה אם יש רמת סיכון
             if (!clientAnalysisData.profile.riskProfile || clientAnalysisData.profile.riskProfile === "") {
-                Swal.fire({
-                    title: 'רמת סיכון נדרשת',
-                    text: 'נא לחזור לשלב 1 ולבחור רמת סיכון או למלא שאלון',
-                    icon: 'warning',
-                    confirmButtonText: 'חזור לשלב 1'
-                }).then(() => {
-                    goToStep(1);
-                });
+                const analysisContainer = document.getElementById('feesAnalysisContent');
+                if (analysisContainer) {
+                    analysisContainer.innerHTML = `
+                        <div class="analysis-card" style="text-align: center; padding: 40px;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ff9800;"></i>
+                            <h3 style="color: #e65100;">רמת סיכון נדרשת</h3>
+                            <p>נא לחזור לשלב 1 ולבחור רמת סיכון</p>
+                        </div>
+                    `;
+                }
                 return;
             }
             
-            // עדכון כפתורים
-            document.querySelectorAll('.analysis-tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('feesAnalysisBtn')?.classList.add('active');
-            
-            const analysisContainer = document.getElementById('analysisContent');
+            const analysisContainer = document.getElementById('feesAnalysisContent');
             if (!analysisContainer) return;
             
             const detailedData = clientAnalysisData.detailedData;
@@ -2211,22 +2244,20 @@
         async function showReturnsAnalysis() {
             // בדיקה אם יש רמת סיכון
             if (!clientAnalysisData.profile.riskProfile || clientAnalysisData.profile.riskProfile === "") {
-                Swal.fire({
-                    title: 'רמת סיכון נדרשת',
-                    text: 'נא לחזור לשלב 1 ולבחור רמת סיכון או למלא שאלון',
-                    icon: 'warning',
-                    confirmButtonText: 'חזור לשלב 1'
-                }).then(() => {
-                    goToStep(1);
-                });
+                const analysisContainer = document.getElementById('returnsAnalysisContent');
+                if (analysisContainer) {
+                    analysisContainer.innerHTML = `
+                        <div class="analysis-card" style="text-align: center; padding: 40px;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ff9800;"></i>
+                            <h3 style="color: #e65100;">רמת סיכון נדרשת</h3>
+                            <p>נא לחזור לשלב 1 ולבחור רמת סיכון</p>
+                        </div>
+                    `;
+                }
                 return;
             }
             
-            // עדכון כפתורים
-            document.querySelectorAll('.analysis-tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('returnsAnalysisBtn')?.classList.add('active');
-            
-            const analysisContainer = document.getElementById('analysisContent');
+            const analysisContainer = document.getElementById('returnsAnalysisContent');
             if (!analysisContainer) return;
             
             const detailedData = clientAnalysisData.detailedData;
