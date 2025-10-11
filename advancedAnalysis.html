@@ -1356,7 +1356,7 @@
             }
             
             // בדיקה אם מילא שאלון סיכון
-            if (!clientAnalysisData.profile.riskProfile) {
+            if (!clientAnalysisData.profile.riskProfile || clientAnalysisData.profile.riskProfile === "") {
                 Swal.fire({
                     title: 'שאלון סיכון',
                     text: 'מומלץ למלא את שאלון הסיכון לפני המשך',
@@ -1387,7 +1387,7 @@
             //console.log('✅ נתוני לקוח נשמרו:', clientAnalysisData.profile);
             
             // החזרת רמת סיכון (אם קיימת)
-            const riskLevel = clientAnalysisData.profile.riskProfile || 'לא הוגדר';
+            const riskLevel = clientAnalysisData.profile.riskProfile || "";
             console.log('🎲 רמת סיכון:', riskLevel);
             
             // מעבר לשלב הבא
