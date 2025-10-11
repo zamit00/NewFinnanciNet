@@ -52,6 +52,7 @@ function importAndClearSessionData() {
     const pensionSum = sessionStorage.getItem('sumKitzvaForAdvancedAnalysis');
     const riskProfile = sessionStorage.getItem('riskProfile');
     const riskScore = sessionStorage.getItem('riskScore');
+    const riskSource = sessionStorage.getItem('riskSource');
     const detailedDataStr = sessionStorage.getItem('advancedAnalysisData');
     
     /*console.log('📥 מייבא נתונים מ-sessionStorage...');
@@ -79,6 +80,7 @@ function importAndClearSessionData() {
     sessionStorage.removeItem('sumKitzvaForAdvancedAnalysis');
     sessionStorage.removeItem('riskProfile');
     sessionStorage.removeItem('riskScore');
+    sessionStorage.removeItem('riskSource');
     sessionStorage.removeItem('advancedAnalysisData');
     //console.log('🗑️ נתונים נמחקו מ-sessionStorage');
     
@@ -89,6 +91,7 @@ function importAndClearSessionData() {
         pensionTotal: pensionSum ? parseFloat(pensionSum) : 0,
         riskProfile: riskProfile || "",          // רמת סיכון
         riskScore: riskScore ? parseInt(riskScore) : null,  // ציון סיכון
+        riskSource: riskSource || "",            // מקור רמת הסיכון
         detailedData: detailedData  // כל הנתונים המפורטים
     };
 }
@@ -104,7 +107,8 @@ const clientAnalysisData = {
         investmentHorizon: 'ארוך',
         moneyGoal: 'קצבה',
         riskProfile: "", // נמוך / בינוני / גבוה
-        riskScore: null
+        riskScore: null,
+        riskSource: "" // manual / questionnaire
     },
     
     // נתוני תיק ההשקעות

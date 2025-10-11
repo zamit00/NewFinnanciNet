@@ -2852,7 +2852,7 @@
                     <div class="file-actions">
                         <button class="cta-button" id="processFiles" style="display: none;">קרא נתונים</button>
                         <button class="cta-button delete-btn" id="deleteFiles">🗑️ סגור תצוגה ומחק נתונים</button>
-                        <button class="cta-button" id="advancedAnalysisBtnMain2" onclick="sessionStorage.removeItem('riskProfile'); sessionStorage.removeItem('riskScore'); window.location.href='advancedAnalysis.html';" 
+                        <button class="cta-button" id="advancedAnalysisBtnMain2" onclick="sessionStorage.removeItem('riskProfile'); sessionStorage.removeItem('riskScore'); sessionStorage.removeItem('riskSource'); window.location.href='advancedAnalysis.html';" 
                          disabled
                          style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                           color: white; border: none; padding: 15px 40px; border-radius: 25px;
@@ -2937,7 +2937,7 @@
                     </div>
                     
                     <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px;"> 
-                        <button class="cta-button" id="advancedAnalysisBtnMain2" onclick="sessionStorage.removeItem('riskProfile'); sessionStorage.removeItem('riskScore'); window.location.href='advancedAnalysis.html';" 
+                        <button class="cta-button" id="advancedAnalysisBtnMain2" onclick="sessionStorage.removeItem('riskProfile'); sessionStorage.removeItem('riskScore'); sessionStorage.removeItem('riskSource'); window.location.href='advancedAnalysis.html';" 
                          disabled
                          style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                           color: white; border: none; padding: 15px 40px; border-radius: 25px;
@@ -5032,6 +5032,7 @@
             // ניקוי רמת סיכון לפני מעבר לניתוח מתקדם
             sessionStorage.removeItem('riskProfile');
             sessionStorage.removeItem('riskScore');
+            sessionStorage.removeItem('riskSource');
             console.log('🧹 ניקוי רמת סיכון לפני מעבר לניתוח מתקדם');
             
             window.location.href = 'advancedAnalysis.html';
@@ -5093,6 +5094,7 @@
                     sessionStorage.removeItem('sumKitzvaForAdvancedAnalysis');
                     sessionStorage.removeItem('riskProfile');
                     sessionStorage.removeItem('riskScore');
+                    sessionStorage.removeItem('riskSource');
                     sessionStorage.removeItem('advancedAnalysisData');
                     console.log('🗑️ נתוני ניתוח מתקדם נמחקו מ-sessionStorage');
                     
