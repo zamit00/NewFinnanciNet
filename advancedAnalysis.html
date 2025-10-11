@@ -875,15 +875,15 @@
                 <div class="step-number">1</div>
                 <div class="step-title">מאפייני לקוח</div>
             </button>
-            <button class="step-btn" data-step="2">
+            <button class="step-btn" id="step2Btn" data-step="2" disabled>
                 <div class="step-number">2</div>
                 <div class="step-title">ניתוח איכות</div>
             </button>
-            <button class="step-btn" data-step="3">
-                <div class="step-number">3</div>
+            <button class="step-btn" data-step="3" id="step3Btn" disabled>
+                <div class="step-number">3</div>   
                 <div class="step-title">איתור פערים</div>
             </button>
-            <button class="step-btn" data-step="4">
+            <button class="step-btn" data-step="4" id="step4Btn" disabled>
                 <div class="step-number">4</div>
                 <div class="step-title">דוח המלצות</div>
             </button>
@@ -1007,7 +1007,7 @@
             
             <div class="step-actions">
                 <div></div>
-                <button class="btn btn-primary" onclick="saveStep1AndContinue()">
+                <button class="btn btn-primary" id="saveStep1AndContinueBtn" onclick="saveStep1AndContinue()" disabled>
                     המשך לניתוח איכות
                     <i class="fas fa-arrow-left"></i>
                 </button>
@@ -1420,6 +1420,10 @@
             clientAnalysisData.profile.riskProfile = riskLevel;
             clientAnalysisData.profile.riskScore = null; // אין ציון כי זה ידני
             clientAnalysisData.profile.riskSource = 'manual'; // מקור: בחירה ידנית
+            document.getElementById('saveStep1AndContinueBtn').disabled = false;
+            document.getElementById('step2Btn').disabled = false;
+            document.getElementById('step3Btn').disabled = false;
+            document.getElementById('step4Btn').disabled = false;
             AnalysisStorage.save();
             
             // עדכון כפתורים
@@ -1515,6 +1519,10 @@
                         
                         if (riskResult && riskBadge) {
                             riskResult.style.display = 'block';
+                            document.getElementById('saveStep1AndContinueBtn').disabled = false;
+                            document.getElementById('step2Btn').disabled = false;
+                            document.getElementById('step3Btn').disabled = false;
+                            document.getElementById('step4Btn').disabled = false;  
                             riskBadge.textContent = riskLevel + ' (שאלון מקצועי)';
                             
                             // צביעה לפי רמה
