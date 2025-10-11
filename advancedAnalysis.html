@@ -2941,8 +2941,8 @@
                         const pathwayRisk = getRiskLevel(ramatsikon);
                         const match = checkRiskMatch(clientRisk, pathwayRisk);
                         
-                        // אם לא מתאים - הוסף לרשימת פערים
-                        if (match && match.message !== 'מתאים') {
+                        // אם לא מתאים - הוסף לרשימת פערים (רק אי-התאמות!)
+                        if (match && !match.isMatch) {
                             riskGaps.push({
                                 tochnit: tochnitData.shemTochnit,
                                 maslul: maslulData.maslulType,
