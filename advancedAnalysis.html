@@ -2804,6 +2804,636 @@
                 }
             });
         }
+        
+        // ========================================
+        // דוח פערים - איסוף כל הבעיות מ-3 הטאבים
+        // ========================================
+        async function analyzeGaps() {
+            console.log('🔍 מתחיל ניתוח פערים...');
+            
+            const gapsContainer = document.getElementById('gapAnalysis');
+            if (!gapsContainer) return;
+            
+            const detailedData = clientAnalysisData.detailedData;
+            const pirteiHeshbon = detailedData.pirteiHeshbon;
+            const clientRisk = clientAnalysisData.profile.riskProfile;
+            
+            // מערכים לאיסוף הפערים
+            const riskGaps = [];
+            const feeGaps = [];
+            const returnGaps = [];
+            
+            // ========================================
+            // 1. איסוף פערי סיכון
+            // ========================================
+            if (clientRisk && clientRisk !== "") {
+                // קיבוץ תכניות ומסלולים (כמו ב-showRiskAnalysis)
+                const tochnitMap = {};
+                
+                for (let heshbonIndex = 0; heshbonIndex < pirteiHeshbon.length; heshbonIndex++) {
+                    const heshbon = pirteiHeshbon[heshbonIndex];
+                    const maslulim = heshbon.mafyenMaslulim || [];
+                    
+                    if (maslulim.length === 0) continue;
+                    
+                    const tochnitKey = heshbon.shemTochnit || `חשבון_${heshbonIndex}`;
+                    const isPensionFund = heshbon.sugMutzar === '2' || heshbon.sugMutzar === 2 || 
+                                         heshbon.sugMutzar === '2_1' || heshbon.sugMutzar === '2_2';
+                    
+                    if (!tochnitMap[tochnitKey]) {
+                        tochnitMap[tochnitKey] = {
+                            shemTochnit: heshbon.shemTochnit,
+                            shemMaasik: heshbon.shemMaasik,
+                            sugMutzar: heshbon.sugMutzar,
+                            isPension: isPensionFund,
+                            maslulim: {}
+                        };
+                    }
+                    
+                    for (let maslulIndex = 0; maslulIndex < maslulim.length; maslulIndex++) {
+                        const maslul = maslulim[maslulIndex];
+                        const pathwayAmount = parseFloat(maslul.schumTzvira || 0);
+                        
+                        if (pathwayAmount <= 0) continue;
+                        
+                        const pathwayName = maslul.shemMaslulHashkaa || maslul.shemMaslul || '';
+                        const maslulType = getMaslulType(pathwayName);
+                        
+                        if (isPensionFund) {
+                            const kodMaslul = Number(maslul.kodMaslolHashkaa.slice(23,30)).toString();
+                            if (!tochnitMap[tochnitKey].maslulim[kodMaslul]) {
+                                tochnitMap[tochnitKey].maslulim[kodMaslul] = {
+                                    pathwayName: pathwayName,
+                                    maslulType: maslulType,
+                                    totalAmount: 0
+                                };
+                            }
+                            tochnitMap[tochnitKey].maslulim[kodMaslul].totalAmount += pathwayAmount;
+                        } else {
+                            const uniqueKey = `${maslulIndex}`;
+                            tochnitMap[tochnitKey].maslulim[uniqueKey] = {
+                                pathwayName: pathwayName,
+                                maslulType: maslulType,
+                                totalAmount: pathwayAmount
+                            };
+                        }
+                    }
+                }
+                
+                // בדיקת התאמות סיכון
+                for (const [tochnitKey, tochnitData] of Object.entries(tochnitMap)) {
+                    for (const [maslulKey, maslulData] of Object.entries(tochnitData.maslulim)) {
+                        const foundRamatsikon = findRamatsikonByName(maslulData.maslulType);
+                        const ramatsikon = foundRamatsikon || 'לא ידוע';
+                        const pathwayRisk = getRiskLevel(ramatsikon);
+                        const match = checkRiskMatch(clientRisk, pathwayRisk);
+                        
+                        // אם לא מתאים - הוסף לרשימת פערים
+                        if (match && match.message !== 'מתאים') {
+                            riskGaps.push({
+                                tochnit: tochnitData.shemTochnit,
+                                maslul: maslulData.maslulType,
+                                clientRisk: clientRisk,
+                                pathwayRisk: pathwayRisk,
+                                gap: match.message,
+                                amount: maslulData.totalAmount
+                            });
+                        }
+                    }
+                }
+            }
+            
+            // ========================================
+            // 2. איסוף פערי דמי ניהול
+            // ========================================
+            for (let heshbonIndex = 0; heshbonIndex < pirteiHeshbon.length; heshbonIndex++) {
+                const heshbon = pirteiHeshbon[heshbonIndex];
+                const maslulim = heshbon.mafyenMaslulim || [];
+                
+                for (let maslulIndex = 0; maslulIndex < maslulim.length; maslulIndex++) {
+                    const maslul = maslulim[maslulIndex];
+                    const pathwayName = maslul.shemMaslulHashkaa || maslul.shemMaslul || 'מסלול ' + (maslulIndex + 1);
+                    const pathwayAmount = parseFloat(maslul.schumTzvira || 0);
+                    
+                    if (pathwayAmount <= 0) continue;
+                    
+                    const maslulType = getMaslulType(pathwayName);
+                    
+                    // זיהוי שם המוצר
+                    let productName = '';
+                    switch(heshbon.sugMutzar) {
+                        case '4':
+                        case 4:
+                            productName = 'קרנות השתלמות';
+                            break;
+                        case '3':
+                        case 3:
+                            productName = 'תגמולים ואישית לפיצויים';
+                            break;
+                        case '9':
+                        case 9:
+                            productName = 'קופת גמל להשקעה';
+                            break;
+                        case '10':
+                        case 10:
+                            productName = 'חסכון לילד';
+                            break;
+                        case '2':
+                        case 2:
+                        case '2_1':
+                        case '2_2':
+                            productName = 'קרנות חדשות';
+                            break;
+                        case '1':
+                        case 1:
+                            productName = 'פוליסת ביטוח חיים משולב חיסכון';
+                            break;
+                        case '5':
+                        case 5:
+                            productName = 'פוליסת חסכון';
+                            break;
+                    }
+                    
+                    // חישוב דמי ניהול
+                    const dmeyNihulShana = parseFloat(maslul.dmeyNihulShnatiyim) || 0;
+                    const dmeyNihulHafkada = parseFloat(maslul.dmeyNihulHafkada) || 0;
+                    
+                    // מציאת ממוצעים
+                    const avgFeesResult = await indicationsforadvancedanalysis(productName, maslulType);
+                    
+                    if (avgFeesResult) {
+                        const avgDmeyNihulShana = parseFloat(avgFeesResult.dmeyNihul || 0);
+                        const avgDmeyNihulHafkada = parseFloat(avgFeesResult.dmeyNihulHafkad || 0);
+                        
+                        // בדיקה אם דמי הניהול גבוהים מהממוצע
+                        if (dmeyNihulShana > 0 && avgDmeyNihulShana > 0 && dmeyNihulShana > avgDmeyNihulShana) {
+                            feeGaps.push({
+                                tochnit: heshbon.shemTochnit,
+                                maslul: pathwayName,
+                                maslulType: maslulType,
+                                feeType: 'דמי ניהול שנתיים',
+                                clientFee: dmeyNihulShana,
+                                avgFee: avgDmeyNihulShana,
+                                diff: dmeyNihulShana - avgDmeyNihulShana,
+                                amount: pathwayAmount
+                            });
+                        }
+                        
+                        if (dmeyNihulHafkada > 0 && avgDmeyNihulHafkada > 0 && dmeyNihulHafkada > avgDmeyNihulHafkada) {
+                            feeGaps.push({
+                                tochnit: heshbon.shemTochnit,
+                                maslul: pathwayName,
+                                maslulType: maslulType,
+                                feeType: 'דמי ניהול הפקדה',
+                                clientFee: dmeyNihulHafkada,
+                                avgFee: avgDmeyNihulHafkada,
+                                diff: dmeyNihulHafkada - avgDmeyNihulHafkada,
+                                amount: pathwayAmount
+                            });
+                        }
+                    }
+                }
+            }
+            
+            // ========================================
+            // 3. איסוף פערי תשואות
+            // ========================================
+            // קיבוץ תכניות ומסלולים (כמו ב-showReturnsAnalysis)
+            const tochnitMapReturns = {};
+            
+            for (let heshbonIndex = 0; heshbonIndex < pirteiHeshbon.length; heshbonIndex++) {
+                const heshbon = pirteiHeshbon[heshbonIndex];
+                const maslulim = heshbon.mafyenMaslulim || [];
+                
+                if (maslulim.length === 0) continue;
+                
+                const tochnitKey = heshbon.shemTochnit || `חשבון_${heshbonIndex}`;
+                const isPensionFund = heshbon.sugMutzar === '2' || heshbon.sugMutzar === 2 || 
+                                     heshbon.sugMutzar === '2_1' || heshbon.sugMutzar === '2_2';
+                
+                if (!tochnitMapReturns[tochnitKey]) {
+                    tochnitMapReturns[tochnitKey] = {
+                        shemTochnit: heshbon.shemTochnit,
+                        shemMaasik: heshbon.shemMaasik,
+                        sugMutzar: heshbon.sugMutzar,
+                        isPension: isPensionFund,
+                        maslulim: {}
+                    };
+                }
+                
+                for (let maslulIndex = 0; maslulIndex < maslulim.length; maslulIndex++) {
+                    const maslul = maslulim[maslulIndex];
+                    const pathwayAmount = parseFloat(maslul.schumTzvira || 0);
+                    
+                    if (pathwayAmount <= 0) continue;
+                    
+                    const kodMaslul = Number(maslul.kodMaslolHashkaa.slice(23,30)).toString();
+                    
+                    if (isPensionFund) {
+                        if (!tochnitMapReturns[tochnitKey].maslulim[kodMaslul]) {
+                            tochnitMapReturns[tochnitKey].maslulim[kodMaslul] = {
+                                kodMaslul: kodMaslul,
+                                pathwayName: maslul.shemMaslulHashkaa || maslul.shemMaslul,
+                                totalAmount: 0
+                            };
+                        }
+                        tochnitMapReturns[tochnitKey].maslulim[kodMaslul].totalAmount += pathwayAmount;
+                    } else {
+                        const uniqueKey = `${kodMaslul}_${maslulIndex}`;
+                        tochnitMapReturns[tochnitKey].maslulim[uniqueKey] = {
+                            kodMaslul: kodMaslul,
+                            pathwayName: maslul.shemMaslulHashkaa || maslul.shemMaslul,
+                            totalAmount: pathwayAmount
+                        };
+                    }
+                }
+            }
+            
+            // בדיקת תשואות
+            for (const [tochnitKey, tochnitData] of Object.entries(tochnitMapReturns)) {
+                for (const [maslulKey, maslulData] of Object.entries(tochnitData.maslulim)) {
+                    const kodMaslul = maslulData.kodMaslul;
+                    const pathwayName = maslulData.pathwayName;
+                    const maslulType = getMaslulType(pathwayName);
+                    
+                    // זיהוי שם המוצר
+                    let productName = '';
+                    switch(tochnitData.sugMutzar) {
+                        case '4':
+                        case 4:
+                            productName = 'קרנות השתלמות';
+                            break;
+                        case '3':
+                        case 3:
+                            productName = 'תגמולים ואישית לפיצויים';
+                            break;
+                        case '9':
+                        case 9:
+                            productName = 'קופת גמל להשקעה';
+                            break;
+                        case '10':
+                        case 10:
+                            productName = 'חסכון לילד';
+                            break;
+                        case '2':
+                        case 2:
+                        case '2_1':
+                        case '2_2':
+                            productName = 'קרנות חדשות';
+                            break;
+                        case '1':
+                        case 1:
+                            productName = 'פוליסת ביטוח חיים משולב חיסכון';
+                            break;
+                        case '5':
+                        case 5:
+                            productName = 'פוליסת חסכון';
+                            break;
+                    }
+                    
+                    // חיפוש תשואות
+                    let getMaslul = null;
+                    getMaslul = datanetunimKlaliXM.filter(item => item.mh === kodMaslul.toString());
+                    if (getMaslul.length === 0) {
+                        getMaslul = datanetunimKlaliXP.filter(item => item.mh === kodMaslul.toString());
+                    }
+                    if (getMaslul.length === 0) {
+                        getMaslul = datanetunimKlaliXB.filter(item => item.mh === kodMaslul.toString());
+                    }
+                    
+                    if (getMaslul && getMaslul.length > 0) {
+                        const clientReturn = parseFloat(getMaslul[0].tesuam);
+                        
+                        // מציאת ממוצע
+                        const avgReturnsResult = await indicationsforadvancedanalysis(productName, maslulType);
+                        
+                        if (avgReturnsResult) {
+                            const avgYear = parseFloat(avgReturnsResult.tesuam || 0);
+                            const comparison = compareReturns(clientReturn, avgYear);
+                            
+                            // אם חלש או טעון שיפור - הוסף לפערים
+                            if (comparison && !comparison.noData && 
+                                (comparison.diffPercent <= -5)) {
+                                returnGaps.push({
+                                    tochnit: tochnitData.shemTochnit,
+                                    maslul: pathwayName,
+                                    maslulType: maslulType,
+                                    clientReturn: clientReturn,
+                                    avgReturn: avgYear,
+                                    diff: comparison.diff,
+                                    diffPercent: comparison.diffPercent,
+                                    rating: comparison.diffPercent <= -10 ? 'חלש' : 'טעון שיפור',
+                                    amount: maslulData.totalAmount
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // ========================================
+            // 4. הצגת הדוח
+            // ========================================
+            let html = `
+                <div class="analysis-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 30px; padding: 30px; text-align: center;">
+                    <h2 style="margin: 0 0 10px 0; font-size: clamp(1.5rem, 4vw, 2rem);">
+                        <i class="fas fa-chart-line"></i>
+                        דוח פערים והזדמנויות
+                    </h2>
+                    <p style="margin: 0; opacity: 0.9; font-size: clamp(0.9rem, 2.5vw, 1.1rem);">
+                        זיהוי אזורים לשיפור ואופטימיזציה בתיק ההשקעות שלך
+                    </p>
+                </div>
+            `;
+            
+            // סיכום כללי
+            const totalGaps = riskGaps.length + feeGaps.length + returnGaps.length;
+            
+            html += `
+                <div class="analysis-card" style="background: ${totalGaps > 0 ? '#fff3cd' : '#d4edda'}; border-right: 4px solid ${totalGaps > 0 ? '#ffc107' : '#28a745'}; margin-bottom: 30px;">
+                    <h3 style="color: ${totalGaps > 0 ? '#856404' : '#155724'}; margin: 0 0 15px 0;">
+                        <i class="fas ${totalGaps > 0 ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+                        סיכום כללי
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: ${riskGaps.length > 0 ? '#dc3545' : '#28a745'};">
+                                ${riskGaps.length}
+                            </div>
+                            <div style="color: var(--text-light); font-size: 0.9rem;">פערי סיכון</div>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: ${feeGaps.length > 0 ? '#ff5722' : '#28a745'};">
+                                ${feeGaps.length}
+                            </div>
+                            <div style="color: var(--text-light); font-size: 0.9rem;">דמי ניהול גבוהים</div>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: ${returnGaps.length > 0 ? '#ffc107' : '#28a745'};">
+                                ${returnGaps.length}
+                            </div>
+                            <div style="color: var(--text-light); font-size: 0.9rem;">תשואות נמוכות</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // פערי סיכון
+            if (riskGaps.length > 0) {
+                html += `
+                    <div class="analysis-card" style="border-right: 4px solid #dc3545; margin-bottom: 30px;">
+                        <h3 style="color: #dc3545; margin: 0 0 20px 0;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            פערי סיכון (${riskGaps.length})
+                        </h3>
+                        <p style="color: var(--text-light); margin-bottom: 20px;">
+                            מסלולים שרמת הסיכון שלהם אינה מתאימה לפרופיל הסיכון שלך
+                        </p>
+                `;
+                
+                riskGaps.forEach(gap => {
+                    html += `
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-right: 3px solid #dc3545;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+                                <div style="flex: 1; min-width: 200px;">
+                                    <div style="font-weight: bold; color: var(--text-dark); margin-bottom: 5px;">
+                                        ${gap.tochnit}
+                                    </div>
+                                    <div style="color: var(--text-light); font-size: 0.9rem;">
+                                        <i class="fas fa-route"></i> ${gap.maslul}
+                                    </div>
+                                </div>
+                                <div style="text-align: left;">
+                                    <div style="font-weight: bold; color: var(--primary);">
+                                        ₪${gap.amount.toLocaleString('he-IL')}
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="background: white; padding: 12px; border-radius: 6px;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                                    <div>
+                                        <small style="color: var(--text-light);">הסיכון שלך:</small>
+                                        <div style="font-weight: bold; color: #28a745;">${gap.clientRisk}</div>
+                                    </div>
+                                    <div>
+                                        <small style="color: var(--text-light);">סיכון המסלול:</small>
+                                        <div style="font-weight: bold; color: #dc3545;">${gap.pathwayRisk}</div>
+                                    </div>
+                                </div>
+                                <div style="padding: 8px; background: #fff3cd; border-radius: 4px; border-right: 3px solid #ffc107;">
+                                    <small style="color: #856404; font-weight: 600;">
+                                        <i class="fas fa-info-circle"></i> ${gap.gap}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            } else if (clientRisk && clientRisk !== "") {
+                html += `
+                    <div class="analysis-card" style="border-right: 4px solid #28a745; margin-bottom: 30px;">
+                        <h3 style="color: #28a745; margin: 0 0 10px 0;">
+                            <i class="fas fa-check-circle"></i>
+                            פערי סיכון
+                        </h3>
+                        <p style="color: var(--text);">
+                            ✅ מצוין! כל המסלולים שלך מתאימים לפרופיל הסיכון שלך
+                        </p>
+                    </div>
+                `;
+            }
+            
+            // פערי דמי ניהול
+            if (feeGaps.length > 0) {
+                html += `
+                    <div class="analysis-card" style="border-right: 4px solid #ff5722; margin-bottom: 30px;">
+                        <h3 style="color: #ff5722; margin: 0 0 20px 0;">
+                            <i class="fas fa-dollar-sign"></i>
+                            דמי ניהול גבוהים מהממוצע (${feeGaps.length})
+                        </h3>
+                        <p style="color: var(--text-light); margin-bottom: 20px;">
+                            מסלולים שבהם דמי הניהול שלך גבוהים יותר מהממוצע בענף
+                        </p>
+                `;
+                
+                feeGaps.forEach(gap => {
+                    html += `
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-right: 3px solid #ff5722;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+                                <div style="flex: 1; min-width: 200px;">
+                                    <div style="font-weight: bold; color: var(--text-dark); margin-bottom: 5px;">
+                                        ${gap.tochnit}
+                                    </div>
+                                    <div style="color: var(--text-light); font-size: 0.9rem;">
+                                        <i class="fas fa-route"></i> ${gap.maslulType}
+                                    </div>
+                                </div>
+                                <div style="text-align: left;">
+                                    <div style="font-weight: bold; color: var(--primary);">
+                                        ₪${gap.amount.toLocaleString('he-IL')}
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="background: white; padding: 12px; border-radius: 6px;">
+                                <div style="margin-bottom: 10px;">
+                                    <small style="color: var(--text-light);">${gap.feeType}</small>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                                    <div style="text-align: center;">
+                                        <small style="color: var(--text-light);">שלך</small>
+                                        <div style="font-weight: bold; color: #dc3545; font-size: 1.1rem;">${gap.clientFee.toFixed(2)}%</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <small style="color: var(--text-light);">ממוצע</small>
+                                        <div style="font-weight: bold; color: var(--primary); font-size: 1.1rem;">${gap.avgFee.toFixed(2)}%</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <small style="color: var(--text-light);">הפרש</small>
+                                        <div style="font-weight: bold; color: #ff5722; font-size: 1.1rem;">+${gap.diff.toFixed(2)}%</div>
+                                    </div>
+                                </div>
+                                <div style="padding: 8px; background: #ffebee; border-radius: 4px; border-right: 3px solid #ff5722;">
+                                    <small style="color: #c62828; font-weight: 600;">
+                                        <i class="fas fa-exclamation-circle"></i> דמי ניהול גבוהים - שקול לבדוק חלופות
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            } else {
+                html += `
+                    <div class="analysis-card" style="border-right: 4px solid #28a745; margin-bottom: 30px;">
+                        <h3 style="color: #28a745; margin: 0 0 10px 0;">
+                            <i class="fas fa-check-circle"></i>
+                            דמי ניהול
+                        </h3>
+                        <p style="color: var(--text);">
+                            ✅ מצוין! דמי הניהול שלך סבירים או נמוכים מהממוצע בענף
+                        </p>
+                    </div>
+                `;
+            }
+            
+            // פערי תשואות
+            if (returnGaps.length > 0) {
+                html += `
+                    <div class="analysis-card" style="border-right: 4px solid #ffc107; margin-bottom: 30px;">
+                        <h3 style="color: #856404; margin: 0 0 20px 0;">
+                            <i class="fas fa-chart-line"></i>
+                            תשואות נמוכות מהממוצע (${returnGaps.length})
+                        </h3>
+                        <p style="color: var(--text-light); margin-bottom: 20px;">
+                            מסלולים שהתשואה שלהם נמוכה משמעותית מהממוצע בענף
+                        </p>
+                `;
+                
+                returnGaps.forEach(gap => {
+                    html += `
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-right: 3px solid ${gap.rating === 'חלש' ? '#dc3545' : '#ff5722'};">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+                                <div style="flex: 1; min-width: 200px;">
+                                    <div style="font-weight: bold; color: var(--text-dark); margin-bottom: 5px;">
+                                        ${gap.tochnit}
+                                    </div>
+                                    <div style="color: var(--text-light); font-size: 0.9rem;">
+                                        <i class="fas fa-route"></i> ${gap.maslulType}
+                                    </div>
+                                </div>
+                                <div style="text-align: left;">
+                                    <div style="font-weight: bold; color: var(--primary);">
+                                        ₪${gap.amount.toLocaleString('he-IL')}
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="background: white; padding: 12px; border-radius: 6px;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                                    <div style="text-align: center;">
+                                        <small style="color: var(--text-light);">תשואה שלך</small>
+                                        <div style="font-weight: bold; color: ${gap.rating === 'חלש' ? '#dc3545' : '#ff5722'}; font-size: 1.1rem;">
+                                            ${gap.clientReturn.toFixed(2)}%
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <small style="color: var(--text-light);">ממוצע ענף</small>
+                                        <div style="font-weight: bold; color: var(--primary); font-size: 1.1rem;">
+                                            ${gap.avgReturn.toFixed(2)}%
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <small style="color: var(--text-light);">הפרש</small>
+                                        <div style="font-weight: bold; color: ${gap.rating === 'חלש' ? '#dc3545' : '#ff5722'}; font-size: 1.1rem;">
+                                            ${gap.diff.toFixed(2)}%
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="padding: 8px; background: ${gap.rating === 'חלש' ? '#ffebee' : '#fff3e0'}; border-radius: 4px; border-right: 3px solid ${gap.rating === 'חלש' ? '#dc3545' : '#ff5722'};">
+                                    <small style="color: ${gap.rating === 'חלש' ? '#c62828' : '#e65100'}; font-weight: 600;">
+                                        <i class="fas fa-arrow-down"></i> ${gap.rating} - שקול לבחון ביצועי המסלול
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            } else {
+                html += `
+                    <div class="analysis-card" style="border-right: 4px solid #28a745; margin-bottom: 30px;">
+                        <h3 style="color: #28a745; margin: 0 0 10px 0;">
+                            <i class="fas fa-check-circle"></i>
+                            תשואות
+                        </h3>
+                        <p style="color: var(--text);">
+                            ✅ מצוין! התשואות שלך סבירות או טובות ביחס לממוצע בענף
+                        </p>
+                    </div>
+                `;
+            }
+            
+            // סיכום והמלצות
+            if (totalGaps > 0) {
+                html += `
+                    <div class="analysis-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 25px;">
+                        <h3 style="margin: 0 0 15px 0; color: white;">
+                            <i class="fas fa-lightbulb"></i>
+                            המלצות לפעולה
+                        </h3>
+                        <ul style="margin: 0; padding-right: 20px; line-height: 1.8;">
+                            ${riskGaps.length > 0 ? '<li>שקול להתאים את המסלולים לפרופיל הסיכון שלך</li>' : ''}
+                            ${feeGaps.length > 0 ? '<li>בדוק אפשרויות להקטנת דמי הניהול או מעבר למסלולים זולים יותר</li>' : ''}
+                            ${returnGaps.length > 0 ? '<li>נתח את ביצועי המסלולים ושקול שינוי אסטרטגיה</li>' : ''}
+                            <li>המשך לשלב 4 לקבלת המלצות מפורטות</li>
+                        </ul>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="analysis-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 25px; text-align: center;">
+                        <h3 style="margin: 0 0 15px 0; color: white;">
+                            <i class="fas fa-trophy"></i>
+                            כל הכבוד!
+                        </h3>
+                        <p style="margin: 0; font-size: 1.1rem; line-height: 1.6;">
+                            לא נמצאו פערים משמעותיים בתיק ההשקעות שלך.<br>
+                            התיק מנוהל בצורה טובה ומתאים לפרופיל שלך!
+                        </p>
+                    </div>
+                `;
+            }
+            
+            gapsContainer.innerHTML = html;
+            
+            console.log(`✅ דוח פערים הושלם: ${totalGaps} פערים נמצאו`);
+            console.log(`   - פערי סיכון: ${riskGaps.length}`);
+            console.log(`   - דמי ניהול: ${feeGaps.length}`);
+            console.log(`   - תשואות: ${returnGaps.length}`);
+        }
     </script>
  
 </body>
