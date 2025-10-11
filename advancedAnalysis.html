@@ -1021,17 +1021,30 @@
                 <p>השוואת הביצועים שלך לממוצע הענף</p>
             </div>
             
+            <!-- כפתורי ניווט למעלה -->
+            <div class="step-actions" style="margin-bottom: 30px;">
+                <button class="btn btn-secondary" onclick="goToStep(1)">
+                    <i class="fas fa-arrow-right"></i>
+                    חזור לשלב 1
+                </button>
+                <button class="btn btn-primary" onclick="goToStep(3)">
+                    המשך לשלב 3
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </div>
+            
             <div id="qualityAnalysis">
                 <!-- Will be populated dynamically -->
             </div>
             
+            <!-- כפתורי ניווט למטה -->
             <div class="step-actions">
                 <button class="btn btn-secondary" onclick="goToStep(1)">
                     <i class="fas fa-arrow-right"></i>
-                    חזור
+                    חזור לשלב 1
                 </button>
                 <button class="btn btn-primary" onclick="goToStep(3)">
-                    המשך
+                    המשך לשלב 3
                     <i class="fas fa-arrow-left"></i>
                 </button>
             </div>
@@ -1044,17 +1057,30 @@
                 <p>זיהוי אזורים לשיפור ואופטימיזציה</p>
             </div>
             
+            <!-- כפתורי ניווט למעלה -->
+            <div class="step-actions" style="margin-bottom: 30px;">
+                <button class="btn btn-secondary" onclick="goToStep(2)">
+                    <i class="fas fa-arrow-right"></i>
+                    חזור לשלב 2
+                </button>
+                <button class="btn btn-primary" onclick="goToStep(4)">
+                    המשך לשלב 4
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </div>
+            
             <div id="gapAnalysis">
                 <!-- Will be populated dynamically -->
             </div>
             
+            <!-- כפתורי ניווט למטה -->
             <div class="step-actions">
                 <button class="btn btn-secondary" onclick="goToStep(2)">
                     <i class="fas fa-arrow-right"></i>
-                    חזור
+                    חזור לשלב 2
                 </button>
                 <button class="btn btn-primary" onclick="goToStep(4)">
-                    המשך
+                    המשך לשלב 4
                     <i class="fas fa-arrow-left"></i>
                 </button>
             </div>
@@ -1067,14 +1093,27 @@
                 <p>סיכום מקיף והמלצות פעולה</p>
             </div>
             
+            <!-- כפתורי ניווט למעלה -->
+            <div class="step-actions" style="margin-bottom: 30px;">
+                <button class="btn btn-secondary" onclick="goToStep(3)">
+                    <i class="fas fa-arrow-right"></i>
+                    חזור לשלב 3
+                </button>
+                <button class="btn btn-primary" onclick="generatePDFReport()">
+                    <i class="fas fa-file-pdf"></i>
+                    הורד דוח PDF
+                </button>
+            </div>
+            
             <div id="recommendationsReport">
                 <!-- Will be populated dynamically -->
             </div>
             
+            <!-- כפתורי ניווט למטה -->
             <div class="step-actions">
                 <button class="btn btn-secondary" onclick="goToStep(3)">
                     <i class="fas fa-arrow-right"></i>
-                    חזור
+                    חזור לשלב 3
                 </button>
                 <button class="btn btn-primary" onclick="generatePDFReport()">
                     <i class="fas fa-file-pdf"></i>
@@ -1815,6 +1854,20 @@
                 `;
             });
             
+            // הוספת כפתורי ניווט גם בתחתית
+            html += `
+                <div class="step-actions" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                    <button class="btn btn-secondary" onclick="goToStep(1)">
+                        <i class="fas fa-arrow-right"></i>
+                        חזור לשלב 1
+                    </button>
+                    <button class="btn btn-primary" onclick="showFeesAnalysis()">
+                        המשך לדמי ניהול
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+            `;
+            
             analysisContainer.innerHTML = html;
         }
         
@@ -2067,6 +2120,20 @@
                 
                 html += `</div>`;
             }
+            
+            // הוספת כפתורי ניווט גם בתחתית
+            html += `
+                <div class="step-actions" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                    <button class="btn btn-secondary" onclick="showRiskAnalysis()">
+                        <i class="fas fa-arrow-right"></i>
+                        חזור לרמת סיכון
+                    </button>
+                    <button class="btn btn-primary" onclick="showReturnsAnalysis()">
+                        המשך לתשואות
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+            `;
             
             analysisContainer.innerHTML = html;
         }
@@ -2476,6 +2543,20 @@
                 html += `</div>`;
             }
             
+            // הוספת כפתורי ניווט גם בתחתית
+            html += `
+                <div class="step-actions" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                    <button class="btn btn-secondary" onclick="showFeesAnalysis()">
+                        <i class="fas fa-arrow-right"></i>
+                        חזור לדמי ניהול
+                    </button>
+                    <button class="btn btn-primary" onclick="goToStep(3)">
+                        המשך לשלב 3
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+            `;
+            
             analysisContainer.innerHTML = html;
         }
         
@@ -2687,7 +2768,7 @@
         }
         
         // Show/Hide scroll to top button on scroll (mobile only)
-        window.addEventListener('scroll', function() {
+        function updateScrollButton() {
             const scrollBtn = document.getElementById('scrollToTopBtn');
             if (scrollBtn && window.innerWidth <= 768) {
                 if (window.pageYOffset > 300) {
@@ -2695,7 +2776,17 @@
                 } else {
                     scrollBtn.classList.remove('show');
                 }
+            } else if (scrollBtn) {
+                scrollBtn.classList.remove('show');
             }
+        }
+        
+        window.addEventListener('scroll', updateScrollButton);
+        window.addEventListener('resize', updateScrollButton);
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(updateScrollButton, 100);
         });
         
         // פונקציה לסגירת ניתוח מתקדם ומחיקת נתונים
