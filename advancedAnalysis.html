@@ -1669,6 +1669,18 @@
             const clientRisk = clientAnalysisData.profile.riskProfile;
             
             let html = `
+                <!-- כפתורי ניווט למעלה -->
+                <div class="step-actions" style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #e0e0e0;">
+                    <button class="btn btn-secondary" onclick="goToStep(1)">
+                        <i class="fas fa-arrow-right"></i>
+                        חזור לשלב 1
+                    </button>
+                    <button class="btn btn-primary" onclick="showFeesAnalysis()">
+                        המשך לדמי ניהול
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+                
                 <div class="analysis-card" style="background: #f8f9fa; margin-bottom: 20px; padding: 20px;">
                     <h4 style="color: var(--primary); margin: 0 0 10px 0;">
                         <i class="fas fa-info-circle"></i>
@@ -1803,20 +1815,6 @@
                 `;
             });
             
-            // הוספת כפתורי ניווט בתחתית
-            html += `
-                <div class="step-actions" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
-                    <button class="btn btn-secondary" onclick="goToStep(1)">
-                        <i class="fas fa-arrow-right"></i>
-                        חזור לשלב 1
-                    </button>
-                    <button class="btn btn-primary" onclick="showFeesAnalysis()">
-                        המשך לדמי ניהול
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                </div>
-            `;
-            
             analysisContainer.innerHTML = html;
         }
         
@@ -1846,6 +1844,18 @@
             const pirteiHeshbon = detailedData.pirteiHeshbon;
             
             let html = `
+                <!-- כפתורי ניווט למעלה -->
+                <div class="step-actions" style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #e0e0e0;">
+                    <button class="btn btn-secondary" onclick="showRiskAnalysis()">
+                        <i class="fas fa-arrow-right"></i>
+                        חזור לרמת סיכון
+                    </button>
+                    <button class="btn btn-primary" onclick="showReturnsAnalysis()">
+                        המשך לתשואות
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+                
                 <div class="analysis-card" style="background: #f8f9fa; margin-bottom: 20px; padding: 20px;">
                     <h4 style="color: var(--primary); margin: 0 0 10px 0;">
                         <i class="fas fa-info-circle"></i>
@@ -2058,20 +2068,6 @@
                 html += `</div>`;
             }
             
-            // הוספת כפתורי ניווט בתחתית
-            html += `
-                <div class="step-actions" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
-                    <button class="btn btn-secondary" onclick="showRiskAnalysis()">
-                        <i class="fas fa-arrow-right"></i>
-                        חזור לרמת סיכון
-                    </button>
-                    <button class="btn btn-primary" onclick="showReturnsAnalysis()">
-                        המשך לתשואות
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                </div>
-            `;
-            
             analysisContainer.innerHTML = html;
         }
         
@@ -2214,6 +2210,18 @@
             const pirteiHeshbon = detailedData.pirteiHeshbon;
             
             let html = `
+                <!-- כפתורי ניווט למעלה -->
+                <div class="step-actions" style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #e0e0e0;">
+                    <button class="btn btn-secondary" onclick="showFeesAnalysis()">
+                        <i class="fas fa-arrow-right"></i>
+                        חזור לדמי ניהול
+                    </button>
+                    <button class="btn btn-primary" onclick="goToStep(3)">
+                        המשך לשלב 3
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+                
                 <div class="analysis-card" style="background: #f8f9fa; margin-bottom: 20px; padding: 20px;">
                     <h4 style="color: var(--primary); margin: 0 0 10px 0;">
                         <i class="fas fa-info-circle"></i>
@@ -2467,20 +2475,6 @@
                 
                 html += `</div>`;
             }
-            
-            // הוספת כפתורי ניווט בתחתית
-            html += `
-                <div class="step-actions" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
-                    <button class="btn btn-secondary" onclick="showFeesAnalysis()">
-                        <i class="fas fa-arrow-right"></i>
-                        חזור לדמי ניהול
-                    </button>
-                    <button class="btn btn-primary" onclick="goToStep(3)">
-                        המשך לשלב 3
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                </div>
-            `;
             
             analysisContainer.innerHTML = html;
         }
