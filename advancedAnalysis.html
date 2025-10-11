@@ -1591,8 +1591,8 @@
                             </div>
                             <div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">
                                 <small style="color: var(--text-light);">רמת סיכון לקוח:</small><br>
-                                <span class="status-badge ${clientRisk === 'גבוה' ? 'status-danger' : clientRisk === 'בינוני' ? 'status-warning' : clientRisk === 'נמוך' ? 'status-good' : ''}">
-                                    ${clientRisk || 'לא הוגדר'}
+                                <span class="status-badge ${clientRisk === 'גבוה' ? 'status-danger' : clientRisk === 'בינוני' ? 'status-warning' : clientRisk === 'נמוך' ? 'status-good' : 'status-warning'}" style="${!clientRisk ? 'background: #fff3cd; color: #856404;' : ''}">
+                                    ${clientRisk || 'לא בוצע שאלון סיכון'}
                                 </span>
                             </div>
                         </div>
@@ -1604,8 +1604,15 @@
                                     <span style="color: ${match.color}; font-weight: 500;">${match.message}</span>
                                 </div>
                             </div>` : 
-                            `<div style="margin-top: 15px; padding: 8px; background: rgba(108, 117, 125, 0.1); border-radius: 5px; text-align: center;">
-                                ℹ️ לא ניתן לקבוע התאמה - נא למלא שאלון סיכון
+                            `<div style="margin-top: 15px; padding: 15px; background: #fff8e1; border-radius: 8px; border-right: 4px solid #ff9800;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                    <i class="fas fa-exclamation-circle" style="color: #ff9800; font-size: 1.2rem;"></i>
+                                    <span style="color: #e65100; font-weight: 600;">לא ניתן להחליט ללא אופי סיכון</span>
+                                </div>
+                                <button class="btn btn-primary" onclick="goToStep(1); setTimeout(openRiskQuestModalAndReturn, 300);" style="width: 100%; justify-content: center;">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    מלא שאלון סיכון
+                                </button>
                             </div>`
                         }
                     </div>

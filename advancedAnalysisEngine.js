@@ -87,7 +87,7 @@ function importAndClearSessionData() {
         yearsToRetirement: yearsToRetirement ? parseInt(yearsToRetirement) : null,
         equityTotal: equitySum ? parseFloat(equitySum) : 0,
         pensionTotal: pensionSum ? parseFloat(pensionSum) : 0,
-        riskProfile: riskProfile || null,          // רמת סיכון
+        riskProfile: riskProfile || "",          // רמת סיכון
         riskScore: riskScore ? parseInt(riskScore) : null,  // ציון סיכון
         detailedData: detailedData  // כל הנתונים המפורטים
     };
@@ -103,7 +103,7 @@ const clientAnalysisData = {
         employmentStatus: null,
         investmentHorizon: 'ארוך',
         moneyGoal: 'קצבה',
-        riskProfile: null, // נמוך / בינוני / גבוה
+        riskProfile: "", // נמוך / בינוני / גבוה
         riskScore: null
     },
     
@@ -206,7 +206,7 @@ const ClientProfile = {
         const profile = clientAnalysisData.profile;
         return profile.age !== null && 
                profile.employmentStatus !== null && 
-               profile.riskProfile !== null;
+               profile.riskProfile !== "";
     }
 };
 
