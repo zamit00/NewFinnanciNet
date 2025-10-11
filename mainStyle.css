@@ -59,11 +59,11 @@
 
 /* WhatsApp Button Styles */
 .whatsapp-mobile {
-    display: none;
+    display: none !important;
 }
 
 .whatsapp-desktop {
-    display: block;
+    display: none !important;
 }
 
 .whatsapp-mobile a,
@@ -92,7 +92,7 @@
     }
     
     .whatsapp-mobile {
-        display: flex !important;
+        display: none !important;
         align-items: center;
         order: 1;
         margin-left: 8px;
