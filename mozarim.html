@@ -532,9 +532,13 @@
                     }
                 }
 
-                // Scroll to tables after they load
+                // Scroll to tables after they load (with offset)
                 setTimeout(() => {
-                    tablesContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    const yOffset = -100; // 100px מעל האלמנט
+                    const element = tablesContainer;
+                    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    
+                    window.scrollTo({ top: y, behavior: 'smooth' });
                 }, 300);
             } catch (error) {
                 console.error('Error loading product data:', error);
