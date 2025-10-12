@@ -5184,22 +5184,7 @@
 
         // Delete files button
         deleteFilesBtn.addEventListener('click', () => {
-            /*if (confirm('האם אתה בטוח שברצונך למחוק את כל הקבצים?')) {
-                uploadedFiles = [];
-                fileInput.value = '';
-                uploadedFilesDiv.style.display = 'none';
-                fileDataDisplay.style.display = 'none';
-                document.getElementById('chartContainer').style.display = 'none';
-                fileUploadArea.style.display = 'none';
-                dataMislaka = null; // Clear data variable
-                if (myChart) {
-                    myChart.destroy();
-                    myChart = null;
-                }
-                console.log('נתוני המסלקה נוקו:', dataMislaka);
-            }*/
             closeDataDisplay();
-            document.getElementById('sectionHeader').style.display = 'none';
         });
 
         // Close chart button
@@ -5214,30 +5199,20 @@
 
         // Close and delete button
         closeAndDeleteBtn.addEventListener('click', () => {
-                uploadedFiles = [];
-                fileInput.value = '';
-                sumSugMutzar = {
-                    '1': [0, 0,0,0,0], '2': [0, 0,0,0,0], '2_1': [0, 0,0,0,0], '2_2': [0, 0,0,0,0], '3': [0, 0,0,0,0],
-                    '4': [0, 0,0,0,0], '5': [0, 0,0,0,0], '6': [0, 0,0,0,0], '7': [0, 0,0,0,0], '8': [0, 0,0,0,0],
-                    '9': [0, 0,0,0,0], '10': [0, 0,0,0,0]
-                };
-                pirteiHeshbon=[];DataAll=[];kodMaslulSet=new Set();yitrotKaspeyPizoyim=[];
-                pratimIshim='';yitrotLefiMutzar='';yitrotLeGilPrisha='';
-                masluleiHashkaa=[];sheabudIkulHalvaa=[];
-                taarichLeyda=''; // Reset birth date variable
-                uploadedFilesDiv.style.display = 'none';
-                fileDataDisplay.style.display = 'none';
-                fileUploadArea.style.display = 'block'; // Show upload area again
-                document.getElementById('chartContainer').style.display = 'none';
-                dataMislaka = null; // Clear data variable
-                if (myChart) {
-                    myChart.destroy();
-                    myChart = null;
-                }
-                console.log('🧹 Close and delete: All data cleared');
-                console.log('✅ taarichLeyda reset to:', taarichLeyda);
-                console.log('✅ uploadedFiles reset to:', uploadedFiles.length);
-                console.log('✅ fileInput.value reset to:', fileInput.value);
+                // ניקוי sessionStorage של נתוני ניתוח מתקדם לפני ריענון
+                sessionStorage.removeItem('gilForAdvancedAnalysis');
+                sessionStorage.removeItem('ageToRetirementForAdvancedAnalysis');
+                sessionStorage.removeItem('sumHonForAdvancedAnalysis');
+                sessionStorage.removeItem('sumKitzvaForAdvancedAnalysis');
+                sessionStorage.removeItem('riskProfile');
+                sessionStorage.removeItem('riskScore');
+                sessionStorage.removeItem('riskSource');
+                sessionStorage.removeItem('advancedAnalysisData');
+                
+                console.log('🔄 Reloading page from closeAndDeleteBtn');
+                
+                // רענון הדף
+                window.location.reload();
         });
 
         // Smooth scroll to file upload section
@@ -5306,12 +5281,12 @@
             //console.log('closeDataDisplay נקרא');
             Swal.fire({
                 title: '<span style="color: #333; font-size: 1.5rem;">האם אתה בטוח?</span>',
-                html: '<p style="color: #666; font-size: 1.1rem;">כל הנתונים והקבצים שהועלו יימחקו</p>',
+                html: '<p style="color: #666; font-size: 1.1rem;">הדף ירוענן וכל הנתונים יימחקו</p>',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#dc3545',
                 cancelButtonColor: '#6c757d',
-                confirmButtonText: 'כן, מחק הכל',
+                confirmButtonText: 'כן, רענן את הדף',
                 cancelButtonText: 'ביטול',
                 width: 'clamp(300px, 90vw, 500px)',
                 customClass: {
@@ -5320,25 +5295,7 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Clear all data
-                    uploadedFiles = [];
-                    fileInput.value = '';
-                    sumSugMutzar = sumSugMutzar = {
-                        '1': [0, 0,0,0,0], '2': [0, 0,0,0,0], '2_1': [0, 0,0,0,0], '2_2': [0, 0,0,0,0], '3': [0, 0,0,0,0],
-                        '4': [0, 0,0,0,0], '5': [0, 0,0,0,0], '6': [0, 0,0,0,0], '7': [0, 0,0,0,0], '8': [0, 0,0,0,0],
-                        '9': [0, 0,0,0,0], '10': [0, 0,0,0,0]
-                    };
-                    pirteiHeshbon=[];DataAll=[];kodMaslulSet=new Set();yitrotKaspeyPizoyim=[];
-                    pratimIshim='';yitrotLefiMutzar='';yitrotLeGilPrisha='';
-                    masluleiHashkaa=[];sheabudIkulHalvaa=[];
-                    taarichLeyda=''; // Reset birth date variable
-                    dataMislaka = null;myChart = null;
-                    
-                    console.log('✅ All variables reset. taarichLeyda:', taarichLeyda);
-                    console.log('✅ uploadedFiles:', uploadedFiles.length);
-                    console.log('✅ fileInput.value:', fileInput.value);
-                    
-                    // ניקוי sessionStorage של נתוני ניתוח מתקדם
+                    // ניקוי sessionStorage של נתוני ניתוח מתקדם לפני ריענון
                     sessionStorage.removeItem('gilForAdvancedAnalysis');
                     sessionStorage.removeItem('ageToRetirementForAdvancedAnalysis');
                     sessionStorage.removeItem('sumHonForAdvancedAnalysis');
@@ -5347,51 +5304,11 @@
                     sessionStorage.removeItem('riskScore');
                     sessionStorage.removeItem('riskSource');
                     sessionStorage.removeItem('advancedAnalysisData');
-                    console.log('🗑️ נתוני ניתוח מתקדם נמחקו מ-sessionStorage');
                     
-                    // השבת את כפתור הניתוח המתקדם
-                    const advBtns = document.querySelectorAll('#advancedAnalysisBtnMain2, #advancedAnalysisBtn');
-                    advBtns.forEach(btn => {
-                        if (btn) {
-                            btn.disabled = true;
-                            btn.style.opacity = '0.5';
-                            btn.style.cursor = 'not-allowed';
-                        }
-                    });
-                    document.getElementById('sectionHeader').style.display = 'none';
-                    document.getElementById('dataDisplayContainer').style.display = 'none';
-                    // Hide all containers and show upload area
-                    document.getElementById('uploadedFiles').style.display = 'none';
-                    document.getElementById('fileDataDisplay').style.display = 'none';
-                    document.getElementById('chartContainer').style.display = 'none';
-                    document.getElementById('advancedAnalysis').style.display = 'none';
-                    document.getElementById('fileUploadArea').style.display = 'block';
+                    console.log('🔄 Reloading page to reset all data');
                     
-                    document.getElementById('filesList').innerHTML = '';
-                    document.getElementById('dataContent').innerHTML = '';
-                    
-                    // Destroy chart if exists
-                    if (myChart) {
-                        myChart.destroy();
-                        myChart = null;
-                    }
-                    
-                    // Hide the file upload section
-                    document.getElementById('fileUpload').style.display = 'none';
-                    
-                    // Scroll back to top
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    
-                    // הצגת הודעת הצלחה
-                    Swal.fire({
-                        title: '<span style="color: #28a745;">הנתונים נמחקו בהצלחה!</span>',
-                        icon: 'success',
-                        timer: 2000,
-                        showConfirmButton: false,
-                        width: 'clamp(300px, 90vw, 400px)'
-                    });
-                    
-                    console.log('סקציית העלאת הקבצים נסגרה וכל הנתונים נוקו');
+                    // רענון הדף - הדרך הכי נקייה לאפס הכל!
+                    window.location.reload();
                 }
             });
         }
