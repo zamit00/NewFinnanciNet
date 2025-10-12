@@ -2082,6 +2082,51 @@ function pdfDo() {
             }
         });
 
+        // Hamburger menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (hamburger && navMenu) {
+                // Close menu when clicking on a link (but allow navigation)
+                document.querySelectorAll('.nav-menu a').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        // Don't close menu for dropdown toggle links
+                        if (this.hasAttribute('onclick') && this.getAttribute('onclick').includes('toggleHashMenahalotCalculatorDropdown')
+                        || this.hasAttribute('onclick') && this.getAttribute('onclick').includes('toggleHashMenahalotToolsDropdown')
+                        || this.hasAttribute('onclick') && this.getAttribute('onclick').includes('toggleHashMenahalotProductsDropdown')) {
+                            return; // Let the dropdown function handle it
+                        }
+
+                        // Don't prevent default for regular links
+                        if (this.getAttribute('href') && this.getAttribute('href') !== '#') {
+                            // Let the browser handle the navigation
+                            return true;
+                        }
+                        
+                        // Only close menu for mobile, not for desktop links
+                        if (window.innerWidth <= 768) {
+                            hamburger.classList.remove('active');
+                            navMenu.classList.remove('active');
+                        }
+                    });
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+
+                hamburger.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+
         // Ensure nav dropdown links work properly
         document.querySelectorAll('#hashMenahalotProductsDropdown a, #hashMenahalotCalculatorDropdown a, #hashMenahalotToolsDropdown a').forEach(link => {
             link.addEventListener('click', function(e) {
