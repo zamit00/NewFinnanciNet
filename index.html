@@ -2912,10 +2912,194 @@
                 max-width: 240px;
             }
         }
+        
+        /* Opening Media Splash Screen */
+        #openingMedia {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        #openingMedia.closing {
+            animation: fadeOut 0.5s ease forwards;
+        }
+        
+        .opening-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            text-align: center;
+        }
+        
+        .opening-logo {
+            max-width: 400px;
+            width: 80%;
+            height: auto;
+            margin-bottom: 30px;
+            animation: scaleIn 0.8s ease;
+        }
+        
+        .opening-text {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: slideUp 0.8s ease 0.3s both;
+        }
+        
+        .opening-subtext {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            animation: slideUp 0.8s ease 0.5s both;
+        }
+        
+        .close-opening-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+        }
+        
+        .close-opening-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: rotate(90deg);
+        }
+        
+        .skip-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        .skip-btn:hover {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .opening-logo {
+                max-width: 280px;
+            }
+            
+            .opening-text {
+                font-size: 1.5rem;
+            }
+            
+            .opening-subtext {
+                font-size: 1rem;
+            }
+            
+            .close-opening-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .skip-btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 
 <body dir="rtl">
+    
+    <!-- Opening Media Splash Screen -->
+    <div id="openingMedia">
+        <button class="close-opening-btn" onclick="closeOpeningMedia()" title="סגור">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="opening-content">
+            <img src="https://i.postimg.cc/L4YLr22D/logoxnew.png" alt="פיננסי-נט" class="opening-logo">
+            <div class="opening-text">ברוכים הבאים לפיננסי-נט</div>
+            <div class="opening-subtext">המקום שלך לניהול נכון של הכסף הפנסיוני</div>
+            <button class="skip-btn" onclick="closeOpeningMedia()">
+                <i class="fas fa-arrow-left" style="margin-left: 10px;"></i>
+                כניסה לאתר
+            </button>
+        </div>
+    </div>
     
     <!-- Scroll to Top Button (Mobile Only) -->
     <button id="scrollToTopBtn" onclick="scrollToTop()" title="חזור למעלה">
@@ -7596,6 +7780,41 @@
         }
 
         // פונקציה לסגירת התצוגה
+        
+        // ========================================
+        // Opening Media Functions
+        // ========================================
+        function closeOpeningMedia() {
+            const openingMedia = document.getElementById('openingMedia');
+            if (openingMedia) {
+                openingMedia.classList.add('closing');
+                setTimeout(() => {
+                    openingMedia.style.display = 'none';
+                    document.body.style.overflow = 'auto'; // אפשר גלילה
+                }, 500);
+            }
+        }
+        
+        // הצג את מסך הפתיחה בטעינה
+        window.addEventListener('DOMContentLoaded', () => {
+            // נעל גלילה בזמן שמסך הפתיחה מוצג
+            document.body.style.overflow = 'hidden';
+            
+            // סגור אוטומטית אחרי 5 שניות (אופציונלי)
+            setTimeout(() => {
+                // closeOpeningMedia(); // הסר את הסימון // אם רוצה סגירה אוטומטית
+            }, 5000);
+        });
+        
+        // אפשר סגירה בלחיצה על ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const openingMedia = document.getElementById('openingMedia');
+                if (openingMedia && openingMedia.style.display !== 'none') {
+                    closeOpeningMedia();
+                }
+            }
+        });
 
     </script>
 
