@@ -571,7 +571,11 @@
                 visibility: visible;
             }
         }
-
+        #gemelhashpolisa {
+            text-align: center;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
         .cta-button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -1314,7 +1318,9 @@
          }
         /* Mobile Responsive */
         @media (max-width: 768px) {
-
+            #gemelhashpolisa {
+                font-size: 1rem;
+            }
             .flex-container-row{
                 display: flex;
                 flex-direction: column;
@@ -3288,13 +3294,13 @@
                 <div class="feature-card">
                     <div class="feature-icon"><img src="advicing.png" width="120" height="auto"/></div>
                     <h3 class="feature-title">יעוץ פנסיוני אישי ומקצועי</h3>
-                    <p class="feature-description">המומחים שלנו יבנו עבורך אסטרטגיה פנסיונית מותאמת למטרות ולמצב הכלכלי הייחודי שלך</p>
+                    <p class="feature-description"> אני אבנה עבורך אסטרטגיה פנסיונית מותאמת למטרות ולמצב הכלכלי הייחודי שלך</p>
                     <a href="#consultation" class="cta-button smallfont" onclick="openConsultationForm()">קבל יעוץ</a>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><img src="tesuot.png" width="100" height="auto"/></div>
                     <h3 class="feature-title">ניתוח תשואות מתקדם</h3>
-                    <p class="feature-description">בכלים שאנו מציעים תוכל לבצע ניתוחים  בצורה מקצועית וייחודית</p>
+                    <p class="feature-description">בכלים של האתר תוכל לבצע ניתוחים  בצורה מקצועית וייחודית</p>
                     <div class="tools-dropdown">
                         <button class="cta-button" id="toolsDropdownBtn"  onclick="toggleToolsDropdown()">השתמש בכלים ▼</button>
                         <div class="dropdown-content" id="toolsDropdown">
@@ -3308,7 +3314,7 @@
                 <div class="feature-card">
                     <div class="feature-icon"><img src="manwithcomputure.png" width="100" height="auto"/></i></div>
                     <h3 class="feature-title">מחשבונים  מגוונים</h3>
-                    <p class="feature-description">במחשבונים שלנו תוכל לחשב ערך עתידי, הפקדה נדרשת לסכום מטרה והחזרי הלוואה חודשיים</p>
+                    <p class="feature-description">במחשבונים של האתר תוכל לחשב ערך עתידי, הפקדה נדרשת לסכום מטרה והחזרי הלוואה חודשיים</p>
                     <div class="calculator-dropdown">
                         <button class="cta-button" id="calculatorDropdownBtn" onclick="toggleCalculatorDropdown()">בחר מחשבון ▼</button>
                         <div class="dropdown-content" id="calculatorDropdown">
@@ -3326,7 +3332,7 @@
                 <div class="feature-card">
                     <div class="feature-icon"><img src="ofisikon.png" width="100" height="auto"/></div>
                     <h3 class="feature-title">התאמה  לאופי סיכון</h3>
-                    <p class="feature-description">באמצעותנו תוכל לאפיין את רמת הסיכון שלך ואת המוצרים המתאימים לרמת הסיכון</p>
+                    <p class="feature-description">באמצעות שאלון סיכון קצר אוכל לאפיין את רמת הסיכון שלך ולבדוק את התאמת מסלולי ההשקעה שלך לרמת הסיכון.</p>
                     <a href="#" onclick="openRiskQuestModal(); return false;" class="cta-button smallfont">עבור לשאלון סיכון 🎯</a>
                 </div>
                 <div class="feature-card">
@@ -3334,6 +3340,12 @@
                     <h3 class="feature-title">ייעוץ פרישה</h3>
                     <p class="feature-description">תכנון פרישה נכון ימקסם את ההכנסות נטו שלך בתקופת הפנסיה תוך ניצול מקסימלי של הטבות המס</p>
                     <a href="#contact" class="cta-button smallfont" onclick="openConsultationForm()">צור קשר</a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><img src="gemelorpolisa.png" width="100" height="auto"/></div>
+                    <h3 class="feature-title">חסכון פרטי</h3>
+                    <p class="feature-description"><span style="font-weight: bold;">קופת גמל להשקעה</span> או <span style="font-weight: bold;">פוליסת חסכון?</span> שתיהן מאפשרות להשקיע באופן פשוט, ליהנות מניהול מקצועי וממגוון מסלולי השקעה – אך יש ביניהן הבדלים מהותיים שכדאי להכיר.</p>
+                    <a href="#contact" class="cta-button smallfont" onclick="openConsultationForm()">להשוואה</a>
                 </div>
             </div>
         </div>
@@ -3346,17 +3358,7 @@
         </div>
     </section>
 
-<div class="mainTitle secondTitle" dir="rtl">
-	<div class="feature-card">
-		<div dir="rtl" class="flex-container">
-			<h1 class="feature-title">קופת גמל להשקעה או פוליסת חיסכון?</h1>
-            <img class="hero-icon" src="gemelorpolisa.png" alt="Graph Icon" style="width: 300px; height: 300px;
-            margin-left: auto;margin-right: auto;"/> 
-			<h1 class="feature-description"> ריכזנו עבורך את כל היתרונות והחסרונות של כל מוצר כך שתוכל לבחור איזה מהמוצרים יותר מתאים לך או אולי שילוב ביניהם.</h1>
-			<button class="cta-button smallfont" onclick="showComparisonModal()">להשוואה</button>
-		</div>
-	</div>
-</div>
+
 
 <!-- Modal להשוואה -->
 <div class="comparison-modal" id="comparisonModal">
