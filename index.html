@@ -2791,6 +2791,121 @@
                 display: none !important;
             }
         }
+        
+        /* Pension Clearance Tooltip */
+        .pension-clearance-link {
+            position: relative;
+            display: inline-block;
+            color: #667eea;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            text-underline-offset: 3px;
+        }
+        
+        .pension-tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 140%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #333;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.6;
+            max-width: 320px;
+            width: max-content;
+            z-index: 9999;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border: 2px solid #667eea;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: normal;
+            text-align: center;
+        }
+        
+        .pension-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -10px;
+            border-width: 10px;
+            border-style: solid;
+            border-color: white transparent transparent transparent;
+        }
+        
+        .pension-tooltip::before {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -12px;
+            border-width: 12px;
+            border-style: solid;
+            border-color: #667eea transparent transparent transparent;
+            z-index: -1;
+        }
+        
+        .pension-clearance-link:hover .pension-tooltip {
+            visibility: visible;
+            opacity: 1;
+            bottom: 150%;
+            pointer-events: auto;
+        }
+        
+        .pension-tooltip strong {
+            color: #667eea;
+            text-decoration: underline;
+            font-weight: 700;
+            transition: opacity 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .pension-tooltip strong:hover {
+            opacity: 0.7;
+        }
+        
+        .pension-tooltip i {
+            margin-left: 8px;
+            color: #667eea;
+            font-size: 16px;
+        }
+        
+        /* Responsive - Mobile & Tablet */
+        @media (max-width: 1024px) {
+            .pension-tooltip {
+                font-size: 14px;
+                padding: 14px 18px;
+                max-width: 280px;
+                left: auto;
+                right: 0;
+                transform: none;
+            }
+            
+            .pension-tooltip::after {
+                left: auto;
+                right: 20px;
+            }
+            
+            .pension-tooltip::before {
+                left: auto;
+                right: 18px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .pension-tooltip {
+                font-size: 13px;
+                padding: 12px 14px;
+                max-width: 240px;
+            }
+        }
     </style>
 </head>
 
@@ -2864,7 +2979,19 @@
             כך תוכל להבין באמת איפה אתה עומד, לקבל החלטות טובות יותר ולגרום לכסף שלך לעבוד בשבילך.</h1>           
             <a href="#fileUpload" class="cta-button bigscreen smallfont" style="margin-left: auto;margin-right: auto;"
             onclick="letStart()">לתהליך - חינם*</a>
-            <div style="font-size: 20px;font-weight: bold;text-align: right;color: #666;">*נדרש להעלות קובצי xml של המסלקה הפנסיונית</div>
+            <div style="font-size: 20px;font-weight: bold;text-align: right;color: #666; margin-top: 15px;">
+                *נדרש להעלות קובצי xml של 
+                <a href="https://www.gov.il/he/service/pension_clearance_information_request" target="_blank" rel="noopener noreferrer" class="pension-clearance-link" style="text-decoration: none;">
+                    המסלקה הפנסיונית
+                    <span class="pension-tooltip">
+                        <i class="fas fa-info-circle"></i>
+                        הזמנת קובצי מסלקה דרך 
+                        <strong style="text-decoration: underline;">
+                            האתר הרשמי של המסלקה הפנסיונית
+                        </strong>
+                    </span>
+                </a>
+            </div>
    
         </div> 
 	</div>
