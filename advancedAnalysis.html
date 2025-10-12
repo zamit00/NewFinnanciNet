@@ -2090,7 +2090,7 @@
                                     <div style="width: 20px; height: 20px; border-radius: 50%; background: ${riskColors[risk]}; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"></div>
                                     <span style="font-weight: 600; font-size: 1.1rem;">סיכון ${risk}</span>
                                 </div>
-                                <span style="font-weight: bold; font-size: 1.3rem;">₪${riskDistribution[risk].toLocaleString('he-IL')}</span>
+                                <span style="font-weight: bold; font-size: 1.3rem;">₪${riskDistribution[risk].toLocaleString('he-IL', {maximumFractionDigits: 0})}</span>
                             </div>
                             <div style="background: rgba(255,255,255,0.2); height: 8px; border-radius: 4px; overflow: hidden;">
                                 <div style="background: ${riskColors[risk]}; height: 100%; width: ${percentage}%; border-radius: 4px; transition: width 0.3s ease;"></div>
@@ -2114,7 +2114,7 @@
                     
                     <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3);">
                         <div style="font-size: 0.95rem; opacity: 0.9;">
-                            <strong>סך כל החיסכון:</strong> ₪${totalAmount.toLocaleString('he-IL')}
+                            <strong>סך כל החיסכון:</strong> ₪${totalAmount.toLocaleString('he-IL', {maximumFractionDigits: 0})}
                             <div class="small-text" style="font-size: 0.7rem; opacity: 0.9;">לא כולל קרנות ותיקות</div>
                         </div>
                     </div>
@@ -2169,7 +2169,7 @@
                                             const value = context.parsed;
                                             const total = context.dataset.data.reduce((a, b) => a + b, 0);
                                             const percentage = ((value / total) * 100).toFixed(1);
-                                            return `₪${value.toLocaleString('he-IL')} (${percentage}%)`;
+                                            return `₪${value.toLocaleString('he-IL', {maximumFractionDigits: 0})} (${percentage}%)`;
                                         }
                                     }
                                 }
@@ -2205,7 +2205,7 @@
                             </div>
                             <div style="text-align: left;">
                                 <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">
-                                    ₪${entry.totalAmount.toLocaleString('he-IL')}
+                                    ₪${entry.totalAmount.toLocaleString('he-IL', {maximumFractionDigits: 0})}
                                 </div>
                                 <div style="color: var(--text-light); font-size: 0.9rem;">
                                     סך הכל
@@ -2418,7 +2418,7 @@
                                 </div>
                                 <div style="text-align: left; min-width: 100px;">
                                     <div style="font-weight: bold; color: var(--primary); font-size: 1.1rem; white-space: nowrap;">
-                                        ₪${pathwayAmount.toLocaleString('he-IL')}
+                                        ₪${pathwayAmount.toLocaleString('he-IL', {maximumFractionDigits: 0})}
                                     </div>
                                     <div style="color: var(--text-light); font-size: 0.85rem;">
                                         צבירה
@@ -2811,7 +2811,7 @@
                                 </div>
                                 <div style="text-align: left; min-width: 100px;">
                                     <div style="font-weight: bold; color: var(--primary); font-size: 1.1rem; white-space: nowrap;">
-                                        ₪${pathwayAmount.toLocaleString('he-IL')}
+                                        ₪${pathwayAmount.toLocaleString('he-IL', {maximumFractionDigits: 0})}
                                     </div>
                                     <div style="color: var(--text-light); font-size: 0.85rem;">
                                         צבירה
@@ -3601,7 +3601,7 @@
                                 </div>
                                 <div style="text-align: left;">
                                     <div style="font-weight: bold; color: var(--primary);">
-                                        ₪${gap.amount.toLocaleString('he-IL')}
+                                        ₪${gap.amount.toLocaleString('he-IL', {maximumFractionDigits: 0})}
                                     </div>
                                 </div>
                             </div>
@@ -3668,7 +3668,7 @@
                                 </div>
                                 <div style="text-align: left;">
                                     <div style="font-weight: bold; color: var(--primary);">
-                                        ₪${gap.amount.toLocaleString('he-IL')}
+                                        ₪${gap.amount.toLocaleString('he-IL', {maximumFractionDigits: 0})}
                                     </div>
                                 </div>
                             </div>
@@ -3742,7 +3742,7 @@
                                 </div>
                                 <div style="text-align: left;">
                                     <div style="font-weight: bold; color: var(--primary);">
-                                        ₪${gap.amount.toLocaleString('he-IL')}
+                                        ₪${gap.amount.toLocaleString('he-IL', {maximumFractionDigits: 0})}
                                     </div>
                                 </div>
                             </div>

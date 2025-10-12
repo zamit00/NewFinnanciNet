@@ -6555,7 +6555,7 @@
                                     const value = context.parsed;
                                     const total = context.dataset.data.reduce((a, b) => a + b, 0);
                                     const percentage = ((value / total) * 100).toFixed(1);
-                                    return `${context.label}: ₪${value.toLocaleString('he-IL')} (${percentage}%)`;
+                                    return `${context.label}: ₪${value.toLocaleString('he-IL', {maximumFractionDigits: 0})} (${percentage}%)`;
                                 }
                             }
                         }
@@ -6597,7 +6597,7 @@
                 `;
                 totalDiv.innerHTML = `
                     <span style="font-size: 1.1rem; color: #667eea; font-weight: bold;">סכום כולל:</span>
-                    <span style="font-size: 1.5rem; color: #667eea; font-weight: bold;">₪${total.toLocaleString('he-IL')}</span>
+                    <span style="font-size: 1.5rem; color: #667eea; font-weight: bold;">₪${total.toLocaleString('he-IL', {maximumFractionDigits: 0})}</span>
                 `;
             }else{
                 totalDiv.style.cssText = `
