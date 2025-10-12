@@ -3121,33 +3121,35 @@
             transform: rotate(90deg);
         }
         
-        .sound-toggle-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid white;
+        /* Floating Stop Music Button */
+        .music-stop-btn {
+            position: fixed;
+            bottom: 90px;
+            left: 30px;
+            background: rgba(220, 53, 69, 0.9);
+            border: 2px solid #dc3545;
             color: white;
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
-            z-index: 100000;
+            z-index: 9998;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
         }
         
-        .sound-toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.4);
+        .music-stop-btn:hover {
+            background: #c82333;
             transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(220, 53, 69, 0.6);
         }
         
-        .sound-toggle-btn.muted {
-            background: rgba(255, 0, 0, 0.3);
-            border-color: #ff6b6b;
+        .music-stop-btn.show {
+            display: flex;
         }
         
         .skip-btn {
@@ -3275,12 +3277,18 @@
 
 <body dir="rtl">
     
+    <!-- Background Audio (plays throughout the site) -->
+    <audio id="openingAudio" loop>
+        <source src="openningMedia.wav" type="audio/wav">
+    </audio>
+    
+    <!-- Floating Stop Music Button -->
+    <button class="music-stop-btn" onclick="stopMusic()" id="musicStopBtn" title="עצור מוזיקה" style="display: none;">
+        <i class="fas fa-stop"></i>
+    </button>
+    
     <!-- Opening Media Splash Screen -->
     <div id="openingMedia">
-        <!-- Background Audio -->
-        <audio id="openingAudio" loop>
-            <source src="openningMedia.wav" type="audio/wav">
-        </audio>
         
         <!-- Background Video (optional - uncomment and add your video URL) -->
         <!-- <video autoplay muted loop playsinline class="opening-video">
@@ -3297,13 +3305,8 @@
             <div class="coin coin-6">₪</div>
         </div>
         
-        <button class="close-opening-btn" onclick="closeOpeningMedia()" title="סגור">
+        <button class="close-opening-btn" onclick="closeOpeningMediaWithMusic()" title="סגור">
             <i class="fas fa-times"></i>
-        </button>
-        
-        <!-- Sound Toggle Button -->
-        <button class="sound-toggle-btn" onclick="toggleSound()" id="soundToggleBtn" title="השתק/הפעל מוזיקה">
-            <i class="fas fa-volume-up" id="soundIcon"></i>
         </button>
         <div class="opening-content">
             <img src="https://i.postimg.cc/L4YLr22D/logoxnew.png" alt="פיננסי-נט" class="opening-logo">
@@ -3329,7 +3332,7 @@
                 </div>
             </div>
             
-            <button class="skip-btn" onclick="closeOpeningMedia()">
+            <button class="skip-btn" onclick="closeOpeningMediaWithMusic()">
                 <i class="fas fa-arrow-left" style="margin-left: 10px;"></i>
                 כניסה לאתר
             </button>
@@ -8021,13 +8024,12 @@
         // ========================================
         function closeOpeningMedia() {
             const openingMedia = document.getElementById('openingMedia');
-            const openingAudio = document.getElementById('openingAudio');
+            const musicStopBtn = document.getElementById('musicStopBtn');
             
-            // עצור את האודיו
-            if (openingAudio) {
-                openingAudio.pause();
-                openingAudio.currentTime = 0;
-            }
+            // שמור שהמסך נסגר (לא יופיע שוב בסשן זה)
+            sessionStorage.setItem('openingMediaShown', 'true');
+            
+            // המוזיקה ממשיכה לנגן! לא עוצרים אותה
             
             if (openingMedia) {
                 openingMedia.classList.add('closing');
@@ -8036,26 +8038,46 @@
                     openingMedia.style.visibility = 'hidden';
                     openingMedia.style.opacity = '0';
                     document.body.style.overflow = 'auto'; // אפשר גלילה
+                    
+                    // הצג את כפתור העצירה הצף
+                    if (musicStopBtn) {
+                        musicStopBtn.classList.add('show');
+                    }
                 }, 500);
             }
         }
         
-        // Toggle Sound Function
-        function toggleSound() {
+        // Close with user interaction (fixes autoplay block)
+        function closeOpeningMediaWithMusic() {
             const openingAudio = document.getElementById('openingAudio');
-            const soundToggleBtn = document.getElementById('soundToggleBtn');
-            const soundIcon = document.getElementById('soundIcon');
+            
+            // נסה להפעיל את המוזיקה (interaction מאפשר autoplay)
+            if (openingAudio && openingAudio.paused) {
+                openingAudio.play().then(() => {
+                    console.log('🎵 Audio started after user click!');
+                }).catch(error => {
+                    console.log('⚠️ Audio still blocked:', error);
+                });
+            }
+            
+            // סגור את המסך
+            closeOpeningMedia();
+        }
+        
+        // Stop Music Function
+        function stopMusic() {
+            const openingAudio = document.getElementById('openingAudio');
+            const musicStopBtn = document.getElementById('musicStopBtn');
             
             if (openingAudio) {
-                if (openingAudio.paused) {
-                    openingAudio.play();
-                    soundToggleBtn.classList.remove('muted');
-                    soundIcon.className = 'fas fa-volume-up';
-                } else {
-                    openingAudio.pause();
-                    soundToggleBtn.classList.add('muted');
-                    soundIcon.className = 'fas fa-volume-mute';
-                }
+                openingAudio.pause();
+                openingAudio.currentTime = 0;
+                console.log('🛑 Music stopped by user');
+            }
+            
+            // הסתר את כפתור העצירה
+            if (musicStopBtn) {
+                musicStopBtn.classList.remove('show');
             }
         }
         
@@ -8093,6 +8115,20 @@
             console.log('🎬 Opening Media: DOMContentLoaded');
             const openingMedia = document.getElementById('openingMedia');
             const openingAudio = document.getElementById('openingAudio');
+            const musicStopBtn = document.getElementById('musicStopBtn');
+            
+            // בדוק אם מסך הפתיחה כבר הוצג בסשן זה
+            const alreadyShown = sessionStorage.getItem('openingMediaShown');
+            
+            if (alreadyShown) {
+                // כבר הוצג - הסתר את המסך מיד
+                console.log('ℹ️ Opening Media already shown in this session');
+                if (openingMedia) {
+                    openingMedia.style.display = 'none';
+                }
+                document.body.style.overflow = 'auto';
+                return;
+            }
             
             if (openingMedia) {
                 console.log('✅ Opening Media element found!');
@@ -8108,7 +8144,7 @@
                         console.log('🎵 Audio playing!');
                     }).catch(error => {
                         console.log('⚠️ Audio autoplay blocked:', error);
-                        // אפשרות: הוסף כפתור unmute
+                        console.log('💡 Click "כניסה לאתר" button to start music');
                     });
                 }
                 
@@ -8118,10 +8154,10 @@
                 console.error('❌ Opening Media element NOT found!');
             }
             
-            // סגור אוטומטית אחרי 10 שניות (אופציונלי)
+            // סגור אוטומטית אחרי 12 שניות (אופציונלי)
             setTimeout(() => {
                 // closeOpeningMedia(); // הסר את הסימון // אם רוצה סגירה אוטומטית
-            }, 10000);
+            }, 12000);
         });
         
         // אפשר סגירה בלחיצה על ESC
