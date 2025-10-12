@@ -3288,7 +3288,7 @@
     </button>
     
     <!-- Opening Media Splash Screen -->
-    <div id="openingMedia">
+    <div id="openingMedia" style="display: none;">
         
         <!-- Background Video (optional - uncomment and add your video URL) -->
         <!-- <video autoplay muted loop playsinline class="opening-video">
@@ -3385,7 +3385,9 @@
                     <i class="fab fa-whatsapp" style="font-size:2rem; color:#25D366;"></i>
                 </a>
             </div>
-            <div class="logo"> <img class="logoimg" src="logoxnew.png" onclick="window.location.href='index.html'" style="cursor: pointer;"/></div>
+            <div class="logo"> <img class="logoimg" src="logoxnew.png" onclick="window.location.href='index.html';
+            closeOpeningMedia();" 
+                style="cursor: pointer;"/></div>
             <div class="hamburger" id="hamburger">
                 <span></span>
                 <span></span>
@@ -8120,18 +8122,21 @@
             // בדוק אם מסך הפתיחה כבר הוצג בסשן זה
             const alreadyShown = sessionStorage.getItem('openingMediaShown');
             
-            if (alreadyShown) {
-                // כבר הוצג - הסתר את המסך מיד
-                console.log('ℹ️ Opening Media already shown in this session');
+            console.log('📋 Session check - alreadyShown:', alreadyShown);
+            
+            if (alreadyShown === 'true') {
+                // כבר הוצג - הסתר את המסך ואל תציג אותו
+                console.log('✅ Opening Media already shown - SKIPPING');
                 if (openingMedia) {
                     openingMedia.style.display = 'none';
                 }
                 document.body.style.overflow = 'auto';
-                return;
+                return; // חשוב! צא מהפונקציה
             }
             
+            // מסך פתיחה לא הוצג עדיין - הצג אותו!
             if (openingMedia) {
-                console.log('✅ Opening Media element found!');
+                console.log('🎬 First visit - SHOWING Opening Media!');
                 // נעל גלילה בזמן שמסך הפתיחה מוצג
                 document.body.style.overflow = 'hidden';
                 openingMedia.style.display = 'flex';
@@ -8156,7 +8161,7 @@
             
             // סגור אוטומטית אחרי 12 שניות (אופציונלי)
             setTimeout(() => {
-                // closeOpeningMedia(); // הסר את הסימון // אם רוצה סגירה אוטומטית
+                // closeOpeningMediaWithMusic(); // הסר את הסימון // אם רוצה סגירה אוטומטית
             }, 12000);
         });
         
