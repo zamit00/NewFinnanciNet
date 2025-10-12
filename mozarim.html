@@ -425,6 +425,9 @@
                     if (typeof tkofa !== 'undefined' && tkofa) {
                         document.getElementById('tkofaDisplay').textContent = tkofa;
                     }
+                    
+                    // Check for URL parameter and load specific product
+                    checkAndLoadProductFromURL();
                 });
             }
             
@@ -439,6 +442,34 @@
                 if (attempts > 20) clearInterval(checkTkofa); // Stop after 10 seconds
             }, 500);
         });
+        
+        // Check URL for product parameter and load it
+        function checkAndLoadProductFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productParam = urlParams.get('product');
+            
+            if (productParam) {
+                console.log('🔗 URL Parameter found:', productParam);
+                
+                // Map parameter to product name
+                const productMap = {
+                    'hishtalmut': 'קרנות השתלמות',
+                    'gemel': 'קופות גמל',
+                    'gemelHashkaa': 'קופות גמל להשקעה',
+                    'yeled': 'חסכון לילד',
+                    'polisot': 'פוליסות חסכון',
+                    'pensia': 'קרנות פנסיה חדשות'
+                };
+                
+                const productName = productMap[productParam];
+                if (productName) {
+                    console.log('✅ Loading product:', productName);
+                    loadProduct(productName);
+                } else {
+                    console.warn('⚠️ Unknown product parameter:', productParam);
+                }
+            }
+        }
 
         // Load Product based on selection
         async function loadProduct(productType) {
