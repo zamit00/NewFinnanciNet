@@ -100,7 +100,6 @@
          font-weight: bold;
          text-align: center;
          line-height: 1.2;
-         min-width: 120px;
          height: auto;
          box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
      }
@@ -1371,6 +1370,10 @@
              
                  /* עיצוב רספונסיבי לתצוגת הנתונים */
                  @media (max-width: 768px) {
+                    
+                    #detailedSummary{
+                        margin-bottom: 15px !important;
+                    }
                     .smallfont{
                         font-size: 0.8rem !important;
                     }
@@ -1398,7 +1401,7 @@
                      max-width: 100% !important;
                      padding: 15px !important;
                      box-sizing: border-box !important;
-                     margin: 0 !important;
+                    
                  }
                  
                  .product-card-mobile {
@@ -1504,11 +1507,9 @@
                      gap: 15px !important;
                  }
                  
-                #dataDisplayContainer button {
-                    width: 100% !important;
-                    max-width: 100% !important;
+                #dataDisplayContainer button {    
                     margin: 5px auto !important;
-                    padding: 12px 15px !important;
+                    padding: 5px 15px !important;
                     font-size: 0.9rem !important;
                     box-sizing: border-box !important;
                     white-space: normal !important;
@@ -1889,7 +1890,7 @@
 			}
 			
 			.cta-button-white {
-				padding: 15px 30px;
+				padding: 20px 30px;
 				font-size: 1rem;
 			}
         .logos-slide img {
@@ -2030,6 +2031,7 @@
         .delete-btn {
             background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
             box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            padding: 20px 5px;
         }
         
         .delete-btn:hover {
@@ -2655,6 +2657,9 @@
                 padding: 12px !important;
                 width: 100% !important;
             }
+            .data-card button{
+                padding: 5px 15px !important;
+            }
             
             .product-card-mobile {
                 padding: 12px !important;
@@ -2691,6 +2696,7 @@
             #dataDisplayContainer button {
                 font-size: 0.7rem !important;
                 padding: 8px !important;
+
             }
             
             #dataDisplayContainer table {
@@ -2904,13 +2910,21 @@
                 right: 18px;
             }
         }
-        
+        #consultationFormBtn{
+            background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.3); padding: 12px 30px; border-radius: 25px; font-size: 1rem; font-weight: bold; cursor: 
+            pointer; transition: all 0.3s ease; backdrop-filter: blur(10px);
+           }
         @media (max-width: 480px) {
             .pension-tooltip {
                 font-size: 13px;
                 padding: 12px 14px;
                 max-width: 240px;
             }
+           #consultationFormBtn{
+            width:clamp(200px, 70%, 250px) !important;
+            background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.3); padding: 12px 30px; border-radius: 25px; font-size: 1rem; font-weight: bold; cursor: 
+            pointer; transition: all 0.3s ease; backdrop-filter: blur(10px);
+           }
         }
     </style>
 </head>
@@ -3032,7 +3046,7 @@
                         <button class="cta-button" id="advancedAnalysisBtnMain2" onclick="sessionStorage.removeItem('riskProfile'); sessionStorage.removeItem('riskScore'); sessionStorage.removeItem('riskSource'); window.location.href='advancedAnalysis.html';" 
                          disabled
                          style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                          color: white; border: none; padding: 15px 40px; border-radius: 25px;
+                          color: white; border: none; padding: 15px 5px; border-radius: 25px;
                           font-size: 1.1rem; cursor: not-allowed; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
                            transition: all 0.3s ease; max-width: 400px; width: 100%; opacity: 0.5;">📊 ניתוח מתקדם</button>
                     </div>
@@ -6413,7 +6427,7 @@
                         קבל ייעוץ אישי מותאם לפרופיל הפיננסי שלך<br>
                         ובדוק אם אתה מנצל את כל הזכויות שלך
                     </p>
-                    <button onclick="openConsultationForm()" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.3); padding: 12px 30px; border-radius: 25px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(10px);">
+                    <button id="consultationFormBtn" onclick="openConsultationForm()">
                         📞 קבל ייעוץ פנסיוני
                     </button>
                 </div>
@@ -6956,7 +6970,7 @@
             const isMobile = window.innerWidth <= 768;
             let tableHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="color: #333; margin: 0; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px; text-align: right;">📊 סיכום לפי מסלול ומוצר</h3>
+                    <h3 style="color: #333; margin-top: 20px; font-size: 1.5rem; border-bottom: 3px solid #667eea; padding-bottom: 10px; text-align: right;">📊 סיכום לפי מסלול ומוצר</h3>
                     <button style="max-width: 50px;" type="button" class="tbl-button" id="closePathwayTable" onclick="closePathwayTableDisplay()">סגור</button>
                 </div>
                 <div id="pathwayTableContent">
