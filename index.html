@@ -3121,6 +3121,35 @@
             transform: rotate(90deg);
         }
         
+        .sound-toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+        }
+        
+        .sound-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+        
+        .sound-toggle-btn.muted {
+            background: rgba(255, 0, 0, 0.3);
+            border-color: #ff6b6b;
+        }
+        
         .skip-btn {
             background: white;
             color: #667eea;
@@ -3210,6 +3239,12 @@
                 font-size: 1.2rem;
             }
             
+            .sound-toggle-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            
             .skip-btn {
                 padding: 12px 30px;
                 font-size: 1rem;
@@ -3242,6 +3277,11 @@
     
     <!-- Opening Media Splash Screen -->
     <div id="openingMedia">
+        <!-- Background Audio -->
+        <audio id="openingAudio" loop>
+            <source src="openningMedia.wav" type="audio/wav">
+        </audio>
+        
         <!-- Background Video (optional - uncomment and add your video URL) -->
         <!-- <video autoplay muted loop playsinline class="opening-video">
             <source src="your-video-url.mp4" type="video/mp4">
@@ -3259,6 +3299,11 @@
         
         <button class="close-opening-btn" onclick="closeOpeningMedia()" title="סגור">
             <i class="fas fa-times"></i>
+        </button>
+        
+        <!-- Sound Toggle Button -->
+        <button class="sound-toggle-btn" onclick="toggleSound()" id="soundToggleBtn" title="השתק/הפעל מוזיקה">
+            <i class="fas fa-volume-up" id="soundIcon"></i>
         </button>
         <div class="opening-content">
             <img src="https://i.postimg.cc/L4YLr22D/logoxnew.png" alt="פיננסי-נט" class="opening-logo">
@@ -7976,6 +8021,14 @@
         // ========================================
         function closeOpeningMedia() {
             const openingMedia = document.getElementById('openingMedia');
+            const openingAudio = document.getElementById('openingAudio');
+            
+            // עצור את האודיו
+            if (openingAudio) {
+                openingAudio.pause();
+                openingAudio.currentTime = 0;
+            }
+            
             if (openingMedia) {
                 openingMedia.classList.add('closing');
                 setTimeout(() => {
@@ -7984,6 +8037,25 @@
                     openingMedia.style.opacity = '0';
                     document.body.style.overflow = 'auto'; // אפשר גלילה
                 }, 500);
+            }
+        }
+        
+        // Toggle Sound Function
+        function toggleSound() {
+            const openingAudio = document.getElementById('openingAudio');
+            const soundToggleBtn = document.getElementById('soundToggleBtn');
+            const soundIcon = document.getElementById('soundIcon');
+            
+            if (openingAudio) {
+                if (openingAudio.paused) {
+                    openingAudio.play();
+                    soundToggleBtn.classList.remove('muted');
+                    soundIcon.className = 'fas fa-volume-up';
+                } else {
+                    openingAudio.pause();
+                    soundToggleBtn.classList.add('muted');
+                    soundIcon.className = 'fas fa-volume-mute';
+                }
             }
         }
         
@@ -8020,6 +8092,8 @@
         window.addEventListener('DOMContentLoaded', () => {
             console.log('🎬 Opening Media: DOMContentLoaded');
             const openingMedia = document.getElementById('openingMedia');
+            const openingAudio = document.getElementById('openingAudio');
+            
             if (openingMedia) {
                 console.log('✅ Opening Media element found!');
                 // נעל גלילה בזמן שמסך הפתיחה מוצג
@@ -8027,6 +8101,16 @@
                 openingMedia.style.display = 'flex';
                 openingMedia.style.visibility = 'visible';
                 openingMedia.style.opacity = '1';
+                
+                // נגן אודיו - עם catch למקרה שהדפדפן חוסם autoplay
+                if (openingAudio) {
+                    openingAudio.play().then(() => {
+                        console.log('🎵 Audio playing!');
+                    }).catch(error => {
+                        console.log('⚠️ Audio autoplay blocked:', error);
+                        // אפשרות: הוסף כפתור unmute
+                    });
+                }
                 
                 // התחל אנימציית מספרים אחרי שנייה
                 setTimeout(animateNumbers, 1000);
