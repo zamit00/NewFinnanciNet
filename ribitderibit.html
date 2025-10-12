@@ -321,6 +321,17 @@
 }
 
 @media only screen and (max-width:600px) {
+    .form-container{
+        width: clamp(300px,90vw,600px);
+        margin-right: auto;
+        margin-left: auto;
+    }
+    #hashevdo{
+        display: block;
+        margin-right: auto;
+        margin-left: auto;
+    }
+    #hashevdoLabel{text-align: center;}
   #tbltoz, #tbltoz tr, #tbltoz td {
     font-size:12px !important;
   }
@@ -583,7 +594,6 @@ box-sizing: border-box;margin: 0%;padding: 0%;
         display: flex   !important;
         flex-direction: column !important;
         align-items: center !important;      
-    
        }
     }
 
@@ -698,7 +708,7 @@ box-sizing: border-box;margin: 0%;padding: 0%;
 		</form>
 		<div style="display:flex;flex-direction:column;">
 			<button id="hashevdo" onclick="hashev(0.04)" >חשב</button>
-			<label style="margin-right:20px;"> החישוב בהתבסס על הפקדות עד סוף התקופה שנבחרה</label>
+			<label for="hashevdo" id="hashevdoLabel"> החישוב בהתבסס על הפקדות עד סוף התקופה שנבחרה</label>
 		</div>
 		<div class="alltoz" id="alltoz">
 			<div class="divtozz">
