@@ -36,6 +36,7 @@
     <script src="kochavimscript.js"></script>
     <script src="PensiaScript.js"></script>
     <script src="mainscript.js"></script>
+    <script src="siteSession.js"></script>
   
   <style>
 
@@ -8070,8 +8071,8 @@
             const openingMedia = document.getElementById('openingMedia');
             const musicStopBtn = document.getElementById('musicStopBtn');
             
-            // שמור שהמסך נסגר (לא יופיע שוב בסשן זה)
-            sessionStorage.setItem('openingMediaShown', 'true');
+            // שמור שהמסך נסגר (שמור בזכרון קבוע)
+            localStorage.setItem('openingMediaShown', 'true');
             
             // המוזיקה ממשיכה לנגן! לא עוצרים אותה
             
@@ -8156,18 +8157,25 @@
             const openingAudio = document.getElementById('openingAudio');
             const musicStopBtn = document.getElementById('musicStopBtn');
             
-            // בדוק אם מסך הפתיחה כבר הוצג בסשן זה
-            const alreadyShown = sessionStorage.getItem('openingMediaShown');
+            // בדוק אם מסך הפתיחה כבר הוצג (localStorage)
+            const alreadyShown = localStorage.getItem('openingMediaShown');
             
-            console.log('📋 Session check - alreadyShown:', alreadyShown);
+            console.log('📋 Storage check - alreadyShown:', alreadyShown);
             
             if (alreadyShown === 'true') {
-                // כבר הוצג - הסתר את המסך ואל תציג אותו
-                console.log('✅ Opening Media already shown - SKIPPING');
+                // כבר הוצג - הסתר את המסך, לא להפעיל מדיה קולית
+                console.log('✅ Opening Media already shown - SKIPPING media and audio');
                 if (openingMedia) {
                     openingMedia.style.display = 'none';
                 }
                 document.body.style.overflow = 'auto';
+                
+                // לא להפעיל את האודיו!
+                if (openingAudio) {
+                    openingAudio.pause();
+                    openingAudio.currentTime = 0;
+                }
+                
                 return; // חשוב! צא מהפונקציה
             }
             
