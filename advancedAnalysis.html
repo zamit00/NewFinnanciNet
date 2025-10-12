@@ -846,6 +846,14 @@
                 padding: 12px !important;
             }
         }
+        @media (max-width: 768px) {
+        #qualityAnalysis{
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+            }
+            
+        }
     </style>
 </head>
 <body>
@@ -2100,6 +2108,7 @@
                     <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3);">
                         <div style="font-size: 0.95rem; opacity: 0.9;">
                             <strong>סך כל החיסכון:</strong> ₪${totalAmount.toLocaleString('he-IL')}
+                            <div class="small-text" style="font-size: 0.7rem; opacity: 0.9;">לא כולל קרנות ותיקות</div>
                         </div>
                     </div>
                 </div>
