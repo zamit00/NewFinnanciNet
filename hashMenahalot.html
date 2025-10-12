@@ -2082,6 +2082,36 @@ function pdfDo() {
             }
         });
 
+        // Ensure nav dropdown links work properly
+        document.querySelectorAll('#hashMenahalotProductsDropdown a, #hashMenahalotCalculatorDropdown a, #hashMenahalotToolsDropdown a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Don't prevent default - let the link work normally
+                e.stopPropagation();
+                
+                // Close dropdown after a short delay to allow navigation
+                setTimeout(() => {
+                    const allDropdowns = ['hashMenahalotProductsDropdown', 'hashMenahalotCalculatorDropdown', 'hashMenahalotToolsDropdown'];
+                    allDropdowns.forEach(dropdownId => {
+                        const dropdown = document.getElementById(dropdownId);
+                        const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
+                        
+                        if (dropdown) {
+                            dropdown.classList.remove('show');
+                        }
+                        if (dropdownLink) {
+                            if (dropdownId.includes('Products')) {
+                                dropdownLink.innerHTML = 'מוצרים ותשואות ▼';
+                            } else if (dropdownId.includes('Calculator')) {
+                                dropdownLink.innerHTML = 'מחשבונים ▼';
+                            } else if (dropdownId.includes('Tools')) {
+                                dropdownLink.innerHTML = 'כלי השוואה ▼';
+                            }
+                        }
+                    });
+                }, 100);
+            });
+        });
+
     </script>
 
     <!-- Modal Container -->

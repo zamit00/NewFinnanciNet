@@ -116,7 +116,7 @@ function hashev(x) {
     if(!x2){x2=0};
     if(x1===0 && x2===0){hatraaRibit('הוסף סכומי השקעה')
         var element=document.getElementById('dropdown-schom')
-        element.style.display='flex' ;               
+        if(element){element.style.display='flex' ;}               
         
         var rd1=document.getElementById('rdbutton1');
         var rd2=document.getElementById('rdbutton2');

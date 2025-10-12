@@ -1399,6 +1399,36 @@
             }
         });
 
+        // Ensure nav dropdown links work properly
+        document.querySelectorAll('#advProductsDropdown a, #advCalculatorDropdown a, #advToolsDropdown a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Don't prevent default - let the link work normally
+                e.stopPropagation();
+                
+                // Close dropdown after a short delay to allow navigation
+                setTimeout(() => {
+                    const allDropdowns = ['advProductsDropdown', 'advCalculatorDropdown', 'advToolsDropdown'];
+                    allDropdowns.forEach(dropdownId => {
+                        const dropdown = document.getElementById(dropdownId);
+                        const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
+                        
+                        if (dropdown) {
+                            dropdown.classList.remove('show');
+                        }
+                        if (dropdownLink) {
+                            if (dropdownId.includes('Products')) {
+                                dropdownLink.innerHTML = 'מוצרים ותשואות ▼';
+                            } else if (dropdownId.includes('Calculator')) {
+                                dropdownLink.innerHTML = 'מחשבונים ▼';
+                            } else if (dropdownId.includes('Tools')) {
+                                dropdownLink.innerHTML = 'כלי השוואה ▼';
+                            }
+                        }
+                    });
+                }, 100);
+            });
+        });
+
         // Hamburger menu functionality
         document.addEventListener('DOMContentLoaded', function() {
             // טעינת כל הנתונים הגלובליים (dataIndicators)

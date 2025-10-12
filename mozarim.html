@@ -715,6 +715,36 @@
             }
         });
 
+        // Ensure nav dropdown links work properly
+        document.querySelectorAll('#mozarimProductsDropdown a, #mozarimCalculatorDropdown a, #mozarimToolsDropdown a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Don't prevent default - let the link work normally
+                e.stopPropagation();
+                
+                // Close dropdown after a short delay to allow navigation
+                setTimeout(() => {
+                    const allDropdowns = ['mozarimProductsDropdown', 'mozarimCalculatorDropdown', 'mozarimToolsDropdown'];
+                    allDropdowns.forEach(dropdownId => {
+                        const dropdown = document.getElementById(dropdownId);
+                        const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
+                        
+                        if (dropdown) {
+                            dropdown.classList.remove('show');
+                        }
+                        if (dropdownLink) {
+                            if (dropdownId.includes('Products')) {
+                                dropdownLink.innerHTML = 'מוצרים ותשואות ▼';
+                            } else if (dropdownId.includes('Calculator')) {
+                                dropdownLink.innerHTML = 'מחשבונים ▼';
+                            } else if (dropdownId.includes('Tools')) {
+                                dropdownLink.innerHTML = 'כלי השוואה ▼';
+                            }
+                        }
+                    });
+                }, 100);
+            });
+        });
+
         // Hamburger menu functionality
         document.addEventListener('DOMContentLoaded', function() {
             const hamburger = document.getElementById('hamburger');
@@ -1013,8 +1043,8 @@
 
             .nav-dropdown .dropdown-content a {
                 padding: 8px 16px;
-                border-bottom: 1px solid #eee;
                 font-size: 1rem;
+                text-align: center;
             }
 
             .nav-dropdown .dropdown-content.show {
@@ -1022,6 +1052,9 @@
                 opacity: 1;
                 visibility: visible;
                 padding-top: 15px;
+            }
+            .nav-dropdown .dropdown-content.show a {
+                border-bottom: none;
             }
         }
     </style>

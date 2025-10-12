@@ -251,28 +251,6 @@
 
      
 @media only screen and (min-width: 600px) {
-  
-   /* Mobile dropdown adjustments */
-   .nav-dropdown .dropdown-content {
-      position: relative;
-      display: none;
-      min-width: auto;
-      width: 100%;
-      box-shadow: none;
-      border: none;
-      background: transparent;
-      margin-top: 10px;
-    }
-
-    .nav-dropdown .dropdown-content a {
-      padding: 8px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      font-size: 1rem;
-    }
-
-    .nav-dropdown .dropdown-content.show {
-      display: block;
-    }
     
   .alltoz {
   display:none;}
@@ -442,31 +420,39 @@ box-sizing: border-box;margin: 0%;padding: 0%;
   }
 
   .nav-dropdown .dropdown-content {
-    display: none;
+    display: flex;
+    flex-direction: column;
     position: absolute;
-    top: 100%;
+    top: calc(100% - 2px);
     right: 0;
     background: white;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+    box-shadow: none;
     min-width: 220px;
     z-index: 1001;
+    margin-top: 0;
+    border-top: none;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
   }
 
   .nav-dropdown .dropdown-content a {
-    color: black;
+    color: #333;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
     transition: background-color 0.3s ease;
     font-size: 14px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #eee;
   }
 
   .nav-dropdown .dropdown-content a:hover {
-    background-color: var(--card);
-    color: blue;
+    background-color: #f5f5f5;
+    color: #667eea;
   }
 
   .nav-dropdown .dropdown-content a:last-child {
@@ -474,13 +460,17 @@ box-sizing: border-box;margin: 0%;padding: 0%;
   }
 
   .nav-dropdown .dropdown-content.show {
-    display: block;
+    max-height: 500px;
+    opacity: 1;
+    visibility: visible;
   }
   
-  /* Desktop hover behavior */
+  /* Desktop hover behavior - only when not using JavaScript */
   @media (min-width: 769px) {
-    .nav-dropdown:hover .dropdown-content {
-      display: block;
+    .nav-dropdown:hover .dropdown-content:not(.show) {
+      max-height: 500px;
+      opacity: 1;
+      visibility: visible;
     }
   }
 
@@ -536,6 +526,7 @@ box-sizing: border-box;margin: 0%;padding: 0%;
    @media (max-width: 768px) {
     .hamburger {
       display: flex;
+      padding-left: 5%;
     }
     body{width: 100%;margin: 0%;padding:5% 0%;box-sizing: border-box;}
        .nav-container { padding: 1rem 0;width: 100%;margin: 0%; }
@@ -545,7 +536,56 @@ box-sizing: border-box;margin: 0%;padding: 0%;
        
        .nav-menu li { margin: 1rem 0; }
        .nav-menu a { font-size: 1.2rem; }
-   }
+       .nav-menu.active li,.nav-menu.active li a{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+       }
+       
+       /* Mobile nav-dropdown adjustments */
+       .nav-dropdown .dropdown-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: auto;
+        width: clamp(200px, 100%, 270px);
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden;
+        border: none;
+        background: white;
+        margin-top: 5px;
+        top: auto;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 0;
+        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, padding-top 0.3s ease;
+       }
+
+       .nav-dropdown .dropdown-content a {
+        padding: 8px 16px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        font-size: 1rem;
+       }
+
+       .nav-dropdown .dropdown-content.show {
+        max-height: 500px;
+        opacity: 1;
+        visibility: visible;
+        padding-top: 15px;
+       }
+       .forForm{
+        display: flex   !important;
+        flex-direction: column !important;
+        align-items: center !important;      
+    
+       }
+    }
 
    </style>
    
@@ -624,23 +664,7 @@ box-sizing: border-box;margin: 0%;padding: 0%;
 <div class="forBigScreen">
     <div class="forForm">
 		<form class="form-container">
-      <!-- <div class="baalrishayon" onclick="window.parent.yossi()"
-      style="width: 100%;
-      box-sizing: border-box;
-      margin: 0%;
-      padding: 10px;
-      height: 30px;
-      font-size: 16px;
-      text-align: center;
-      background-color: blue;
-      position: relative;
-      top: 0%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;overflow-y: hidden;">צור קשר עם סוכן פנסיוני
-		&nbsp;<i class="fa fa-phone"></i></div> -->
+      
 			<div class='closewindow' onclick='window.parent.showMachshevonim();'></div>
 			<h3>מחשבון ריבית דריבית </h3> 
 			<label>בחר סוג השקעה:</label>
@@ -727,6 +751,54 @@ box-sizing: border-box;margin: 0%;padding: 0%;
 	
 
     <script>
+
+async function showProductTables(productType) {
+            // Hide other sections
+            const productsSection = document.getElementById('products');
+            if (!productsSection) return;
+            
+            // Show products section
+            productsSection.style.display = 'block';
+            
+            // Scroll to products section
+            productsSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Map product type to internal name and call appropriate function
+            const productMap = {
+                'קרנות השתלמות': 'קרנות השתלמות',
+                'קופות גמל': 'תגמולים ואישית לפיצויים',
+                'קופות גמל להשקעה': 'קופת גמל להשקעה',
+                'חסכון לילד': 'קופת גמל להשקעה - חסכון לילד',
+                'פוליסות חסכון': 'פוליסות חסכון',
+                'קרנות פנסיה חדשות': 'קרנות חדשות'
+            };
+            
+            const internalName = productMap[productType];
+            
+            if (productType === 'קרנות פנסיה חדשות') {
+                // Call pension function
+                if (typeof maslulimP === 'function') {
+                    await maslulimP(1, internalName, 0);
+                }
+            } else {
+                // Call regular products function
+                if (typeof maslulim === 'function') {
+                    await maslulim(1, internalName, 0);
+                }
+            }
+            
+            // Close mobile menu if open
+            const navMenu = document.getElementById('navMenu');
+            const hamburger = document.getElementById('hamburger');
+            if (navMenu && hamburger) {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        }
+
+
+
+
 const inputs = document.querySelectorAll(".inputNuber");
  // Hamburger menu functionality
  function toggleNav() {
@@ -738,17 +810,7 @@ const inputs = document.querySelectorAll(".inputNuber");
                 navMenu.classList.toggle('active');
             }
         }
-        // Add click handler for hamburger
-        const hamburger = document.getElementById('hamburger');
-        if (hamburger) {
-            hamburger.addEventListener('click', function() {
-                this.classList.toggle('active');
-                const navMenu = document.getElementById('navMenu');
-                if (navMenu) {
-                    navMenu.classList.toggle('active');
-                }
-            });
-        }
+        
  document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('navMenu');
@@ -758,9 +820,12 @@ const inputs = document.querySelectorAll(".inputNuber");
         document.querySelectorAll('.nav-menu a').forEach(link => {
             link.addEventListener('click', function(e) {
                 // Don't close menu for dropdown toggle links
-                if (this.hasAttribute('onclick') && this.getAttribute('onclick').includes('toggleRibitCalculatorDropdown')) {
+                if (this.hasAttribute('onclick') && this.getAttribute('onclick').includes('toggleRibitCalculatorDropdown')
+                || this.hasAttribute('onclick') && this.getAttribute('onclick').includes('toggleRibitToolsDropdown')
+                || this.hasAttribute('onclick') && this.getAttribute('onclick').includes('toggleRibitProductsDropdown')) {
                     return; // Let the dropdown function handle it
                 }
+
                 
                 // Don't prevent default for regular links
                 if (this.getAttribute('href') && this.getAttribute('href') !== '#') {
@@ -828,6 +893,10 @@ function toggleRibitProductsDropdown(event) {
     } else {
         dropdown.classList.add('show');
         link.innerHTML = 'מוצרים ותשואות ▲';
+        link.style.marginLeft = 'auto';
+        link.style.marginRight = 'auto';
+        link.style.textAlign = 'center';
+        link.style.display = 'block';
     }
     return false;
 }
@@ -861,6 +930,10 @@ function toggleRibitCalculatorDropdown(event) {
     } else {
         dropdown.classList.add('show');
         link.innerHTML = 'מחשבונים ▲';
+        link.style.marginLeft = 'auto';
+        link.style.marginRight = 'auto';
+        link.style.textAlign = 'center';
+        link.style.display = 'block';
     }
     
     return false;
@@ -895,6 +968,10 @@ function toggleRibitToolsDropdown(event) {
     } else {
         dropdown.classList.add('show');
         link.innerHTML = 'כלי השוואה ▲';
+        link.style.marginLeft = 'auto';
+        link.style.marginRight = 'auto';
+        link.style.textAlign = 'center';
+        link.style.display = 'block';
     }
     
     return false;
@@ -916,6 +993,7 @@ document.addEventListener('click', function(event) {
                     parentLink.innerHTML = 'כלי השוואה ▼';
                 }
             }
+            
         }
     });
 });
@@ -945,6 +1023,36 @@ document.addEventListener('click', function(event) {
         if (navDropdown) navDropdown.classList.remove('show');
         if (navLink) navLink.innerHTML = 'כלי השוואה ▼';
     }
+});
+
+// Ensure nav dropdown links work properly
+document.querySelectorAll('#ribitProductsDropdown a, #ribitCalculatorDropdown a, #ribitToolsDropdown a').forEach(link => {
+    link.addEventListener('click', function(e) {
+        // Don't prevent default - let the link work normally
+        e.stopPropagation();
+        
+        // Close dropdown after a short delay to allow navigation
+        setTimeout(() => {
+            const allDropdowns = ['ribitProductsDropdown', 'ribitCalculatorDropdown', 'ribitToolsDropdown'];
+            allDropdowns.forEach(dropdownId => {
+                const dropdown = document.getElementById(dropdownId);
+                const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (dropdown) {
+                    dropdown.classList.remove('show');
+                }
+                if (dropdownLink) {
+                    if (dropdownId.includes('Products')) {
+                        dropdownLink.innerHTML = 'מוצרים ותשואות ▼';
+                    } else if (dropdownId.includes('Calculator')) {
+                        dropdownLink.innerHTML = 'מחשבונים ▼';
+                    } else if (dropdownId.includes('Tools')) {
+                        dropdownLink.innerHTML = 'כלי השוואה ▼';
+                    }
+                }
+            });
+        }, 100);
+    });
 });
 
 // Hamburger menu functionality
