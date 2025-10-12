@@ -6710,14 +6710,14 @@
                                     
                                     const calculatedValue = Math.pow(1.04, years) * originalTotalValue;
                                     
-                                    sumSugMutzar[key][i] = calculatedValue.toLocaleString('he-IL')+" "+'₪'
+                                    sumSugMutzar[key][i] = calculatedValue.toLocaleString('he-IL', {maximumFractionDigits: 0})+" "+'₪'
                                 }
                                 else {
                                     sumSugMutzar[key][i]='לא רלבנטי'
                                 }
                             }
                             else{
-                                sumSugMutzar[key][i]=sumSugMutzar[key][i].toLocaleString('he-IL')+" "+'₪'
+                                sumSugMutzar[key][i]=sumSugMutzar[key][i].toLocaleString('he-IL', {maximumFractionDigits: 0})+" "+'₪'
                             }
                         }
                         
@@ -6821,14 +6821,14 @@
                                     
                                     const calculatedValue = Math.pow(1.04, years) * originalTotalValue;
                                     
-                                    sumSugMutzar[key][i] = calculatedValue.toLocaleString('he-IL')+" "+'₪'
+                                    sumSugMutzar[key][i] = calculatedValue.toLocaleString('he-IL', {maximumFractionDigits: 0})+" "+'₪'
                                 }
                                 else {
                                     sumSugMutzar[key][i]='לא רלבנטי'
                                 }
                             }
                             else{
-                                sumSugMutzar[key][i]=sumSugMutzar[key][i].toLocaleString('he-IL')+" "+'₪'
+                                sumSugMutzar[key][i]=sumSugMutzar[key][i].toLocaleString('he-IL', {maximumFractionDigits: 0})+" "+'₪'
                             }
                         }
                         tableHTML += `
@@ -6993,7 +6993,9 @@
                 pathwaySummary.forEach(item => {
                     const formattedAmount = new Intl.NumberFormat('he-IL', {
                         style: 'currency',
-                        currency: 'ILS'
+                        currency: 'ILS',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
                     }).format(item.totalSchumTzvira).replace('₪', '₪ ').trim();
                     
                     totalSum += item.totalSchumTzvira;
@@ -7018,7 +7020,9 @@
                 // הוספת כרטיס סך הכל
                 const formattedTotalSum = new Intl.NumberFormat('he-IL', {
                     style: 'currency',
-                    currency: 'ILS'
+                    currency: 'ILS',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
                 }).format(totalSum).replace('₪', '₪ ').trim();
                 
                 tableHTML += `
@@ -7048,7 +7052,9 @@
                 pathwaySummary.forEach(item => {
                     const formattedAmount = new Intl.NumberFormat('he-IL', {
                         style: 'currency',
-                        currency: 'ILS'
+                        currency: 'ILS',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
                     }).format(item.totalSchumTzvira).replace('₪', '₪ ').trim();
                     
                     totalSum += item.totalSchumTzvira;
@@ -7065,7 +7071,9 @@
                 // הוספת שורת סך הכל
                 const formattedTotalSum = new Intl.NumberFormat('he-IL', {
                     style: 'currency',
-                    currency: 'ILS'
+                    currency: 'ILS',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
                 }).format(totalSum).replace('₪', '₪ ').trim();
                 
                 tableHTML += `
