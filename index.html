@@ -3978,7 +3978,11 @@
          // שמירת הקבצים ב אוסף uploadedFiles
         function handleFiles(files) {
             console.log('📁 handleFiles called with', files.length, 'files');
-            console.log('📂 Current uploadedFiles count:', uploadedFiles.length);
+            console.log('📂 Current uploadedFiles count BEFORE reset:', uploadedFiles.length);
+            
+            // ⚡ RESET uploadedFiles - don't accumulate from previous uploads
+            uploadedFiles = [];
+            console.log('🔄 uploadedFiles reset to empty array');
             
             Array.from(files).forEach(file => {
                 if (isValidFile(file)) {
@@ -4084,6 +4088,7 @@
             
             // ⚡ RESET ALL GLOBAL VARIABLES BEFORE PROCESSING
             taarichLeyda = '';
+            dataMislaka = null;
             sumSugMutzar = {
                 '1': [0, 0,0,0,0], '2': [0, 0,0,0,0], '2_1': [0, 0,0,0,0], '2_2': [0, 0,0,0,0], '3': [0, 0,0,0,0],
                 '4': [0, 0,0,0,0], '5': [0, 0,0,0,0], '6': [0, 0,0,0,0], '7': [0, 0,0,0,0], '8': [0, 0,0,0,0],
@@ -4099,7 +4104,15 @@
             masluleiHashkaa = [];
             sheabudIkulHalvaa = [];
             
+            // Destroy existing chart if any
+            if (myChart) {
+                myChart.destroy();
+                myChart = null;
+            }
+            
             console.log('✅ All variables RESET. taarichLeyda:', taarichLeyda);
+            console.log('✅ dataMislaka:', dataMislaka);
+            console.log('✅ myChart:', myChart);
             
             uploadedFilesTitle.style.display = 'none';
             filesList.style.display = 'none';
@@ -5363,8 +5376,8 @@
                         myChart = null;
                     }
                     
-                    // Show the file upload section again for next upload
-                    document.getElementById('fileUpload').style.display = 'block';
+                    // Hide the file upload section
+                    document.getElementById('fileUpload').style.display = 'none';
                     
                     // Scroll back to top
                     window.scrollTo({ top: 0, behavior: 'smooth' });
