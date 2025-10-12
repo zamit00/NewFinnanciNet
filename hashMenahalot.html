@@ -1949,6 +1949,15 @@ function pdfDo() {
             document.querySelectorAll('.dropdown-content.show').forEach(d => {
                 if (d !== dropdown) {
                     d.classList.remove('show');
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink) {
+                        if (d.id === 'hashMenahalotCalculatorDropdown') {
+                            parentLink.innerHTML = 'מחשבונים ▼';
+                        } else if (d.id === 'hashMenahalotToolsDropdown') {
+                            parentLink.innerHTML = 'כלי השוואה ▼';
+                        }
+                    }
                 }
             });
             
@@ -1962,7 +1971,6 @@ function pdfDo() {
             return false;
         }
         
-        // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט - מחשבונים
         function toggleHashMenahalotCalculatorDropdown(event) {
             event.preventDefault();
             event.stopPropagation();
@@ -1970,10 +1978,18 @@ function pdfDo() {
             const dropdown = document.getElementById('hashMenahalotCalculatorDropdown');
             const link = event.target;
             
-            // Close other dropdowns first
             document.querySelectorAll('.dropdown-content.show').forEach(d => {
                 if (d !== dropdown) {
                     d.classList.remove('show');
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink) {
+                        if (d.id === 'hashMenahalotProductsDropdown') {
+                            parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                        } else if (d.id === 'hashMenahalotToolsDropdown') {
+                            parentLink.innerHTML = 'כלי השוואה ▼';
+                        }
+                    }
                 }
             });
             
@@ -1984,9 +2000,9 @@ function pdfDo() {
                 dropdown.classList.add('show');
                 link.innerHTML = 'מחשבונים ▲';
             }
+            return false;
         }
         
-        // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט - כלי השוואה
         function toggleHashMenahalotToolsDropdown(event) {
             event.preventDefault();
             event.stopPropagation();
@@ -1994,10 +2010,18 @@ function pdfDo() {
             const dropdown = document.getElementById('hashMenahalotToolsDropdown');
             const link = event.target;
             
-            // Close other dropdowns first
             document.querySelectorAll('.dropdown-content.show').forEach(d => {
                 if (d !== dropdown) {
                     d.classList.remove('show');
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink) {
+                        if (d.id === 'hashMenahalotProductsDropdown') {
+                            parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                        } else if (d.id === 'hashMenahalotCalculatorDropdown') {
+                            parentLink.innerHTML = 'מחשבונים ▼';
+                        }
+                    }
                 }
             });
             
@@ -2008,45 +2032,56 @@ function pdfDo() {
                 dropdown.classList.add('show');
                 link.innerHTML = 'כלי השוואה ▲';
             }
+            return false;
         }
 
-        // Close calculator dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            const dropdown = document.getElementById('hashMenahalotCalculatorDropdown');
-            const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
+        // Close nav dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('.dropdown-content.show').forEach(d => {
+                if (!d.contains(event.target)) {
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink && !parentLink.contains(event.target)) {
+                        d.classList.remove('show');
+                        if (d.id === 'hashMenahalotProductsDropdown') {
+                            parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                        } else if (d.id === 'hashMenahalotCalculatorDropdown') {
+                            parentLink.innerHTML = 'מחשבונים ▼';
+                        } else if (d.id === 'hashMenahalotToolsDropdown') {
+                            parentLink.innerHTML = 'כלי השוואה ▼';
+                        }
+                    }
+                }
+            });
+        });
+
+        // Close nav dropdown when clicking on links
+        document.addEventListener('click', function(event) {
+            if (event.target.closest('#hashMenahalotProductsDropdown a')) {
+                const navDropdown = document.getElementById('hashMenahalotProductsDropdown');
+                const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'מוצרים ותשואות ▼';
+            }
             
-            if (dropdown && dropdownLink && !dropdownLink.contains(e.target) && !dropdown.contains(e.target)) {
-                dropdown.classList.remove('show');
-                dropdownLink.innerHTML = 'מחשבונים ▼';
+            if (event.target.closest('#hashMenahalotCalculatorDropdown a')) {
+                const navDropdown = document.getElementById('hashMenahalotCalculatorDropdown');
+                const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'מחשבונים ▼';
+            }
+            
+            if (event.target.closest('#hashMenahalotToolsDropdown a')) {
+                const navDropdown = document.getElementById('hashMenahalotToolsDropdown');
+                const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'כלי השוואה ▼';
             }
         });
 
-        // Ensure dropdown links work properly
-        document.querySelectorAll('#hashMenahalotCalculatorDropdown a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.stopPropagation();
-                
-                setTimeout(() => {
-                    const dropdown = document.getElementById('hashMenahalotCalculatorDropdown');
-                    const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
-                    
-                    if (dropdown) {
-                        dropdown.classList.remove('show');
-                    }
-                    if (dropdownLink) {
-                        dropdownLink.innerHTML = 'מחשבונים ▼';
-                    }
-                    
-                    // Close mobile menu after navigation
-                    if (window.innerWidth <= 768) {
-                        const navMenu = document.getElementById('navMenu');
-                        const hamburger = document.getElementById('hamburger');
-                        if (navMenu) navMenu.classList.remove('active');
-                        if (hamburger) hamburger.classList.remove('active');
-                    }
-                }, 100);
-            });
-        });
     </script>
 
     <!-- Modal Container -->

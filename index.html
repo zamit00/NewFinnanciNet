@@ -3318,7 +3318,7 @@
 <body dir="rtl">
     
     <!-- Background Audio (plays throughout the site) -->
-    <audio id="openingAudio" loop>
+    <audio id="openingAudio" >
         <source src="openningMedia.wav" type="audio/wav">
     </audio>
     
@@ -3348,7 +3348,7 @@
         <button class="close-opening-btn" onclick="closeOpeningMediaWithMusic()" title="סגור">
             <i class="fas fa-times"></i>
         </button>
-        <div class="opening-content">
+        <div id="openingContent" class="opening-content">
             <img src="https://i.postimg.cc/L4YLr22D/logoxnew.png" alt="פיננסי-נט" class="opening-logo">
             <div class="opening-text">ברוכים הבאים לפיננסי-נט</div>
             <div class="opening-subtext">המקום שלך לניהול נכון של הכסף הפנסיוני</div>
@@ -3369,7 +3369,8 @@
                 </div>
             </div>
             
-            <button class="skip-btn" onclick="closeOpeningMediaWithMusic()">
+            <button class="skip-btn" onclick="closeOpeningMediaWithMusic()
+            document.getElementById('openingMedia').style.display = 'none';">
                 <i class="fas fa-arrow-left" style="margin-left: 10px;"></i>
                 כניסה לאתר
             </button>
@@ -8111,6 +8112,8 @@
                 stopBtn.style.display = 'none';
             }
             document.getElementById('stopMedia').style.display = 'none';
+            document.getElementById('openingMedia').innerHTML =` 
+            <source src="#" type="audio/wav">`
         }
         // Close with user interaction (fixes autoplay block)
         function closeOpeningMediaWithMusic() {

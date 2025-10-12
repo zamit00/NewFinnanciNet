@@ -801,6 +801,15 @@
             document.querySelectorAll('.dropdown-content.show').forEach(d => {
                 if (d !== dropdown) {
                     d.classList.remove('show');
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink) {
+                        if (d.id === 'hasifotCalculatorDropdown') {
+                            parentLink.innerHTML = 'מחשבונים ▼';
+                        } else if (d.id === 'hasifotToolsDropdown') {
+                            parentLink.innerHTML = 'כלי השוואה ▼';
+                        }
+                    }
                 }
             });
             
@@ -814,7 +823,6 @@
             return false;
         }
         
-        // Calculator dropdown functionality
         function toggleHasifotCalculatorDropdown(event) {
             event.preventDefault();
             event.stopPropagation();
@@ -823,10 +831,18 @@
             const dropdown = document.getElementById('hasifotCalculatorDropdown');
             const link = event.target;
             
-            // Close other dropdowns first
             document.querySelectorAll('.dropdown-content.show').forEach(d => {
                 if (d !== dropdown) {
                     d.classList.remove('show');
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink) {
+                        if (d.id === 'hasifotProductsDropdown') {
+                            parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                        } else if (d.id === 'hasifotToolsDropdown') {
+                            parentLink.innerHTML = 'כלי השוואה ▼';
+                        }
+                    }
                 }
             });
             
@@ -837,9 +853,9 @@
                 dropdown.classList.add('show');
                 link.innerHTML = 'מחשבונים ▲';
             }
+            return false;
         }
         
-        // Tools dropdown functionality
         function toggleHasifotToolsDropdown(event) {
             event.preventDefault();
             event.stopPropagation();
@@ -848,10 +864,18 @@
             const dropdown = document.getElementById('hasifotToolsDropdown');
             const link = event.target;
             
-            // Close other dropdowns first
             document.querySelectorAll('.dropdown-content.show').forEach(d => {
                 if (d !== dropdown) {
                     d.classList.remove('show');
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink) {
+                        if (d.id === 'hasifotProductsDropdown') {
+                            parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                        } else if (d.id === 'hasifotCalculatorDropdown') {
+                            parentLink.innerHTML = 'מחשבונים ▼';
+                        }
+                    }
                 }
             });
             
@@ -862,44 +886,54 @@
                 dropdown.classList.add('show');
                 link.innerHTML = 'כלי השוואה ▲';
             }
+            return false;
         }
 
-        // Close calculator dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            const dropdown = document.getElementById('hasifotCalculatorDropdown');
-            const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
-            
-            if (dropdown && dropdownLink && !dropdownLink.contains(e.target) && !dropdown.contains(e.target)) {
-                dropdown.classList.remove('show');
-                dropdownLink.innerHTML = 'מחשבונים ▼';
-            }
+        // Close nav dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('.dropdown-content.show').forEach(d => {
+                if (!d.contains(event.target)) {
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink && !parentLink.contains(event.target)) {
+                        d.classList.remove('show');
+                        if (d.id === 'hasifotProductsDropdown') {
+                            parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                        } else if (d.id === 'hasifotCalculatorDropdown') {
+                            parentLink.innerHTML = 'מחשבונים ▼';
+                        } else if (d.id === 'hasifotToolsDropdown') {
+                            parentLink.innerHTML = 'כלי השוואה ▼';
+                        }
+                    }
+                }
+            });
         });
 
-        // Ensure dropdown links work properly
-        document.querySelectorAll('#hasifotCalculatorDropdown a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.stopPropagation();
+        // Close nav dropdown when clicking on links
+        document.addEventListener('click', function(event) {
+            if (event.target.closest('#hasifotProductsDropdown a')) {
+                const navDropdown = document.getElementById('hasifotProductsDropdown');
+                const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
                 
-                setTimeout(() => {
-                    const dropdown = document.getElementById('hasifotCalculatorDropdown');
-                    const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
-                    
-                    if (dropdown) {
-                        dropdown.classList.remove('show');
-                    }
-                    if (dropdownLink) {
-                        dropdownLink.innerHTML = 'מחשבונים ▼';
-                    }
-                    
-                    // Close mobile menu after navigation
-                    if (window.innerWidth <= 768) {
-                        const navMenu = document.getElementById('navMenu');
-                        const hamburger = document.getElementById('hamburger');
-                        if (navMenu) navMenu.classList.remove('active');
-                        if (hamburger) hamburger.classList.remove('active');
-                    }
-                }, 100);
-            });
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'מוצרים ותשואות ▼';
+            }
+            
+            if (event.target.closest('#hasifotCalculatorDropdown a')) {
+                const navDropdown = document.getElementById('hasifotCalculatorDropdown');
+                const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'מחשבונים ▼';
+            }
+            
+            if (event.target.closest('#hasifotToolsDropdown a')) {
+                const navDropdown = document.getElementById('hasifotToolsDropdown');
+                const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'כלי השוואה ▼';
+            }
         });
     </script>
 

@@ -871,6 +871,15 @@
         document.querySelectorAll('.dropdown-content.show').forEach(d => {
             if (d !== dropdown) {
                 d.classList.remove('show');
+                const parentLi = d.closest('.nav-dropdown');
+                const parentLink = parentLi?.querySelector('a');
+                if (parentLink) {
+                    if (d.id === 'hashCalculatorDropdown') {
+                        parentLink.innerHTML = 'מחשבונים ▼';
+                    } else if (d.id === 'hashToolsDropdown') {
+                        parentLink.innerHTML = 'כלי השוואה ▼';
+                    }
+                }
             }
         });
         
@@ -884,7 +893,6 @@
         return false;
     }
     
-    // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט - מחשבונים
     function toggleHashCalculatorDropdown(event) {
         event.preventDefault();
         event.stopPropagation();
@@ -892,10 +900,18 @@
         const dropdown = document.getElementById('hashCalculatorDropdown');
         const link = event.target;
         
-        // Close other dropdowns first
         document.querySelectorAll('.dropdown-content.show').forEach(d => {
             if (d !== dropdown) {
                 d.classList.remove('show');
+                const parentLi = d.closest('.nav-dropdown');
+                const parentLink = parentLi?.querySelector('a');
+                if (parentLink) {
+                    if (d.id === 'hashProductsDropdown') {
+                        parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                    } else if (d.id === 'hashToolsDropdown') {
+                        parentLink.innerHTML = 'כלי השוואה ▼';
+                    }
+                }
             }
         });
         
@@ -906,9 +922,9 @@
             dropdown.classList.add('show');
             link.innerHTML = 'מחשבונים ▲';
         }
+        return false;
     }
     
-    // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט - כלי השוואה
     function toggleHashToolsDropdown(event) {
         event.preventDefault();
         event.stopPropagation();
@@ -916,10 +932,18 @@
         const dropdown = document.getElementById('hashToolsDropdown');
         const link = event.target;
         
-        // Close other dropdowns first
         document.querySelectorAll('.dropdown-content.show').forEach(d => {
             if (d !== dropdown) {
                 d.classList.remove('show');
+                const parentLi = d.closest('.nav-dropdown');
+                const parentLink = parentLi?.querySelector('a');
+                if (parentLink) {
+                    if (d.id === 'hashProductsDropdown') {
+                        parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                    } else if (d.id === 'hashCalculatorDropdown') {
+                        parentLink.innerHTML = 'מחשבונים ▼';
+                    }
+                }
             }
         });
         
@@ -930,49 +954,54 @@
             dropdown.classList.add('show');
             link.innerHTML = 'כלי השוואה ▲';
         }
+        return false;
     }
 
-    // Close calculator dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        const dropdown = document.getElementById('hashCalculatorDropdown');
-        const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
-        
-        // Don't close if clicking on dropdown links
-        if (dropdown && dropdownLink && !dropdownLink.contains(e.target) && !dropdown.contains(e.target)) {
-            dropdown.classList.remove('show');
-            dropdownLink.innerHTML = 'מחשבונים ▼';
-        }
-    });
-
-    // Ensure dropdown links work properly
-    document.querySelectorAll('#hashCalculatorDropdown a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Don't prevent default - let the link work normally
-            e.stopPropagation();
-            
-            // Close dropdown after a short delay to allow navigation
-            setTimeout(() => {
-                const dropdown = document.getElementById('hashCalculatorDropdown');
-                const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
-                
-                if (dropdown) {
-                    dropdown.classList.remove('show');
-                }
-                if (dropdownLink) {
-                    dropdownLink.innerHTML = 'מחשבונים ▼';
-                }
-                
-                // Close mobile menu after navigation
-                if (window.innerWidth <= 768) {
-                    const hamburger = document.getElementById('hamburger');
-                    const navMenu = document.getElementById('navMenu');
-                    if (hamburger && navMenu) {
-                        hamburger.classList.remove('active');
-                        navMenu.classList.remove('active');
+    // Close nav dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        document.querySelectorAll('.dropdown-content.show').forEach(d => {
+            if (!d.contains(event.target)) {
+                const parentLi = d.closest('.nav-dropdown');
+                const parentLink = parentLi?.querySelector('a');
+                if (parentLink && !parentLink.contains(event.target)) {
+                    d.classList.remove('show');
+                    if (d.id === 'hashProductsDropdown') {
+                        parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                    } else if (d.id === 'hashCalculatorDropdown') {
+                        parentLink.innerHTML = 'מחשבונים ▼';
+                    } else if (d.id === 'hashToolsDropdown') {
+                        parentLink.innerHTML = 'כלי השוואה ▼';
                     }
                 }
-            }, 100);
+            }
         });
+    });
+
+    // Close nav dropdown when clicking on links
+    document.addEventListener('click', function(event) {
+        if (event.target.closest('#hashProductsDropdown a')) {
+            const navDropdown = document.getElementById('hashProductsDropdown');
+            const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+            
+            if (navDropdown) navDropdown.classList.remove('show');
+            if (navLink) navLink.innerHTML = 'מוצרים ותשואות ▼';
+        }
+        
+        if (event.target.closest('#hashCalculatorDropdown a')) {
+            const navDropdown = document.getElementById('hashCalculatorDropdown');
+            const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+            
+            if (navDropdown) navDropdown.classList.remove('show');
+            if (navLink) navLink.innerHTML = 'מחשבונים ▼';
+        }
+        
+        if (event.target.closest('#hashToolsDropdown a')) {
+            const navDropdown = document.getElementById('hashToolsDropdown');
+            const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+            
+            if (navDropdown) navDropdown.classList.remove('show');
+            if (navLink) navLink.innerHTML = 'כלי השוואה ▼';
+        }
     });
     </script>
 

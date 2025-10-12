@@ -810,14 +810,13 @@ function toggleRibitProductsDropdown(event) {
     document.querySelectorAll('.dropdown-content.show').forEach(d => {
         if (d !== dropdown) {
             d.classList.remove('show');
-            // Reset text for other dropdowns
-            const parentLi = d.parentElement;
-            if (parentLi) {
-                const dropdownLink = parentLi.querySelector('a');
-                if (dropdownLink && dropdownLink.textContent.includes('מחשבונים')) {
-                    dropdownLink.innerHTML = 'מחשבונים ▼';
-                } else if (dropdownLink && dropdownLink.textContent.includes('כלי השוואה')) {
-                    dropdownLink.innerHTML = 'כלי השוואה ▼';
+            const parentLi = d.closest('.nav-dropdown');
+            const parentLink = parentLi?.querySelector('a');
+            if (parentLink) {
+                if (d.id === 'ribitCalculatorDropdown') {
+                    parentLink.innerHTML = 'מחשבונים ▼';
+                } else if (d.id === 'ribitToolsDropdown') {
+                    parentLink.innerHTML = 'כלי השוואה ▼';
                 }
             }
         }
@@ -833,7 +832,6 @@ function toggleRibitProductsDropdown(event) {
     return false;
 }
 
-// Calculator dropdown functionality
 function toggleRibitCalculatorDropdown(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -842,10 +840,18 @@ function toggleRibitCalculatorDropdown(event) {
     const dropdown = document.getElementById('ribitCalculatorDropdown');
     const link = event.target;
     
-    // Close other dropdowns first
     document.querySelectorAll('.dropdown-content.show').forEach(d => {
         if (d !== dropdown) {
             d.classList.remove('show');
+            const parentLi = d.closest('.nav-dropdown');
+            const parentLink = parentLi?.querySelector('a');
+            if (parentLink) {
+                if (d.id === 'ribitProductsDropdown') {
+                    parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                } else if (d.id === 'ribitToolsDropdown') {
+                    parentLink.innerHTML = 'כלי השוואה ▼';
+                }
+            }
         }
     });
     
@@ -860,7 +866,6 @@ function toggleRibitCalculatorDropdown(event) {
     return false;
 }
 
-// Tools dropdown functionality
 function toggleRibitToolsDropdown(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -869,10 +874,18 @@ function toggleRibitToolsDropdown(event) {
     const dropdown = document.getElementById('ribitToolsDropdown');
     const link = event.target;
     
-    // Close other dropdowns first
     document.querySelectorAll('.dropdown-content.show').forEach(d => {
         if (d !== dropdown) {
             d.classList.remove('show');
+            const parentLi = d.closest('.nav-dropdown');
+            const parentLink = parentLi?.querySelector('a');
+            if (parentLink) {
+                if (d.id === 'ribitProductsDropdown') {
+                    parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                } else if (d.id === 'ribitCalculatorDropdown') {
+                    parentLink.innerHTML = 'מחשבונים ▼';
+                }
+            }
         }
     });
     
@@ -887,71 +900,80 @@ function toggleRibitToolsDropdown(event) {
     return false;
 }
 
-// Close calculator dropdown when clicking outside
-document.addEventListener('click', function(e) {
-    const dropdown = document.getElementById('ribitCalculatorDropdown');
-    const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
+// Close nav dropdowns when clicking outside
+document.addEventListener('click', function(event) {
+    document.querySelectorAll('.dropdown-content.show').forEach(d => {
+        if (!d.contains(event.target)) {
+            const parentLi = d.closest('.nav-dropdown');
+            const parentLink = parentLi?.querySelector('a');
+            if (parentLink && !parentLink.contains(event.target)) {
+                d.classList.remove('show');
+                if (d.id === 'ribitProductsDropdown') {
+                    parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                } else if (d.id === 'ribitCalculatorDropdown') {
+                    parentLink.innerHTML = 'מחשבונים ▼';
+                } else if (d.id === 'ribitToolsDropdown') {
+                    parentLink.innerHTML = 'כלי השוואה ▼';
+                }
+            }
+        }
+    });
+});
+
+// Close nav dropdown when clicking on links
+document.addEventListener('click', function(event) {
+    if (event.target.closest('#ribitProductsDropdown a')) {
+        const navDropdown = document.getElementById('ribitProductsDropdown');
+        const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+        
+        if (navDropdown) navDropdown.classList.remove('show');
+        if (navLink) navLink.innerHTML = 'מוצרים ותשואות ▼';
+    }
     
-    // Don't close if clicking on dropdown links
-    if (dropdown && dropdownLink && !dropdownLink.contains(e.target) && !dropdown.contains(e.target)) {
-        dropdown.classList.remove('show');
-        dropdownLink.innerHTML = 'מחשבונים ▼';
+    if (event.target.closest('#ribitCalculatorDropdown a')) {
+        const navDropdown = document.getElementById('ribitCalculatorDropdown');
+        const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+        
+        if (navDropdown) navDropdown.classList.remove('show');
+        if (navLink) navLink.innerHTML = 'מחשבונים ▼';
+    }
+    
+    if (event.target.closest('#ribitToolsDropdown a')) {
+        const navDropdown = document.getElementById('ribitToolsDropdown');
+        const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+        
+        if (navDropdown) navDropdown.classList.remove('show');
+        if (navLink) navLink.innerHTML = 'כלי השוואה ▼';
     }
 });
 
-// Ensure dropdown links work properly
-document.querySelectorAll('#ribitCalculatorDropdown a').forEach(link => {
-    link.addEventListener('click', function(e) {
-        // Don't prevent default - let the link work normally
-        e.stopPropagation();
-        
-        // Close dropdown after a short delay to allow navigation
-        setTimeout(() => {
-            const dropdown = document.getElementById('ribitCalculatorDropdown');
-            const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
-            
-            if (dropdown) {
-                dropdown.classList.remove('show');
-            }
-            if (dropdownLink) {
-                dropdownLink.innerHTML = 'מחשבונים ▼';
-            }
-            
-            // Close mobile menu after navigation
-            if (window.innerWidth <= 768) {
-                const hamburger = document.getElementById('hamburger');
-                const navMenu = document.getElementById('navMenu');
-                if (hamburger && navMenu) {
-                    hamburger.classList.remove('active');
-                    navMenu.classList.remove('active');
-                }
-            }
-        }, 100);
-    });
-});
-
-// Additional fix for dropdown links
+// Hamburger menu functionality
 document.addEventListener('DOMContentLoaded', function() {
-    const dropdownLinks = document.querySelectorAll('.dropdown-content a');
-    dropdownLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Don't prevent default - let the link work normally
-            e.stopPropagation();
-            
-            // Close dropdown after a short delay to allow navigation
-            setTimeout(() => {
-                const dropdown = document.getElementById('calculatorDropdown');
-                const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
-                
-                if (dropdown) {
-                    dropdown.classList.remove('show');
-                }
-                if (dropdownLink) {
-                    dropdownLink.innerHTML = 'מחשבונים ▼';
-                }
-            }, 100);
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
+    
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navMenu.classList.toggle('active');
         });
-    });
+
+        document.addEventListener('click', function(e) {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
+
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && !this.hasAttribute('onclick')) {
+                    navMenu.classList.remove('active');
+                    hamburger.classList.remove('active');
+                }
+            });
+        });
+    }
 });
         
         inputs.forEach(inp => {
