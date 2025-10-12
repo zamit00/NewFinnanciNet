@@ -696,8 +696,9 @@
 
             .nav-dropdown .dropdown-content a {
                 padding: 8px 16px;
-                border-bottom: 1px solid #eee;
+                border-bottom: none;
                 font-size: 1rem;
+                text-align: center;
             }
 
             .nav-dropdown .dropdown-content.show {
@@ -1399,36 +1400,7 @@
             }
         });
 
-        // Hamburger menu functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const hamburger = document.getElementById('hamburger');
-            const navMenu = document.getElementById('navMenu');
-            
-            if (hamburger && navMenu) {
-                hamburger.addEventListener('click', function() {
-                    this.classList.toggle('active');
-                    navMenu.classList.toggle('active');
-                });
-
-                document.addEventListener('click', function(e) {
-                    if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-                        navMenu.classList.remove('active');
-                        hamburger.classList.remove('active');
-                    }
-                });
-
-                document.querySelectorAll('.nav-menu a').forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        if (window.innerWidth <= 768 && !this.hasAttribute('onclick')) {
-                            navMenu.classList.remove('active');
-                            hamburger.classList.remove('active');
-                        }
-                    });
-                });
-            }
-        });
-
-        // Ensure nav dropdown links work properly
+            // Ensure nav dropdown links work properly
         document.querySelectorAll('#advProductsDropdown a, #advCalculatorDropdown a, #advToolsDropdown a').forEach(link => {
             link.addEventListener('click', function(e) {
                 // Don't prevent default - let the link work normally

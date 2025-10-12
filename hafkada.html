@@ -240,94 +240,102 @@
     transform: rotate(-45deg) translate(7px, -6px);
   }
 
-   /* Mobile Navigation */
-   @media (max-width: 768px) {
-     .nav-container {
-       padding:  1.5rem;
-       margin-bottom: 0;
-       
-     }
+ /* Mobile Navigation */
+ @media (max-width: 768px) {
+            .nav-container {
+                padding:  1.5rem;
+            }
 
-    .logoimg{
-      width: 150px;
-      height: auto;
-    }
+            .logoimg {
+                width: 150px;
+                height: auto;
+            }
 
-     .nav-menu {
-       display: none;
-       position: fixed;
-       top: 70px;
-       right: -100%;
-       width: 100%;
-       height: calc(100vh - 70px);
-       background: white;
-       flex-direction: column;
-       justify-content: flex-start;
-       align-items: center;
-       padding-top: 1rem;
-       transition: right 0.3s ease;
-       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-       margin-top: 0;
-     }
-     .nav-container{
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1000;
-       
-     }
-    .nav-menu.active {
-      display: flex;
-      right: 0;
-      z-index: 1000;  
-    }
+            .nav-menu {
+                display: none;
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding-top: 1rem;
+                transition: right 0.3s ease;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            }
 
-    .hamburger {
-      display: flex;
-    }
+            .nav-menu.active {
+                display: flex;
+                right: 0;
+                z-index: 1000;
+                
+            }
 
-    .nav-menu li {
-      margin: 1rem 0;
-    }
+            .hamburger {
+                display: flex;
+            }
 
-    .nav-menu a {
-      font-size: 1.2rem;
-    }
+            .nav-menu li {
+                margin: 1rem 0;
+                display: flex;
+                justify-content: center;
+            }
+            
+            /* Hide WhatsApp desktop icon on mobile */
+            .whatsapp-desktop {
+                display: none !important;
+            }
 
-     /* Mobile dropdown adjustments */
-     .nav-dropdown .dropdown-content {
-       position: relative;
-       display: flex;
-       flex-direction: column;
-       min-width: auto;
-       width: clamp(200px, 100%, 270px);
-       max-height: 0;
-       opacity: 0;
-       visibility: hidden;
-       overflow: hidden;
-       border: none;
-       background: white;
-       margin-top: 5px;
-       top: auto;
-       border-radius: 15px;
-       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-       padding: 0;
-       transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, padding-top 0.3s ease;
-     }
+            .nav-menu a {
+                font-size: 1.2rem;
+            }
 
-    .nav-dropdown .dropdown-content a {
-      padding: 8px 16px;
-      border-bottom: 1px solid #eee;
-      font-size: 1rem;
-    }
+            .nav-dropdown {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-    .nav-dropdown .dropdown-content.show {
-      max-height: 500px;
-      opacity: 1;
-      visibility: visible;
-      padding-top: 15px;
-    }
-  }
+            .nav-dropdown .dropdown-content {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                min-width: auto;
+                width: clamp(200px, 90vw, 270px);
+                max-height: 0;
+                opacity: 0;
+                visibility: hidden;
+                overflow: hidden;
+                border: none;
+                background: white;
+                margin: 5px auto 0;
+                top: auto;
+                border-radius: 15px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                padding: 0;
+                transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+            }
+
+            .nav-dropdown .dropdown-content a {
+                padding: 8px 16px;
+                font-size: 1rem;
+                text-align: center;
+            }
+
+            .nav-dropdown .dropdown-content.show {
+                max-height: 500px;
+                opacity: 1;
+                visibility: visible;
+                padding-top: 15px;
+            }
+            .nav-dropdown .dropdown-content.show a {
+                border-bottom: none;
+            }
+        }
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -964,42 +972,7 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const hamburger = document.getElementById('hamburger');
-            const navMenu = document.getElementById('navMenu');
-            
-            if (hamburger && navMenu) {
-                // Close menu when clicking on a link (but allow navigation)
-                document.querySelectorAll('.nav-menu a').forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        // Only close menu for mobile, not for desktop links
-                        if (window.innerWidth <= 768) {
-                            hamburger.classList.remove('active');
-                            navMenu.classList.remove('active');
-                        }
-                    });
-                });
-
-                // Close menu when clicking outside
-                document.addEventListener('click', function(e) {
-                    if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
-                        hamburger.classList.remove('active');
-                        navMenu.classList.remove('active');
-                    }
-                });
-
-                // Handle dropdown clicks
-                const dropdown = document.querySelector('.nav-dropdown');
-                if (dropdown) {
-                    dropdown.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const dropdownContent = this.querySelector('.dropdown-content');
-                        dropdownContent.classList.toggle('show');
-                    });
-                }
-            }
-        });
-        
+          
         // Ensure navigation links work properly
         document.querySelectorAll('.nav-menu a[href]').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -1151,10 +1124,12 @@ document.addEventListener('click', function(event) {
 
 // Hamburger menu functionality
 document.addEventListener('DOMContentLoaded', function() {
+   
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('navMenu');
     
     if (hamburger && navMenu) {
+        
         hamburger.addEventListener('click', function() {
             this.classList.toggle('active');
             navMenu.classList.toggle('active');

@@ -622,7 +622,7 @@
 
             .nav-dropdown .dropdown-content a {
                 padding: 8px 16px;
-                border-bottom: 1px solid #eee;
+                border-bottom: none;
                 font-size: 1rem;
             }
 
@@ -845,20 +845,7 @@
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('navMenu');
 
-    if (hamburger && navMenu) {
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
-
-        // Close menu when clicking on a link
-        navMenu.addEventListener('click', (e) => {
-            if (e.target.tagName === 'A' && !e.target.onclick) {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-            }
-        });
-    }
+    
     
     // Products dropdown functionality
     function toggleHashProductsDropdown(event) {
