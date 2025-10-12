@@ -3968,20 +3968,31 @@
         // Button click handler
         selectFilesBtn.addEventListener('click', (e) => {
             e.stopPropagation();
+            // Reset file input to allow selecting same files again
+            fileInput.value = '';
+            console.log('🔄 File input reset before selection');
             fileInput.click();
             
         });
 
          // שמירת הקבצים ב אוסף uploadedFiles
         function handleFiles(files) {
+            console.log('📁 handleFiles called with', files.length, 'files');
+            console.log('📂 Current uploadedFiles count:', uploadedFiles.length);
+            
             Array.from(files).forEach(file => {
                 if (isValidFile(file)) {
                     uploadedFiles.push(file);
+                    console.log('✅ Added file:', file.name);
                 }
             });
+            
+            console.log('📊 Total uploaded files after adding:', uploadedFiles.length);
             displayUploadedFiles();
+            
             if(uploadedFiles.length > 0) {
-            setTimeout(() => {
+                console.log('⏳ Scheduling processFilesBtn click in 3.5s');
+                setTimeout(() => {
                     processFilesBtn.click();
                 }, 3500);
             }
@@ -4067,9 +4078,16 @@
 
         // Process files button
         processFilesBtn.addEventListener('click', async () => {
+            console.log('🚀 processFiles started');
+            console.log('📁 uploadedFiles count:', uploadedFiles.length);
+            console.log('📅 taarichLeyda value:', taarichLeyda);
+            
             uploadedFilesTitle.style.display = 'none';
             filesList.style.display = 'none';
-            if (uploadedFiles.length === 0) return;    
+            if (uploadedFiles.length === 0) {
+                console.warn('⚠️ No files to process!');
+                return;
+            }    
            
             fileDataDisplay.style.display = 'none';
             try {
@@ -4126,14 +4144,23 @@
                         if(misparCellulari===''){misparCellulari = cleanVal(yeshutLakoach ? getElementText(yeshutLakoach, 'MISPAR-CELLULARI') : '') || ''};
                         if(eMail===''){eMail = cleanVal(yeshutLakoach ? getElementText(yeshutLakoach, 'E-MAIL') : '') || ''};
                         if(misparZihuyLakoach===''){ misparZihuyLakoach = last9Digits(yeshutLakoach ? getElementText(yeshutLakoach, 'MISPAR-ZIHUY-LAKOACH') : '')};
-                        if(taarichLeyda===''){ taarichLeyda = cleanVal(yeshutLakoach ? getElementText(yeshutLakoach, 'TAARICH-LEYDA') : '');
+                        
+                        console.log('🔍 Checking taarichLeyda. Current value:', taarichLeyda);
+                        if(taarichLeyda===''){ 
+                            console.log('✅ taarichLeyda is empty, setting new value');
+                            taarichLeyda = cleanVal(yeshutLakoach ? getElementText(yeshutLakoach, 'TAARICH-LEYDA') : '');
+                            console.log('📅 New taarichLeyda value:', taarichLeyda);
+                            
                             const birthYear = parseInt(taarichLeyda.slice(0,4));
                             const currentYear = new Date().getFullYear();
                             gil = currentYear - birthYear;
+                            console.log('👤 Calculated age (gil):', gil);
                             
                             // שמירה ב-sessionStorage לשימוש בעמוד הניתוח המתקדם
                             sessionStorage.setItem('gilForAdvancedAnalysis', gil);
                             sessionStorage.setItem('ageToRetirementForAdvancedAnalysis', 67-Number(gil));
+                        } else {
+                            console.log('⚠️ taarichLeyda already has value, skipping:', taarichLeyda);
                         };
                         
                         pratimIshim={shemPrati,shemMishpacha,misparCellulari,eMail,misparZihuyLakoach,taarichLeyda,gil};
@@ -5168,13 +5195,17 @@
                 taarichLeyda=''; // Reset birth date variable
                 uploadedFilesDiv.style.display = 'none';
                 fileDataDisplay.style.display = 'none';
+                fileUploadArea.style.display = 'block'; // Show upload area again
                 document.getElementById('chartContainer').style.display = 'none';
                 dataMislaka = null; // Clear data variable
                 if (myChart) {
                     myChart.destroy();
                     myChart = null;
                 }
-                console.log('נתוני המסלקה נוקו:', dataMislaka);
+                console.log('🧹 Close and delete: All data cleared');
+                console.log('✅ taarichLeyda reset to:', taarichLeyda);
+                console.log('✅ uploadedFiles reset to:', uploadedFiles.length);
+                console.log('✅ fileInput.value reset to:', fileInput.value);
         });
 
         // Smooth scroll to file upload section
@@ -5271,6 +5302,10 @@
                     taarichLeyda=''; // Reset birth date variable
                     dataMislaka = null;myChart = null;
                     
+                    console.log('✅ All variables reset. taarichLeyda:', taarichLeyda);
+                    console.log('✅ uploadedFiles:', uploadedFiles.length);
+                    console.log('✅ fileInput.value:', fileInput.value);
+                    
                     // ניקוי sessionStorage של נתוני ניתוח מתקדם
                     sessionStorage.removeItem('gilForAdvancedAnalysis');
                     sessionStorage.removeItem('ageToRetirementForAdvancedAnalysis');
@@ -5293,12 +5328,12 @@
                     });
                     document.getElementById('sectionHeader').style.display = 'none';
                     document.getElementById('dataDisplayContainer').style.display = 'none';
-                    // Hide all containers
+                    // Hide all containers and show upload area
                     document.getElementById('uploadedFiles').style.display = 'none';
                     document.getElementById('fileDataDisplay').style.display = 'none';
                     document.getElementById('chartContainer').style.display = 'none';
                     document.getElementById('advancedAnalysis').style.display = 'none';
-                    document.getElementById('fileUploadArea').style.display = 'none';
+                    document.getElementById('fileUploadArea').style.display = 'block';
                     
                     document.getElementById('filesList').innerHTML = '';
                     document.getElementById('dataContent').innerHTML = '';
@@ -5309,8 +5344,8 @@
                         myChart = null;
                     }
                     
-                    // Hide the file upload section
-                    document.getElementById('fileUpload').style.display = 'none';
+                    // Show the file upload section again for next upload
+                    document.getElementById('fileUpload').style.display = 'block';
                     
                     // Scroll back to top
                     window.scrollTo({ top: 0, behavior: 'smooth' });
