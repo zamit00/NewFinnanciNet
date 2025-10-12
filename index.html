@@ -4080,7 +4080,26 @@
         processFilesBtn.addEventListener('click', async () => {
             console.log('🚀 processFiles started');
             console.log('📁 uploadedFiles count:', uploadedFiles.length);
-            console.log('📅 taarichLeyda value:', taarichLeyda);
+            console.log('📅 taarichLeyda BEFORE reset:', taarichLeyda);
+            
+            // ⚡ RESET ALL GLOBAL VARIABLES BEFORE PROCESSING
+            taarichLeyda = '';
+            sumSugMutzar = {
+                '1': [0, 0,0,0,0], '2': [0, 0,0,0,0], '2_1': [0, 0,0,0,0], '2_2': [0, 0,0,0,0], '3': [0, 0,0,0,0],
+                '4': [0, 0,0,0,0], '5': [0, 0,0,0,0], '6': [0, 0,0,0,0], '7': [0, 0,0,0,0], '8': [0, 0,0,0,0],
+                '9': [0, 0,0,0,0], '10': [0, 0,0,0,0]
+            };
+            pirteiHeshbon = [];
+            DataAll = [];
+            kodMaslulSet = new Set();
+            yitrotKaspeyPizoyim = [];
+            pratimIshim = '';
+            yitrotLefiMutzar = '';
+            yitrotLeGilPrisha = '';
+            masluleiHashkaa = [];
+            sheabudIkulHalvaa = [];
+            
+            console.log('✅ All variables RESET. taarichLeyda:', taarichLeyda);
             
             uploadedFilesTitle.style.display = 'none';
             filesList.style.display = 'none';
