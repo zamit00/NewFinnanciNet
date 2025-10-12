@@ -3357,17 +3357,14 @@
             <div class="stats-animation">
                 <div class="stat-item">
                     <i class="fas fa-chart-line"></i>
-                    <span class="stat-number" data-target="1000"> 0</span>
                     <span>מסלולי השקעה</span>
                 </div>
                 <div class="stat-item">
                     <i class="fas fa-calculator"></i>
-                    <span class="stat-number" data-target="5">0</span>
                     <span>מחשבונים</span>
                 </div>
                 <div class="stat-item">
                     <i class="fas fa-balance-scale"></i>
-                    <span class="stat-number" data-target="4">0</span>
                     <span>כלי השוואה</span>
                 </div>
             </div>
@@ -8151,34 +8148,7 @@
         }
         
         // Animate Numbers Counter
-        function animateNumbers() {
-            const numbers = document.querySelectorAll('.stat-number');
-            numbers.forEach(number => {
-                const target = parseInt(number.getAttribute('data-target'));
-                const duration = 2000; // 2 seconds
-                const increment = target / (duration / 16); // 60fps
-                let current = 0;
-                
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        if(target==1000){
-                        number.textContent = 'מעל '+target.toLocaleString('he-IL');
-                        }else{
-                        number.textContent = target.toLocaleString('he-IL');
-                        }
-                        clearInterval(timer);
-                    } else {
-                        if(target==1000){
-                            number.textContent = 'מעל '+Math.floor(current).toLocaleString('he-IL');
-                            }else{
-                            number.textContent = Math.floor(current).toLocaleString('he-IL');
-                            }
-                    }
-                }, 16);
-            });
-        }
-        
+               
         // הצג את מסך הפתיחה בטעינה
         window.addEventListener('DOMContentLoaded', () => {
             console.log('🎬 Opening Media: DOMContentLoaded');
