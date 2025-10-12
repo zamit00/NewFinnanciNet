@@ -2922,10 +2922,12 @@
             height: 100%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             z-index: 99999;
-            display: flex;
+            display: flex !important;
             justify-content: center;
             align-items: center;
             animation: fadeIn 0.5s ease;
+            visibility: visible;
+            opacity: 1;
         }
         
         #openingMedia.closing {
@@ -7790,6 +7792,8 @@
                 openingMedia.classList.add('closing');
                 setTimeout(() => {
                     openingMedia.style.display = 'none';
+                    openingMedia.style.visibility = 'hidden';
+                    openingMedia.style.opacity = '0';
                     document.body.style.overflow = 'auto'; // אפשר גלילה
                 }, 500);
             }
@@ -7797,13 +7801,23 @@
         
         // הצג את מסך הפתיחה בטעינה
         window.addEventListener('DOMContentLoaded', () => {
-            // נעל גלילה בזמן שמסך הפתיחה מוצג
-            document.body.style.overflow = 'hidden';
+            console.log('🎬 Opening Media: DOMContentLoaded');
+            const openingMedia = document.getElementById('openingMedia');
+            if (openingMedia) {
+                console.log('✅ Opening Media element found!');
+                // נעל גלילה בזמן שמסך הפתיחה מוצג
+                document.body.style.overflow = 'hidden';
+                openingMedia.style.display = 'flex';
+                openingMedia.style.visibility = 'visible';
+                openingMedia.style.opacity = '1';
+            } else {
+                console.error('❌ Opening Media element NOT found!');
+            }
             
-            // סגור אוטומטית אחרי 5 שניות (אופציונלי)
+            // סגור אוטומטית אחרי 8 שניות (אופציונלי)
             setTimeout(() => {
                 // closeOpeningMedia(); // הסר את הסימון // אם רוצה סגירה אוטומטית
-            }, 5000);
+            }, 8000);
         });
         
         // אפשר סגירה בלחיצה על ESC
