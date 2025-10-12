@@ -811,6 +811,41 @@
                 display: none !important;
             }
         }
+        
+        /* Risk Distribution Card Responsive Styles */
+        @media (max-width: 768px) {
+            .risk-distribution-card {
+                padding: 20px 15px !important;
+            }
+            
+            .risk-card-grid {
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+            }
+            
+            .risk-chart-container {
+                width: 200px !important;
+                height: 200px !important;
+                margin: 0 auto !important;
+                padding: 15px !important;
+            }
+            
+            .risk-card-title {
+                font-size: 1.3rem !important;
+            }
+            
+            .risk-stats-section [style*="font-size: 1.3rem"] {
+                font-size: 1.1rem !important;
+            }
+            
+            .risk-stats-section [style*="font-size: 1.1rem"] {
+                font-size: 1rem !important;
+            }
+            
+            .risk-distribution-card [style*="padding: 15px"] {
+                padding: 12px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1989,7 +2024,146 @@
                 });
             });
             
-            // שלב 2: הצגת הנתונים המרוכזים
+            // שלב 2: חישוב חלוקה לפי רמת סיכון
+            const riskDistribution = {
+                'גבוה': 0,
+                'בינוני': 0,
+                'נמוך': 0
+            };
+            
+            Object.values(productMaslulMap).forEach((entry) => {
+                const foundRamatsikon = findRamatsikonByName(entry.maslulType);
+                const ramatsikon = foundRamatsikon || 'לא ידוע';
+                const pathwayRisk = getRiskLevel(ramatsikon);
+                
+                if (pathwayRisk === 'גבוה' || pathwayRisk === 'בינוני' || pathwayRisk === 'נמוך') {
+                    riskDistribution[pathwayRisk] += entry.totalAmount;
+                }
+            });
+            
+            const totalAmount = riskDistribution['גבוה'] + riskDistribution['בינוני'] + riskDistribution['נמוך'];
+            
+            // יצירת כרטיסיה מרכזת עם גרף עוגה
+            const riskChartId = 'riskDistributionChart_' + Date.now();
+            
+            html += `
+                <div class="analysis-card risk-distribution-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 30px; padding: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
+                    <h3 class="risk-card-title" style="color: white; margin: 0 0 20px 0; text-align: center; font-size: 1.6rem;">
+                        <i class="fas fa-chart-pie"></i>
+                        חלוקת התיק לפי רמות סיכון
+                    </h3>
+                    
+                    <div class="risk-card-grid" style="display: grid; grid-template-columns: 1fr auto; gap: 30px; align-items: center;">
+                        <!-- Statistics Section -->
+                        <div class="risk-stats-section" style="display: flex; flex-direction: column; gap: 15px;">
+            `;
+            
+            // הצגת כל רמת סיכון שיש בה כסף
+            const riskColors = {
+                'גבוה': '#dc3545',
+                'בינוני': '#ffc107',
+                'נמוך': '#28a745'
+            };
+            
+            Object.keys(riskDistribution).forEach(risk => {
+                if (riskDistribution[risk] > 0) {
+                    const percentage = ((riskDistribution[risk] / totalAmount) * 100).toFixed(1);
+                    html += `
+                        <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 12px; backdrop-filter: blur(10px);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 20px; height: 20px; border-radius: 50%; background: ${riskColors[risk]}; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"></div>
+                                    <span style="font-weight: 600; font-size: 1.1rem;">סיכון ${risk}</span>
+                                </div>
+                                <span style="font-weight: bold; font-size: 1.3rem;">₪${riskDistribution[risk].toLocaleString('he-IL')}</span>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.2); height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="background: ${riskColors[risk]}; height: 100%; width: ${percentage}%; border-radius: 4px; transition: width 0.3s ease;"></div>
+                            </div>
+                            <div style="text-align: left; margin-top: 5px; font-size: 0.95rem; opacity: 0.9;">
+                                ${percentage}% מסך התיק
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            html += `
+                        </div>
+                        
+                        <!-- Chart Section -->
+                        <div class="risk-chart-container" style="width: 250px; height: 250px; background: rgba(255,255,255,0.1); border-radius: 50%; padding: 20px; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                            <canvas id="${riskChartId}" style="max-width: 100%; max-height: 100%;"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3);">
+                        <div style="font-size: 0.95rem; opacity: 0.9;">
+                            <strong>סך כל החיסכון:</strong> ₪${totalAmount.toLocaleString('he-IL')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // שמירת ID של הגרף ליצירה מאוחר יותר
+            setTimeout(() => {
+                const ctx = document.getElementById(riskChartId);
+                if (ctx) {
+                    const chartData = [];
+                    const chartLabels = [];
+                    const chartColors = [];
+                    
+                    if (riskDistribution['גבוה'] > 0) {
+                        chartData.push(riskDistribution['גבוה']);
+                        chartLabels.push('סיכון גבוה');
+                        chartColors.push('#dc3545');
+                    }
+                    if (riskDistribution['בינוני'] > 0) {
+                        chartData.push(riskDistribution['בינוני']);
+                        chartLabels.push('סיכון בינוני');
+                        chartColors.push('#ffc107');
+                    }
+                    if (riskDistribution['נמוך'] > 0) {
+                        chartData.push(riskDistribution['נמוך']);
+                        chartLabels.push('סיכון נמוך');
+                        chartColors.push('#28a745');
+                    }
+                    
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: chartLabels,
+                            datasets: [{
+                                data: chartData,
+                                backgroundColor: chartColors,
+                                borderColor: 'white',
+                                borderWidth: 3
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const value = context.parsed;
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = ((value / total) * 100).toFixed(1);
+                                            return `₪${value.toLocaleString('he-IL')} (${percentage}%)`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }, 100);
+            
+            // שלב 3: הצגת הנתונים המרוכזים
             const sortedEntries = Object.values(productMaslulMap).sort((a, b) => b.totalAmount - a.totalAmount);
             
             //console.log(`📊 נמצאו ${sortedEntries.length} קומבינציות מוצר+מסלול`);
