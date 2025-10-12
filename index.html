@@ -3346,7 +3346,7 @@
             <div class="coin coin-6">₪</div>
         </div>
         
-        <button class="close-opening-btn" onclick="closeOpeningMediaWithMusic()" title="סגור">
+        <button class="close-opening-btn" onclick="closeOpeningMediaWithMusic();pauseMusic()" title="סגור">
             <i class="fas fa-times"></i>
         </button>
         <div id="openingContent" class="opening-content">
@@ -3370,7 +3370,7 @@
                 </div>
             </div>
             
-            <button class="skip-btn" onclick="closeOpeningMediaWithMusic()
+            <button class="skip-btn" onclick="closeOpeningMediaWithMusic();pauseMusic()"
             document.getElementById('openingMedia').style.display = 'none';">
                 <i class="fas fa-arrow-left" style="margin-left: 10px;"></i>
                 כניסה לאתר
@@ -3454,7 +3454,7 @@
             onclick="letStart()">לתהליך - חינם*</a>
             <div style="font-size: 20px;font-weight: bold;text-align: right;color: #666; margin-top: 15px;">
                 *נדרש להעלות קובצי xml של 
-                <a href="https://www.gov.il/he/service/pension_clearance_information_request" target="_blank" rel="noopener noreferrer" class="pension-clearance-link" style="text-decoration: none;">
+                <a href="https://www.swiftness.co.il/?gad_source=1" target="_blank" rel="noopener noreferrer" class="pension-clearance-link" style="text-decoration: none;">
                     המסלקה הפנסיונית
                     <span class="pension-tooltip">
                         <i class="fas fa-info-circle"></i>
@@ -3934,6 +3934,7 @@
 
 <script>
     // משתנים לניתוח מתקדם - נשמרים רק ב-sessionStorage
+    var alreadyShown;
         function letStart(){
             if(window.innerWidth>768){
                 document.getElementById('fileUpload').style.display = 'flex';   
@@ -8127,7 +8128,7 @@
                 });
             }
             
-            // סגור את המסך
+            // סגור את המסך (שמירה ב-localStorage קורית בתוך הפונקציה)
             closeOpeningMedia();
         }
         
@@ -8158,7 +8159,8 @@
             const musicStopBtn = document.getElementById('musicStopBtn');
             
             // בדוק אם מסך הפתיחה כבר הוצג (localStorage)
-            const alreadyShown = localStorage.getItem('openingMediaShown');
+            alreadyShown = localStorage.getItem('openingMediaShown');
+            console.log('alreadyShown:', alreadyShown);
             
             console.log('📋 Storage check - alreadyShown:', alreadyShown);
             
@@ -8199,7 +8201,7 @@
                 }
                 
                 // התחל אנימציית מספרים אחרי שנייה
-                setTimeout(animateNumbers, 1000);
+                
             } else {
                 console.error('❌ Opening Media element NOT found!');
             }
