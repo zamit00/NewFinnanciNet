@@ -3422,8 +3422,7 @@
                     <i class="fab fa-whatsapp" style="font-size:2rem; color:#25D366;"></i>
                 </a>
             </div>
-            <div class="logo"> <img class="logoimg" src="logoxnew.png" onclick="window.location.href='index.html';
-            closeOpeningMedia();" 
+            <div class="logo"> <img class="logoimg" src="logoxnew.png" onclick="navigateToHome();" 
                 style="cursor: pointer;"/></div>
             <div class="hamburger" id="hamburger">
                 <span></span>
@@ -5670,7 +5669,7 @@
             sessionStorage.removeItem('riskScore');
             sessionStorage.removeItem('riskSource');
             console.log('🧹 ניקוי רמת סיכון לפני מעבר לניתוח מתקדם');
-            
+           
             window.location.href = 'advancedAnalysis.html';
         });
 
@@ -8212,6 +8211,20 @@
             }
         });
 
+        // ========================================
+        // Navigate to Home Page Function
+        // ========================================
+        function navigateToHome() {
+            // אם אנחנו כבר בדף הבית - פשוט נגלול למעלה
+            if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                // סגור את מסך הכניסה אם הוא פתוח
+                closeOpeningMedia();
+            } else {
+                // אנחנו בדף אחר - נעבור לדף הבית
+                window.location.href = 'index.html';
+            }
+        }
     </script>
 
     <!-- Modal Container -->

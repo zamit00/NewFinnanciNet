@@ -628,7 +628,7 @@
     <header class="header">
         <div class="nav-container">   
             <nav class="nav-menu" id="navMenu">
-                <li><a href="index.html"><i class="fa fa-home" style="font-size:2rem"></i></a></li>
+                <li><a href="#" onclick="navigateToHome(); return false;"><i class="fa fa-home" style="font-size:2rem"></i></a></li>
                 <li class="nav-dropdown">
                     <a href="#" onclick="toggleHasifotProductsDropdown(event)">מוצרים ותשואות ▼</a>
                     <div class="dropdown-content" id="hasifotProductsDropdown">
@@ -669,7 +669,7 @@
                 </a>
             </div>
             <div class="logo" style="cursor: pointer;"> 
-                <img class="logoimg" src="logoxnew.png" alt="לוגו" onclick="window.location.href='index.html'" style="cursor: pointer;"/>
+                <img class="logoimg" src="logoxnew.png" alt="לוגו" onclick="navigateToHome();" style="cursor: pointer;"/>
             </div>
             <div class="hamburger" id="hamburger">
                 <span></span>
@@ -933,6 +933,19 @@
                 document.body.insertAdjacentHTML('beforeend', html);
             })
             .catch(err => console.error('Error loading footer:', err));
+        
+        // ========================================
+        // Navigate to Home Page Function
+        // ========================================
+        function navigateToHome() {
+            // אם אנחנו כבר בדף הבית - פשוט נגלול למעלה
+            if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // אנחנו בדף אחר - נעבור לדף הבית
+                window.location.href = 'index.html';
+            }
+        }
     </script>
 
 </body>

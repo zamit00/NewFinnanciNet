@@ -638,7 +638,7 @@
 <body>
   <div class="nav-container">
     <nav class="nav-menu" id="navMenu">
-      <li><a href="index.html"><i class="fa fa-home" style="font-size:2rem"></i></a></li>
+      <li><a href="#" onclick="navigateToHome(); return false;"><i class="fa fa-home" style="font-size:2rem"></i></a></li>
       <li class="nav-dropdown">
         <a href="#" onclick="toggleLoanProductsDropdown(event)">מוצרים ותשואות ▼</a>
         <div class="dropdown-content" id="loanProductsDropdown">
@@ -679,7 +679,7 @@
             <i class="fab fa-whatsapp" style="font-size:2rem; color:#25D366;"></i>
         </a>
     </div>
-    <div class="logo"> <img class="logoimg" src="logoxnew.png" onclick="window.location.href='index.html'" style="cursor: pointer;"/></div>
+    <div class="logo"> <img class="logoimg" src="logoxnew.png" onclick="navigateToHome();" style="cursor: pointer;"/></div>
     <div class="hamburger" id="hamburger" style="padding: 10px;">
       <span></span>
       <span></span>
@@ -1286,6 +1286,19 @@
                 document.body.insertAdjacentHTML('beforeend', html);
             })
             .catch(err => console.error('Error loading footer:', err));
+        
+        // ========================================
+        // Navigate to Home Page Function
+        // ========================================
+        function navigateToHome() {
+            // אם אנחנו כבר בדף הבית - פשוט נגלול למעלה
+            if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // אנחנו בדף אחר - נעבור לדף הבית
+                window.location.href = 'index.html';
+            }
+        }
     </script>
 
 </body>
