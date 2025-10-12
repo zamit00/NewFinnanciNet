@@ -3269,18 +3269,18 @@
             <div class="stats-animation">
                 <div class="stat-item">
                     <i class="fas fa-chart-line"></i>
-                    <span class="stat-number" data-target="1000">0</span>
-                    <span>מוצרים</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-users"></i>
-                    <span class="stat-number" data-target="50000">0</span>
-                    <span>משתמשים</span>
+                    <span class="stat-number" data-target="1000"> 0</span>
+                    <span>מסלולים</span>
                 </div>
                 <div class="stat-item">
                     <i class="fas fa-calculator"></i>
-                    <span class="stat-number" data-target="15">0</span>
-                    <span>כלים</span>
+                    <span class="stat-number" data-target="5">0</span>
+                    <span>מחשבונים</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-balance-scale"></i>
+                    <span class="stat-number" data-target="4">0</span>
+                    <span>כלי השוואה</span>
                 </div>
             </div>
             
@@ -7999,10 +7999,18 @@
                 const timer = setInterval(() => {
                     current += increment;
                     if (current >= target) {
+                        if(target==1000){
+                        number.textContent = 'מעל '+target.toLocaleString('he-IL');
+                        }else{
                         number.textContent = target.toLocaleString('he-IL');
+                        }
                         clearInterval(timer);
                     } else {
-                        number.textContent = Math.floor(current).toLocaleString('he-IL');
+                        if(target==1000){
+                            number.textContent = 'מעל '+Math.floor(current).toLocaleString('he-IL');
+                            }else{
+                            number.textContent = Math.floor(current).toLocaleString('he-IL');
+                            }
                     }
                 }, 16);
             });
