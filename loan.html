@@ -1162,6 +1162,8 @@
                 dropdown.classList.add('show');
                 link.innerHTML = 'מוצרים ותשואות ▲';
             }
+            
+            return false;
         }
 
         // Calculator dropdown functionality
@@ -1187,6 +1189,8 @@
                 dropdown.classList.add('show');
                 link.innerHTML = 'מחשבונים ▲';
             }
+            
+            return false;
         }
         
         // פונקציה לפתיחה/סגירה של הרשימה הנפתחת בתפריט הניווט - כלי השוואה
@@ -1211,49 +1215,57 @@
                 dropdown.classList.add('show');
                 link.innerHTML = 'כלי השוואה ▲';
             }
+            
+            return false;
         }
 
-        // Close calculator dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            const dropdown = document.getElementById('loanCalculatorDropdown');
-            const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
+        // Close nav dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('.dropdown-content.show').forEach(d => {
+                if (!d.contains(event.target)) {
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink && !parentLink.contains(event.target)) {
+                        d.classList.remove('show');
+                        if (d.id === 'loanProductsDropdown') {
+                            parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                        } else if (d.id === 'loanCalculatorDropdown') {
+                            parentLink.innerHTML = 'מחשבונים ▼';
+                        } else if (d.id === 'loanToolsDropdown') {
+                            parentLink.innerHTML = 'כלי השוואה ▼';
+                        }
+                    }
+                }
+            });
+        });
+
+        // Close nav dropdown when clicking on links
+        document.addEventListener('click', function(event) {
+            if (event.target.closest('#loanProductsDropdown a')) {
+                const navDropdown = document.getElementById('loanProductsDropdown');
+                const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'מוצרים ותשואות ▼';
+            }
             
-            if (dropdownLink && dropdown && !dropdownLink.contains(e.target) && !dropdown.contains(e.target)) {
-                dropdown.classList.remove('show');
-                dropdownLink.innerHTML = 'מחשבונים ▼';
+            if (event.target.closest('#loanCalculatorDropdown a')) {
+                const navDropdown = document.getElementById('loanCalculatorDropdown');
+                const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'מחשבונים ▼';
+            }
+            
+            if (event.target.closest('#loanToolsDropdown a')) {
+                const navDropdown = document.getElementById('loanToolsDropdown');
+                const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'כלי השוואה ▼';
             }
         });
 
-        // Ensure dropdown links work properly
-        document.querySelectorAll('#loanCalculatorDropdown a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                // Don't prevent default - let the link work normally
-                e.stopPropagation();
-                
-                // Close dropdown after a short delay to allow navigation
-                setTimeout(() => {
-                    const dropdown = document.getElementById('loanCalculatorDropdown');
-                    const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
-                    
-                    if (dropdown) {
-                        dropdown.classList.remove('show');
-                    }
-                    if (dropdownLink) {
-                        dropdownLink.innerHTML = 'מחשבונים ▼';
-                    }
-                    
-                    // Close mobile menu after navigation
-                    if (window.innerWidth <= 768) {
-                        const hamburger = document.getElementById('hamburger');
-                        const navMenu = document.getElementById('navMenu');
-                        if (hamburger && navMenu) {
-                            hamburger.classList.remove('active');
-                            navMenu.classList.remove('active');
-                        }
-                    }
-                }, 100);
-            });
-        });
     </script>
 
     <!-- Modal Container -->

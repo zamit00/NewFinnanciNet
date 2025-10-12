@@ -1268,6 +1268,15 @@ function togglePrisatProductsDropdown(event) {
     document.querySelectorAll('.dropdown-content.show').forEach(d => {
         if (d !== dropdown) {
             d.classList.remove('show');
+            const parentLi = d.closest('.nav-dropdown');
+            const parentLink = parentLi?.querySelector('a');
+            if (parentLink) {
+                if (d.id === 'prisatCalculatorDropdown') {
+                    parentLink.innerHTML = 'מחשבונים ▼';
+                } else if (d.id === 'prisatToolsDropdown') {
+                    parentLink.innerHTML = 'כלי השוואה ▼';
+                }
+            }
         }
     });
     
@@ -1290,10 +1299,18 @@ function togglePrisatCalculatorDropdown(event) {
     const dropdown = document.getElementById('prisatCalculatorDropdown');
     const link = event.target;
     
-    // Close other dropdowns first
     document.querySelectorAll('.dropdown-content.show').forEach(d => {
         if (d !== dropdown) {
             d.classList.remove('show');
+            const parentLi = d.closest('.nav-dropdown');
+            const parentLink = parentLi?.querySelector('a');
+            if (parentLink) {
+                if (d.id === 'prisatProductsDropdown') {
+                    parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                } else if (d.id === 'prisatToolsDropdown') {
+                    parentLink.innerHTML = 'כלי השוואה ▼';
+                }
+            }
         }
     });
     
@@ -1317,10 +1334,18 @@ function togglePrisatToolsDropdown(event) {
     const dropdown = document.getElementById('prisatToolsDropdown');
     const link = event.target;
     
-    // Close other dropdowns first
     document.querySelectorAll('.dropdown-content.show').forEach(d => {
         if (d !== dropdown) {
             d.classList.remove('show');
+            const parentLi = d.closest('.nav-dropdown');
+            const parentLink = parentLi?.querySelector('a');
+            if (parentLink) {
+                if (d.id === 'prisatProductsDropdown') {
+                    parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                } else if (d.id === 'prisatCalculatorDropdown') {
+                    parentLink.innerHTML = 'מחשבונים ▼';
+                }
+            }
         }
     });
     
@@ -1335,36 +1360,50 @@ function togglePrisatToolsDropdown(event) {
     return false;
 }
 
-// Ensure nav dropdown links work properly
-document.querySelectorAll('#prisatCalculatorDropdown a').forEach(link => {
-    link.addEventListener('click', function(e) {
-        // Don't prevent default - let the link work normally
-        e.stopPropagation();
-        
-        // Close dropdown after a short delay to allow navigation
-        setTimeout(() => {
-            const dropdown = document.getElementById('prisatCalculatorDropdown');
-            const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
-            
-            if (dropdown) {
-                dropdown.classList.remove('show');
+// Close nav dropdowns when clicking outside
+document.addEventListener('click', function(event) {
+    document.querySelectorAll('.dropdown-content.show').forEach(d => {
+        if (!d.contains(event.target)) {
+            const parentLi = d.closest('.nav-dropdown');
+            const parentLink = parentLi?.querySelector('a');
+            if (parentLink && !parentLink.contains(event.target)) {
+                d.classList.remove('show');
+                if (d.id === 'prisatProductsDropdown') {
+                    parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                } else if (d.id === 'prisatCalculatorDropdown') {
+                    parentLink.innerHTML = 'מחשבונים ▼';
+                } else if (d.id === 'prisatToolsDropdown') {
+                    parentLink.innerHTML = 'כלי השוואה ▼';
+                }
             }
-            if (dropdownLink) {
-                dropdownLink.innerHTML = 'מחשבונים ▼';
-            }
-        }, 100);
+        }
     });
 });
 
-// Close calculator dropdown when clicking outside
-document.addEventListener('click', function(e) {
-    const dropdown = document.getElementById('prisatCalculatorDropdown');
-    const dropdownLink = dropdown?.closest('.nav-dropdown')?.querySelector('a');
+// Close nav dropdown when clicking on links
+document.addEventListener('click', function(event) {
+    if (event.target.closest('#prisatProductsDropdown a')) {
+        const navDropdown = document.getElementById('prisatProductsDropdown');
+        const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+        
+        if (navDropdown) navDropdown.classList.remove('show');
+        if (navLink) navLink.innerHTML = 'מוצרים ותשואות ▼';
+    }
     
-    // Don't close if clicking on dropdown links
-    if (dropdown && dropdownLink && !dropdownLink.contains(e.target) && !dropdown.contains(e.target)) {
-        dropdown.classList.remove('show');
-        dropdownLink.innerHTML = 'מחשבונים ▼';
+    if (event.target.closest('#prisatCalculatorDropdown a')) {
+        const navDropdown = document.getElementById('prisatCalculatorDropdown');
+        const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+        
+        if (navDropdown) navDropdown.classList.remove('show');
+        if (navLink) navLink.innerHTML = 'מחשבונים ▼';
+    }
+    
+    if (event.target.closest('#prisatToolsDropdown a')) {
+        const navDropdown = document.getElementById('prisatToolsDropdown');
+        const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+        
+        if (navDropdown) navDropdown.classList.remove('show');
+        if (navLink) navLink.innerHTML = 'כלי השוואה ▼';
     }
 });
 </script>

@@ -1262,6 +1262,8 @@
                 dropdown.classList.add('show');
                 link.innerHTML = 'מוצרים ותשואות ▲';
             }
+            
+            return false;
         }
         
         function toggleAdvCalculatorDropdown(event) {
@@ -1293,6 +1295,8 @@
                 dropdown.classList.add('show');
                 link.innerHTML = 'מחשבונים ▲';
             }
+            
+            return false;
         }
 
         function toggleAdvToolsDropdown(event) {
@@ -1324,7 +1328,56 @@
                 dropdown.classList.add('show');
                 link.innerHTML = 'כלי השוואה ▲';
             }
+            
+            return false;
         }
+        
+        // Close nav dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('.dropdown-content.show').forEach(d => {
+                if (!d.contains(event.target)) {
+                    const parentLi = d.closest('.nav-dropdown');
+                    const parentLink = parentLi?.querySelector('a');
+                    if (parentLink && !parentLink.contains(event.target)) {
+                        d.classList.remove('show');
+                        if (d.id === 'advProductsDropdown') {
+                            parentLink.innerHTML = 'מוצרים ותשואות ▼';
+                        } else if (d.id === 'advCalculatorDropdown') {
+                            parentLink.innerHTML = 'מחשבונים ▼';
+                        } else if (d.id === 'advToolsDropdown') {
+                            parentLink.innerHTML = 'כלי השוואה ▼';
+                        }
+                    }
+                }
+            });
+        });
+
+        // Close nav dropdown when clicking on links
+        document.addEventListener('click', function(event) {
+            if (event.target.closest('#advProductsDropdown a')) {
+                const navDropdown = document.getElementById('advProductsDropdown');
+                const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'מוצרים ותשואות ▼';
+            }
+            
+            if (event.target.closest('#advCalculatorDropdown a')) {
+                const navDropdown = document.getElementById('advCalculatorDropdown');
+                const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'מחשבונים ▼';
+            }
+            
+            if (event.target.closest('#advToolsDropdown a')) {
+                const navDropdown = document.getElementById('advToolsDropdown');
+                const navLink = navDropdown?.closest('.nav-dropdown')?.querySelector('a');
+                
+                if (navDropdown) navDropdown.classList.remove('show');
+                if (navLink) navLink.innerHTML = 'כלי השוואה ▼';
+            }
+        });
 
         // Hamburger menu functionality
         document.addEventListener('DOMContentLoaded', function() {
