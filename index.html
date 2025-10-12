@@ -3152,6 +3152,46 @@
             display: flex;
         }
         
+        /* Stop Audio Button in Main Section */
+        .stop-audio-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+        
+        .stop-audio-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.5);
+            background: linear-gradient(135deg, #c82333 0%, #a71d2a 100%);
+        }
+        
+        .stop-audio-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(220, 53, 69, 0.4);
+        }
+        
+        .stop-audio-btn i {
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .stop-audio-btn {
+                font-size: 0.9rem;
+                padding: 12px 24px;
+            }
+        }
+        
         .skip-btn {
             background: white;
             color: #667eea;
@@ -3400,7 +3440,12 @@
 <div class="mainTitle" dir="rtl">
 	<div class="feature-card">
 		<div dir="rtl" class="flex-container">
+            
 			<h1  class="feature-title hatid">העתיד הפיננסי שלך מתחיל כאן!</h1>
+            <button onclick="pauseMusic();" class="stop-audio-btn">
+                <i class="fas fa-stop-circle"></i>
+                עצור מוזיקת רקע
+            </button>
             <img class="hero-icon" src="savemoney.png" alt="Graph Icon" style="width: 300px;
              height: 300px;margin-left: auto;margin-right: auto;animation: none !important;"/>           
 
@@ -8049,6 +8094,27 @@
             }
         }
         
+        function pauseMusic() {
+            const openingAudio = document.getElementById('openingAudio');
+            const musicStopBtn = document.getElementById('musicStopBtn');
+            
+            if (openingAudio) {
+                openingAudio.pause();
+                openingAudio.currentTime = 0;
+                console.log('🛑 Music stopped');
+            }
+            
+            // הסתר גם את הכפתור הצף אם קיים
+            if (musicStopBtn) {
+                musicStopBtn.classList.remove('show');
+            }
+            
+            // הסתר את הכפתור עצמו
+            const stopBtn = document.querySelector('.stop-audio-btn');
+            if (stopBtn) {
+                stopBtn.style.display = 'none';
+            }
+        }
         // Close with user interaction (fixes autoplay block)
         function closeOpeningMediaWithMusic() {
             const openingAudio = document.getElementById('openingAudio');
