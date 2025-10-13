@@ -253,23 +253,17 @@ async function indications(){
       !isNaN(item[field]) &&
       parseFloat(item[field]) !== 0
     );
+    
+    
     const total = validItems.reduce((sum, item) => sum + parseFloat(item[field]), 0);
     const avg = validItems.length > 0 ? total / validItems.length : 0;
-    resultSikon[field] = avg.toFixed(2);
-    
-    console.log(`📊 ${sugmuzar} - ${field}: ממוצע של ${validItems.length} מסלולים = ${avg.toFixed(2)}`);
+    resultSikon[field+"Avg"] = avg.toFixed(2);
+    resultSikon[field+"Min"] = Math.min(...validItems.map(item=>Number(item[field]))).toFixed(2);
+    resultSikon[field+"Max"] = Math.max(...validItems.map(item=>Number(item[field]))).toFixed(2);
+     
   }
-  
-  dataIndicatorsSikon.push(resultSikon);
-  
-    } 
-    
-  console.log('📈 dataIndicatorsSikon (ברמת מוצר):', dataIndicatorsSikon);
-  dataIndicators.forEach(item=>{
-    if(item.mozar==='קרנות השתלמות'){
-    console.log(item.mozar+":"+item.maslul+":"+item.stiya36+":"+item.stiya60);
-    }
-  });
+    dataIndicatorsSikon.push(resultSikon);
+    }   
   }
   
 
