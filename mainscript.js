@@ -185,36 +185,6 @@ async function indications(){
   else if(r===3){typamas=layeled}
   else if(r===5){typamas=pensia}  // קרנות פנסיה
   
-  // חישוב סטיית תקן ברמת מוצר (לא מסלול!)
-  const resultSikon = {
-    mozar: sugmuzar
-  };
-  
-  // איסוף כל הנתונים מכל המסלולים במוצר
-  let allProductData = [];
-  for (let i = 0; i < typamas.length; i++) {
-    const dataY = await filterMaslul(typamas[i], sugmuzar, 0);
-    allProductData = allProductData.concat(dataY);
-  }
-  
-  // חישוב ממוצעים לשדות סיכון ברמת המוצר
-  for (const field of fieldsToAverageSikon) {
-    const validItems = allProductData.filter(obj =>
-      obj[field] !== undefined &&
-      obj[field] !== null &&
-      obj[field] !== '' &&
-      !isNaN(obj[field]) &&
-      parseFloat(obj[field]) !== 0
-    );
-    const total = validItems.reduce((sum, obj) => sum + parseFloat(obj[field]), 0);
-    const avg = validItems.length > 0 ? total / validItems.length : 0;
-    resultSikon[field] = avg.toFixed(2); 
-  }
-  
-  // הוספה ל-dataIndicatorsSikon (רק אם יש נתונים)
-  if (allProductData.length > 0) {
-    dataIndicatorsSikon.push(resultSikon);
-  }
   
   for (let i = 0; i < typamas.length; i++) {
     const dataY = await filterMaslul(typamas[i], sugmuzar, 0);
@@ -265,9 +235,38 @@ async function indications(){
     
     
   } 
+  
+  // חישוב ממוצע סטיות ברמת מוצר (ממוצע הממוצעים)
+  const resultSikon = {
+    mozar: sugmuzar
+  };
+  
+  // סינון כל המסלולים של המוצר הנוכחי מ-dataIndicators
+  const productPathways = dataIndicators.filter(item => item.mozar === sugmuzar);
+  
+  // חישוב ממוצע של הסטיות מכל המסלולים
+  for (const field of fieldsToAverageSikon) {
+    const validItems = productPathways.filter(item => 
+      item[field] !== undefined &&
+      item[field] !== null &&
+      item[field] !== '' &&
+      !isNaN(item[field]) &&
+      parseFloat(item[field]) !== 0
+    );
+    const total = validItems.reduce((sum, item) => sum + parseFloat(item[field]), 0);
+    const avg = validItems.length > 0 ? total / validItems.length : 0;
+    resultSikon[field] = avg.toFixed(2);
+    
+    console.log(`📊 ${sugmuzar} - ${field}: ממוצע של ${validItems.length} מסלולים = ${avg.toFixed(2)}`);
+  }
+  
+  dataIndicatorsSikon.push(resultSikon);
+  
     } 
     
-  console.log(dataIndicatorsSikon);
-  console.log(dataIndicators);
+  console.log('📈 dataIndicatorsSikon (ברמת מוצר):', dataIndicatorsSikon);
+  dataIndicators.forEach(item=>{
+    console.log(item.mozar+":"+item.maslul+":"+item.stiya36+":"+item.stiya60);
+  });
   };
 
