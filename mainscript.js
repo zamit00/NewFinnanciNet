@@ -266,7 +266,10 @@ async function indications(){
     
   console.log('📈 dataIndicatorsSikon (ברמת מוצר):', dataIndicatorsSikon);
   dataIndicators.forEach(item=>{
+    if(item.mozar==='קרנות השתלמות'){
     console.log(item.mozar+":"+item.maslul+":"+item.stiya36+":"+item.stiya60);
+    }
   });
-  };
+  }
+  
 
