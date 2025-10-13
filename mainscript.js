@@ -1,5 +1,5 @@
 var datanetunimKlaliXM;var datanetunimKlaliXB;var datanetunimKlaliXP;
-var clickStatus;let dataIndicators = [];
+var clickStatus;var dataIndicators = [];var dataIndicatorsSikon = [];
 var tkofa;let sikonData = [];
 const gufmosdixA = [
     'הראל פנסיה וגמל', 'כלל פנסיה וגמל',
@@ -19,6 +19,10 @@ const fieldsToAverage = [
     "sharp", "tusaAharona", "tesuaMitchilatshana",
     "kvutzaAhuz4751", "kvutzaAhuz4761","dmeyNihul","dmeyNihulHafkad"     
 ];
+const fieldsToAverageSikon = [
+    "stiya36", "stiya60"     
+];
+
 const pHishSmall=`קרן השתלמות היא מכשיר חיסכון לטווח בינוני המאפשר חיסכון הן לשכירים והן לעצמאים. הקרן היא לספק מענה לצרכי השתלמות מקצועית, אך בפועל היא משמשת ככלי חיסכון פופולרי בישראל בזכות הטבות המס הנלוות לה . בקרן ההשתלמות מגוון מסלולי השקעה השונים זה מזה ברמת הסיכון. ככלל, הכספים בקרן ניתנים 
 למשיכה לאחר 6 שנים ממועד הפקדה ראשונה.`
 const pHishBig=`קרן השתלמות היא מכשיר חיסכון לטווח בינוני המאפשר חיסכון הן לשכירים והן לעצמאים. מטרת הקרן היא לספק מענה לצרכי השתלמות מקצועית, אך בפועל היא משמשת ככלי חיסכון פופולרי בישראל בזכות הטבות המס הנלוות לה . בקרן ההשתלמות מגוון מסלולי השקעה השונים זה מזה ברמת הסיכון. ככלל, הכספים בקרן ניתנים למשיכה לאחר 6 שנים ממועד הפקדה ראשונה.
@@ -54,6 +58,7 @@ async function loadalldata() {
         //console.log('📊 מעבד ממוצעים...');
         await indications();
         await fetchInvestmentData();
+        
         //console.log(`📈 נוצרו ${dataIndicators.length} רשומות ממוצע`);
         const tkofaItem = datanetunimKlaliXM.filter(item=>item.mh==='579')[0].tesua12
         ;
@@ -189,6 +194,24 @@ async function indications(){
       mozar: sugmuzar,
       maslul: typamas[i]
     };
+    const resultSikon = {
+      mozar: sugmuzar,
+      maslul: typamas[i]
+    };
+    
+    // חישוב ממוצעים לשדות סיכון (ברמת מסלול)
+    for (const field of fieldsToAverageSikon) {
+      const validItems = dataY.filter(obj =>
+        obj[field] !== undefined &&
+        obj[field] !== null &&
+        obj[field] !== '' &&
+        !isNaN(obj[field]) &&
+        parseFloat(obj[field]) !== 0
+      );
+      const total = validItems.reduce((sum, obj) => sum + parseFloat(obj[field]), 0);
+      const avg = validItems.length > 0 ? total / validItems.length : 0;
+      resultSikon[field] = avg.toFixed(2); 
+    }
     
     for (const field of fieldsToAverage) {
       const validItems = dataY.filter(obj =>
@@ -224,6 +247,7 @@ async function indications(){
     
     if (!isDuplicate) {
         dataIndicators.push(result);
+        dataIndicatorsSikon.push(resultSikon);
     }
 
     

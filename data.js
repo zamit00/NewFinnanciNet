@@ -251,7 +251,7 @@ function filterIncludes(text, includes = [], excludes = []) {
     let filtered = dataforfilter.filter(item =>
       item.mozar === moza 
     );
-  
+    
     const masFilter = maslulFilters[mas];
     if (masFilter) {
       filtered = filtered.filter(item => applyFilters(item, masFilter));
