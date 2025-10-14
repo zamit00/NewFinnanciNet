@@ -245,25 +245,50 @@ async function indications(){
   const productPathways = dataIndicators.filter(item => item.mozar === sugmuzar);
   
   // חישוב ממוצע של הסטיות מכל המסלולים
-  for (const field of fieldsToAverageSikon) {
-    const validItems = productPathways.filter(item => 
-      item[field] !== undefined &&
-      item[field] !== null &&
-      item[field] !== '' &&
-      !isNaN(item[field]) &&
-      parseFloat(item[field]) !== 0
+  
+    const validItemsStiya36 = productPathways.filter(item => 
+      item["stiya36"] !== undefined &&
+      item["stiya36"] !== null &&
+      item["stiya36"] !== '' &&
+      !isNaN(item["stiya36"]) &&
+      parseFloat(item["stiya36"]) !== 0
     );
     
-    
-    const total = validItems.reduce((sum, item) => sum + parseFloat(item[field]), 0);
-    const avg = validItems.length > 0 ? total / validItems.length : 0;
-    resultSikon[field+"Avg"] = avg.toFixed(2);
-    resultSikon[field+"Min"] = Math.min(...validItems.map(item=>Number(item[field]))).toFixed(2);
-    resultSikon[field+"Max"] = Math.max(...validItems.map(item=>Number(item[field]))).toFixed(2);
+    const total36 = validItemsStiya36.reduce((sum, item) => sum + parseFloat(item["stiya36"]), 0);
+    const avg36 = validItemsStiya36.length > 0 ? total36 / validItemsStiya36.length : 0;
+    resultSikon["stiya36Avg"] = avg36.toFixed(2);
+    resultSikon["stiya36Min"] = Math.min(...validItemsStiya36.map(item=>Number(item['stiya36']))).toFixed(2);
+    resultSikon["stiya36Max"] = Math.max(...validItemsStiya36.map(item=>Number(item['stiya36']))).toFixed(2);
      
-  }
+    const validItemsStiya60 = productPathways.filter(item => 
+      item["stiya60"] !== undefined &&
+      item["stiya60"] !== null &&
+      item["stiya60"] !== '' &&
+      !isNaN(item["stiya60"]) &&
+      parseFloat(item["stiya60"]) !== 0
+    );
+    
+    const total60 = validItemsStiya60.reduce((sum, item) => sum + parseFloat(item["stiya60"]), 0);
+    const avg60 = validItemsStiya60.length > 0 ? total60 / validItemsStiya60.length : 0;
+    resultSikon["stiya60Avg"] = avg60.toFixed(2);
+    resultSikon["stiya60Min"] = Math.min(...validItemsStiya60.map(item=>Number(item['stiya60']))).toFixed(2);
+    resultSikon["stiya60Max"] = Math.max(...validItemsStiya36.map(item=>Number(item['stiya60']))).toFixed(2);
+  
+    const lowCombined=Number( resultSikon["stiya60Min"])*0.6+Number( resultSikon["stiya36Min"])*0.4;
+    const highCombined=Number( resultSikon["stiya60Max"])*0.6+Number( resultSikon["stiya36Max"])*0.4;
+    const avgCombined=Number( resultSikon["stiya60Avg"])*0.6+Number( resultSikon["stiya36Avg"])*0.4;
+    resultSikon["lowCombined"]=lowCombined.toFixed(2);
+    resultSikon["highCombined"]=highCombined.toFixed(2);
+    resultSikon["avgCombined"]=avgCombined.toFixed(2);
+    resultSikon["stiyaCombinedMin"]=(Number(lowCombined)+Number((avgCombined-lowCombined)*0.66)).toFixed(2);
+    resultSikon["stiyaCombinedMax"]=(Number(highCombined)-Number((highCombined-avgCombined)*0.66)).toFixed(2);
+    
+
     dataIndicatorsSikon.push(resultSikon);
-    }   
+    
+    }
+    console.log(dataIndicatorsSikon);
+    
   }
   
 
