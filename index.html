@@ -5,13 +5,15 @@
   <meta charset="UTF-8">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-41JX3YK216"></script>
 
-<script>  
+	<script>
+    
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-41JX3YK216');
-</script>
-	<script src="https://cdn.jsdelivr.net/npm/eruda"></script> 
+  
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 	<script>    
 	     eruda.init();
 	</script>
@@ -4477,7 +4479,17 @@
                                     const tesuaNeto = cleanVal(getElementText(maslul,'TSUA-NETO')) || '';
                                     const shiurAlotShnatitZpuiaLmslulHashkah = cleanVal(getElementText(maslul,'SHIUR-ALUT-SHNATIT-ZPUIA-LMSLUL-HASHKAH')) || '';
                                     const kodSugMaslul = cleanVal(getElementText(maslul,'KOD-SUG-MASLUL')) || '';
+                                    const kodSugMaslulShort= kodMaslolHashkaa?Number(kodMaslolHashkaa.slice(23,30)) : "";
+                                    let match = datanetunimKlaliXM.find(obj => obj.mh === kodSugMaslulShort.toString())?
+                                    datanetunimKlaliXM.find(obj => obj.mh === kodSugMaslulShort.toString()):
+                                    datanetunimKlaliXP.find(obj => obj.mh === kodSugMaslulShort.toString())?
+                                    datanetunimKlaliXP.find(obj => obj.mh === kodSugMaslulShort.toString()):
+                                    datanetunimKlaliXB.find(obj => obj.mh === kodSugMaslulShort.toString())?
+                                    datanetunimKlaliXB.find(obj => obj.mh === kodSugMaslulShort.toString()):"NOT FIND";
                                     
+                                    console.log(match.stiya36?shemMaslulHashkaa+":"+match.stiya36:"notfind");continue;
+
+                                   
                                     // אם המסלול כבר קיים במפה, הוסף את הסכום
                                     if (maslulMap.has(kodMaslolHashkaa)) {
                                         const existingMaslul = maslulMap.get(kodMaslolHashkaa);
@@ -4495,7 +4507,7 @@
                                                 tesuaNeto,
                                                 shiurAlotShnatitZpuiaLmslulHashkah,
                                                 kodSugMaslul,
-                                                pensiaVatikaOHadasha, 
+                                                pensiaVatikaOHadasha,
                                                 count: 1
                                             });
                                               
