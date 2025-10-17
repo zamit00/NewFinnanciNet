@@ -283,7 +283,12 @@ async function indications(){
     resultSikon["highCombined"]=highCombined.toFixed(2);
     resultSikon["avgCombined"]=avgCombined.toFixed(2);
 
-    dataIndicatorsSikon.push(resultSikon);
+    // בדיקה שלא קיים כבר מוצר זהה
+    const isSikonDuplicate = dataIndicatorsSikon.some(item => item.mozar === resultSikon.mozar);
+    
+    if (!isSikonDuplicate) {
+        dataIndicatorsSikon.push(resultSikon);
+    }
     
     }
     
