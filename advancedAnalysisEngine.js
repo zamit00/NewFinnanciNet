@@ -61,19 +61,11 @@ function importAndClearSessionData() {
     const riskSource = sessionStorage.getItem('riskSource');
     const detailedDataStr = sessionStorage.getItem('advancedAnalysisData');
     
-    /*console.log('📥 מייבא נתונים מ-sessionStorage...');
-    console.log('  גיל:', gil);
-    console.log('  שנים לפרישה:', yearsToRetirement);
-    console.log('  סך הוני:', equitySum);
-    console.log('  סך קצבה:', pensionSum);
-    console.log('  רמת סיכון:', riskProfile);*/
-    
     // פענוח נתונים מפורטים
     let detailedData = null;
     if (detailedDataStr) {
         try {
             detailedData = JSON.parse(detailedDataStr);
-            //console.log('✅ נתונים מפורטים נטענו:', Object.keys(detailedData));
         } catch (error) {
             console.error('❌ שגיאה בפענוח נתונים מפורטים:', error);
         }
@@ -88,7 +80,6 @@ function importAndClearSessionData() {
     sessionStorage.removeItem('riskScore');
     sessionStorage.removeItem('riskSource');
     sessionStorage.removeItem('advancedAnalysisData');
-    //console.log('🗑️ נתונים נמחקו מ-sessionStorage');
     
     return {
         age: gil ? parseInt(gil) : null,
@@ -158,7 +149,6 @@ const AnalysisStorage = {
         try {
             clientAnalysisData.lastUpdated = new Date().toISOString();
             localStorage.setItem('clientAnalysisData', JSON.stringify(clientAnalysisData));
-            //console.log('✅ נתוני ניתוח נשמרו בהצלחה');
             return true;
         } catch (error) {
             console.error('❌ שגיאה בשמירת נתונים:', error);
@@ -172,7 +162,6 @@ const AnalysisStorage = {
             if (saved) {
                 const data = JSON.parse(saved);
                 Object.assign(clientAnalysisData, data);
-                console.log('✅ נתוני ניתוח נטענו בהצלחה');
                 return true;
             }
             return false;
@@ -192,7 +181,6 @@ const AnalysisStorage = {
                 clientAnalysisData[key] = null;
             }
         });
-        console.log('🗑️ נתוני ניתוח נוקו');
     }
 };
 
@@ -201,7 +189,6 @@ const ClientProfile = {
     updateProfile: function(data) {
         Object.assign(clientAnalysisData.profile, data);
         AnalysisStorage.save();
-        console.log('📝 פרופיל לקוח עודכן:', data);
     },
     
     getAge: function() {
@@ -224,8 +211,6 @@ const ClientProfile = {
 const PortfolioAnalyzer = {
     // ניתוח מהנתונים הגלובליים שכבר הועלו
     analyzeFromGlobalData: function() {
-        console.log('🔍 מנתח נתונים קיימים...');
-        
         // בדיקה אם יש נתונים גלובליים
         if (typeof DataAll === 'undefined' || !DataAll || DataAll.length === 0) {
             console.warn('⚠️ אין נתונים זמינים - נא להעלות קבצי מסלקה בדף הבית');
@@ -324,12 +309,10 @@ const PortfolioAnalyzer = {
         
         if (typeof sumHonForAdvancedAnalysis !== 'undefined') {
             equityTotal = sumHonForAdvancedAnalysis;
-            console.log(`💰 מוצרים הוניים: ₪${equityTotal.toLocaleString('he-IL')}`);
         }
         
         if (typeof sumKitzvaForAdvancedAnalysis !== 'undefined') {
             pensionTotal = sumKitzvaForAdvancedAnalysis;
-            console.log(`🏦 מוצרי קצבה: ₪${pensionTotal.toLocaleString('he-IL')}`);
         }
         
         // עדכן את הנתונים
@@ -344,11 +327,6 @@ const PortfolioAnalyzer = {
         };
         
         AnalysisStorage.save();
-        /*console.log(`✅ נותחו ${accounts.length} חשבונות`);
-        console.log(`   סך כולל: ₪${totalValue.toLocaleString('he-IL')}`);
-        console.log(`   מוצרים הוניים: ₪${equityTotal.toLocaleString('he-IL')}`);
-        console.log(`   מוצרי קצבה: ₪${pensionTotal.toLocaleString('he-IL')}`);
-        */
         return true;
     },
     
@@ -407,8 +385,6 @@ const PortfolioAnalyzer = {
 const QualityAnalyzer = {
     // השוואה לממוצע השוק
     compareToMarket: function() {
-        console.log('📊 משווה לממוצע השוק...');
-        
         if (!clientAnalysisData.portfolio.accounts.length) {
             console.warn('⚠️ אין נתוני חשבונות');
             return null;
@@ -446,7 +422,6 @@ const QualityAnalyzer = {
         
         clientAnalysisData.quality.comparisonToMarket = comparisons;
         AnalysisStorage.save();
-        console.log(`✅ נותחו ${comparisons.length} מסלולים מול השוק`);
         return comparisons;
     },
     
@@ -485,7 +460,6 @@ const QualityAnalyzer = {
 const GapAnalyzer = {
     // זיהוי דמי ניהול גבוהים
     identifyHighFees: function() {
-        console.log('💰 בודק דמי ניהול...');
         
         const highFees = [];
         const feeThresholds = {
@@ -513,13 +487,11 @@ const GapAnalyzer = {
         
         clientAnalysisData.gaps.highFees = highFees;
         AnalysisStorage.save();
-        console.log(`⚠️ זוהו ${highFees.length} חשבונות עם דמי ניהול גבוהים`);
         return highFees;
     },
     
     // זיהוי ביצועים נמוכים
     identifyLowPerformance: function() {
-        console.log('📉 בודק ביצועים נמוכים...');
         
         const lowPerf = [];
         const comparisons = clientAnalysisData.quality.comparisonToMarket;
@@ -541,13 +513,11 @@ const GapAnalyzer = {
         
         clientAnalysisData.gaps.lowPerformance = lowPerf;
         AnalysisStorage.save();
-        console.log(`⚠️ זוהו ${lowPerf.length} מסלולים עם ביצועים נמוכים`);
         return lowPerf;
     },
     
     // בדיקת התאמת סיכון
     checkRiskAlignment: function() {
-        console.log('🎲 בודק התאמת סיכון...');
         
         const riskProfile = clientAnalysisData.profile.riskProfile;
         const age = clientAnalysisData.profile.age;
@@ -589,7 +559,6 @@ const GapAnalyzer = {
         
         clientAnalysisData.gaps.riskMismatch = mismatches;
         AnalysisStorage.save();
-        console.log(`⚠️ זוהו ${mismatches.length} אי-התאמות בסיכון`);
         return mismatches;
     },
     
@@ -614,8 +583,6 @@ const GapAnalyzer = {
     
     // בדיקת ריכוזיות
     checkConcentration: function() {
-        console.log('🎯 בודק ריכוזיות...');
-        
         const concentration = [];
         const providerBreakdown = clientAnalysisData.portfolio.providerBreakdown;
         const totalValue = clientAnalysisData.portfolio.totalValue;
@@ -635,13 +602,11 @@ const GapAnalyzer = {
         
         clientAnalysisData.gaps.concentration = concentration;
         AnalysisStorage.save();
-        console.log(`⚠️ זוהו ${concentration.length} מקרים של ריכוזיות`);
         return concentration;
     },
     
     // ניתוח מקיף של כל הפערים
     performFullGapAnalysis: function() {
-        console.log('🔬 מבצע ניתוח פערים מקיף...');
         
         this.identifyHighFees();
         this.identifyLowPerformance();
@@ -651,7 +616,6 @@ const GapAnalyzer = {
         // יצירת המלצות
         this.generateRecommendations();
         
-        console.log('✅ ניתוח פערים הושלם');
         return clientAnalysisData.gaps;
     },
     
@@ -749,7 +713,6 @@ const AnalysisUtils = {
 // טעינת נתונים בעת טעינת הדף
 document.addEventListener('DOMContentLoaded', function() {
     AnalysisStorage.load();
-    console.log('📂 מנוע ניתוח מתקדם נטען');
 });
 
 // ייצוא לשימוש גלובלי
