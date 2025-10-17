@@ -285,6 +285,44 @@
             background: #5a6268;
         }
         
+        /* Risk Selection Buttons */
+        #riskBtnLow:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.5) !important;
+            border-color: #2e7d32 !important;
+        }
+        
+        #riskBtnMedium:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(255, 152, 0, 0.5) !important;
+            border-color: #ef6c00 !important;
+        }
+        
+        #riskBtnHigh:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(244, 67, 54, 0.5) !important;
+            border-color: #c62828 !important;
+        }
+        
+        #riskBtnLow:active,
+        #riskBtnMedium:active,
+        #riskBtnHigh:active {
+            transform: translateY(-1px);
+        }
+        
+        /* Pulse Animation for selected risk button */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.15);
+            }
+            100% {
+                transform: scale(1.1);
+            }
+        }
+        
         .step-actions {
             display: flex;
             justify-content: space-between;
@@ -1040,48 +1078,56 @@
             </div>
             
             <!-- שאלון סיכון -->
-            <div class="analysis-card" style="margin-top: 30px;">
-                <h3><i class="fas fa-chart-line"></i> הערכת אופי סיכון</h3>
-                <p style="margin-bottom: 15px; color: var(--text-light);">
-                    בחר רמת סיכון ידנית או מלא שאלון להערכה מדויקת
+            <div class="analysis-card" style="margin-top: 30px; border: 3px solid var(--primary); background: #f8f9fa;">
+                <h3 style="color: var(--primary); margin-bottom: 15px;">
+                    <i class="fas fa-chart-line"></i> הערכת אופי סיכון
+                </h3>
+                <p style="margin-bottom: 20px; color: var(--text); font-size: 1.05rem;">
+                    <strong>בחר רמת סיכון ידנית או מלא שאלון להערכה מדויקת</strong>
                 </p>
                 
                 <!-- בחירה ידנית -->
-                <div id="manualRiskSelection" style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-dark);">
+                <div id="manualRiskSelection" style="margin-bottom: 25px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <label style="display: block; margin-bottom: 15px; font-weight: 700; color: var(--text-dark); font-size: 1.1rem;">
                         <i class="fas fa-hand-pointer"></i>
                         בחירה ידנית:
                     </label>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                         <button class="btn" onclick="setManualRisk('נמוך')" id="riskBtnLow" 
-                                style="flex: 1; min-width: 100px; background: #e8f5e9; color: #2e7d32; border: 2px solid #4caf50;">
-                            נמוך
+                                style="flex: 1; min-width: 120px; padding: 18px 25px; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); color: #1b5e20; border: 3px solid #4caf50; font-size: 1.1rem; font-weight: 700; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); transition: all 0.3s ease;">
+                            <i class="fas fa-shield-alt"></i> נמוך
                         </button>
                         <button class="btn" onclick="setManualRisk('בינוני')" id="riskBtnMedium"
-                                style="flex: 1; min-width: 100px; background: #fff3e0; color: #e65100; border: 2px solid #ff9800;">
-                            בינוני
+                                style="flex: 1; min-width: 120px; padding: 18px 25px; background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); color: #e65100; border: 3px solid #ff9800; font-size: 1.1rem; font-weight: 700; box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3); transition: all 0.3s ease;">
+                            <i class="fas fa-chart-line"></i> בינוני
                         </button>
                         <button class="btn" onclick="setManualRisk('גבוה')" id="riskBtnHigh"
-                                style="flex: 1; min-width: 100px; background: #ffebee; color: #c62828; border: 2px solid #f44336;">
-                            גבוה
+                                style="flex: 1; min-width: 120px; padding: 18px 25px; background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); color: #b71c1c; border: 3px solid #f44336; font-size: 1.1rem; font-weight: 700; box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3); transition: all 0.3s ease;">
+                            <i class="fas fa-rocket"></i> גבוה
                         </button>
                     </div>
                 </div>
                 
-                <div id="orDivider" style="text-align: center; margin: 15px 0; color: var(--text-light); font-weight: 500;">
-                    או
+                <div id="orDivider" style="text-align: center; margin: 25px 0; position: relative;">
+                    <span style="background: #f8f9fa; padding: 0 15px; color: var(--text-light); font-weight: 600; font-size: 1.1rem; position: relative; z-index: 1;">
+                        או
+                    </span>
+                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: linear-gradient(to right, transparent, #ddd, transparent); z-index: 0;"></div>
                 </div>
                 
                 <!-- שאלון -->
-                <button class="btn btn-primary" onclick="openRiskQuestModalAndReturn()" style="width: 100%; justify-content: center;">
-                    <i class="fas fa-clipboard-list"></i>
-                    מלא שאלון סיכון מקצועי
-                </button>
+                <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <button class="btn btn-primary" onclick="openRiskQuestModalAndReturn()" 
+                            style="width: 100%; justify-content: center; padding: 18px 25px; font-size: 1.15rem; font-weight: 700; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+                        <i class="fas fa-clipboard-list"></i>
+                        מלא שאלון סיכון מקצועי
+                    </button>
+                </div>
                 
-                <div id="riskResult" style="margin-top: 15px; display: none;">
+                <div id="riskResult" style="margin-top: 20px; padding: 15px; background: white; border-radius: 12px; border-right: 4px solid var(--primary); display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <div class="metric">
-                        <span class="metric-label">רמת סיכון שנבחרה:</span>
-                        <span class="status-badge" id="riskBadge"></span>
+                        <span class="metric-label" style="font-size: 1.1rem; font-weight: 600;">רמת סיכון שנבחרה:</span>
+                        <span class="status-badge" id="riskBadge" style="font-size: 1.1rem; padding: 8px 16px;"></span>
                     </div>
                 </div>
             </div>
@@ -1557,6 +1603,30 @@
                                 riskBadge.className = 'status-badge status-danger';
                             }
                         }
+                        
+                        // הדגשת הכפתור הנכון אם זה בחירה ידנית
+                        if (importedData.riskSource === 'manual') {
+                            setTimeout(() => {
+                                document.querySelectorAll('#riskBtnLow, #riskBtnMedium, #riskBtnHigh').forEach(btn => {
+                                    btn.style.opacity = '0.4';
+                                    btn.style.transform = 'scale(0.95)';
+                                    btn.style.filter = 'grayscale(0.5)';
+                                });
+                                
+                                const selectedBtn = document.getElementById(
+                                    importedData.riskProfile === 'נמוך' ? 'riskBtnLow' : 
+                                    importedData.riskProfile === 'בינוני' ? 'riskBtnMedium' : 
+                                    'riskBtnHigh'
+                                );
+                                if (selectedBtn) {
+                                    selectedBtn.style.opacity = '1';
+                                    selectedBtn.style.transform = 'scale(1.1)';
+                                    selectedBtn.style.filter = 'grayscale(0)';
+                                    selectedBtn.style.boxShadow = '0 8px 20px rgba(102, 126, 234, 0.6)';
+                                }
+                            }, 100);
+                        }
+                        
                         console.log('✅ רמת סיכון נטענה:', importedData.riskProfile);
                     }
                     
@@ -1629,10 +1699,11 @@
             document.getElementById('step4Btn').disabled = false;
             AnalysisStorage.save();
             
-            // עדכון כפתורים
+            // עדכון כפתורים - איפוס כל הכפתורים
             document.querySelectorAll('#riskBtnLow, #riskBtnMedium, #riskBtnHigh').forEach(btn => {
-                btn.style.opacity = '0.5';
-                btn.style.transform = 'scale(1)';
+                btn.style.opacity = '0.4';
+                btn.style.transform = 'scale(0.95)';
+                btn.style.filter = 'grayscale(0.5)';
             });
             
             const selectedBtn = document.getElementById(
@@ -1642,8 +1713,12 @@
             );
             if (selectedBtn) {
                 selectedBtn.style.opacity = '1';
-                selectedBtn.style.transform = 'scale(1.05)';
-                selectedBtn.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.4)';
+                selectedBtn.style.transform = 'scale(1.1)';
+                selectedBtn.style.filter = 'grayscale(0)';
+                selectedBtn.style.boxShadow = '0 8px 20px rgba(102, 126, 234, 0.6)';
+                
+                // אנימציה של "pulse"
+                selectedBtn.style.animation = 'pulse 0.5s ease-in-out';
             }
             
             // הצגת התוצאה
@@ -1993,6 +2068,27 @@
                         </div>`
                     }
                 </div>
+                
+                <div class="analysis-card" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); margin-bottom: 20px; padding: 20px; border-right: 4px solid #2196f3;">
+                    <h4 style="color: #1976d2; margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>שיטת חישוב רמת הסיכון</span>
+                    </h4>
+                    <div style="background: white; padding: 15px; border-radius: 8px; line-height: 1.8;">
+                        <p style="margin: 0 0 10px 0; color: var(--text-dark);">
+                            <i class="fas fa-calculator" style="color: #2196f3; margin-left: 8px;"></i>
+                            <strong>רמת הסיכון נקבעת בשתי שיטות:</strong>
+                        </p>
+                        <ul style="margin: 10px 0 0 20px; padding-right: 20px; color: var(--text);">
+                            <li style="margin-bottom: 8px;">
+                                <strong>שיטה עיקרית:</strong> סיכון נקבע בהתאם ל<strong>סטיית התקן</strong> (תנודתיות) של התשואות ביחס לממוצע הענפי של המוצר
+                            </li>
+                            <li>
+                                <strong>שיטה משנית:</strong> במידה ולא קיים נתון סטטיסטי, הסיכון נקבע בהתאם ל<strong>מדיניות ההשקעות</strong> של המסלול
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             `;
             
             // ריכוז נתונים לפי מוצר + מסלול
@@ -2002,6 +2098,9 @@
             pirteiHeshbon.forEach((heshbon) => {
                 const maslulim = heshbon.mafyenMaslulim || [];
                 const productName = heshbon.shemTochnit || heshbon.sugMutzar || 'לא ידוע';
+                
+                // זיהוי סוג המוצר
+                const mozarType = getMozarType(heshbon.sugMutzar);
                 
                 maslulim.forEach(maslul => {
                     const pathwayName = maslul.shemMaslulHashkaa || maslul.shemMaslul || '';
@@ -2024,6 +2123,7 @@
                     if (!productMaslulMap[key]) {
                         productMaslulMap[key] = {
                             productName: productName,
+                            mozarType: mozarType, // סוג המוצר הממופה
                             maslulType: maslulType,
                             totalAmount: 0,
                             examples: []
@@ -2047,9 +2147,10 @@
             };
             
             Object.values(productMaslulMap).forEach((entry) => {
-                const foundRamatsikon = findRamatsikonByName(entry.maslulType);
-                const ramatsikon = foundRamatsikon || 'לא ידוע';
-                const pathwayRisk = getRiskLevel(ramatsikon);
+                // שימוש בפונקציה המתקדמת לחישוב סיכון לפי סטיות סטטיסטיות
+                // מעבירים את סוג המוצר (mozarType) ולא את שם התוכנית
+                const mozarForCalc = entry.mozarType || entry.productName;
+                const pathwayRisk = calculateRiskByStandardDeviation(mozarForCalc, entry.maslulType);
                 
                 if (pathwayRisk === 'גבוה' || pathwayRisk === 'בינוני' || pathwayRisk === 'נמוך') {
                     riskDistribution[pathwayRisk] += entry.totalAmount;
@@ -2185,10 +2286,10 @@
             //console.log(`📊 נמצאו ${sortedEntries.length} קומבינציות מוצר+מסלול`);
             
             sortedEntries.forEach((entry) => {
-                // חיפוש ramatsikon לפי סוג המסלול
-                const foundRamatsikon = findRamatsikonByName(entry.maslulType);
-                const ramatsikon = foundRamatsikon || 'לא ידוע';
-                const pathwayRisk = getRiskLevel(ramatsikon);
+                // שימוש בפונקציה המתקדמת לחישוב סיכון לפי סטיות סטטיסטיות
+                // מעבירים את סוג המוצר (mozarType) ולא את שם התוכנית
+                const mozarForCalc = entry.mozarType || entry.productName;
+                const pathwayRisk = calculateRiskByStandardDeviation(mozarForCalc, entry.maslulType);
                 const match = clientRisk ? checkRiskMatch(clientRisk, pathwayRisk) : null;
                 
                 html += `
@@ -2993,6 +3094,48 @@
             return { color, icon, message, shortMessage, rating, diff, diffPercent, noData: false };
         }
         
+        // פונקציה לזיהוי סוג מוצר לפי sugMutzar
+        function getMozarType(sugMutzar) {
+            const sugMutzarStr = String(sugMutzar || '');
+            
+            // קרנות פנסיה
+            if (sugMutzarStr === '2' || sugMutzarStr === '2_1' || sugMutzarStr === '2_2') {
+                return 'קרנות חדשות';
+            }
+            
+            // קרנות השתלמות
+            if (sugMutzarStr === '3' || sugMutzarStr.includes('השתלמות')) {
+                return 'קרנות השתלמות';
+            }
+            
+            // תגמולים ואישית לפיצויים
+            if (sugMutzarStr === '5' || sugMutzarStr === '6' || sugMutzarStr.includes('תגמולים') || sugMutzarStr.includes('פיצויים')) {
+                return 'תגמולים ואישית לפיצויים';
+            }
+            
+            // קופת גמל להשקעה
+            if (sugMutzarStr === '8' || sugMutzarStr.includes('גמל להשקעה')) {
+                return 'קופת גמל להשקעה';
+            }
+            
+            // חסכון לילד
+            if (sugMutzarStr.includes('לכל ילד') || sugMutzarStr.includes('חסכון לילד')) {
+                return 'קופת גמל להשקעה - חסכון לילד';
+            }
+            
+            // פוליסות חסכון
+            if (sugMutzarStr === '7' || sugMutzarStr.includes('פוליס')) {
+                return 'פוליסות חסכון';
+            }
+            
+            // מרכזית לפיצויים
+            if (sugMutzarStr.includes('מרכזית')) {
+                return 'מרכזית לפיצויים';
+            }
+            
+            return null;
+        }
+        
         // פונקציה לחיפוש ramatsikon לפי שם המסלול
         // משתמשת ב-sikonData שנטען מ-ofihashkaa.xml בעליית האתר
         function findRamatsikonByName(shemMaslul) {
@@ -3064,6 +3207,94 @@
             }
             
             return 'לא ידוע';
+        }
+        
+        // פונקציה מתקדמת לחישוב רמת סיכון לפי סטיות סטטיסטיות
+        function calculateRiskByStandardDeviation(productName, maslulType) {
+            console.log(`🔍 מחשב סיכון: מוצר="${productName}", מסלול="${maslulType}"`);
+            
+            // בדיקה שיש גישה ל-dataIndicators ו-dataIndicatorsSikon
+            if (typeof dataIndicators === 'undefined' || !Array.isArray(dataIndicators) || dataIndicators.length === 0) {
+                console.warn('⚠️ dataIndicators לא זמין - נופל לשיטה הישנה');
+                // נפילה לשיטה הישנה
+                const foundRamatsikon = findRamatsikonByName(maslulType);
+                return getRiskLevel(foundRamatsikon || 'לא ידוע');
+            }
+            
+            if (typeof dataIndicatorsSikon === 'undefined' || !Array.isArray(dataIndicatorsSikon) || dataIndicatorsSikon.length === 0) {
+                console.warn('⚠️ dataIndicatorsSikon לא זמין - נופל לשיטה הישנה');
+                const foundRamatsikon = findRamatsikonByName(maslulType);
+                return getRiskLevel(foundRamatsikon || 'לא ידוע');
+            }
+            
+            // שלב 1: חיפוש המסלול ב-dataIndicators
+            const maslulData = dataIndicators.find(item => 
+                item.mozar === productName && item.maslul === maslulType
+            );
+            
+            if (!maslulData) {
+                console.warn(`⚠️ לא נמצא מסלול "${maslulType}" במוצר "${productName}" ב-dataIndicators`);
+                console.log(`   📋 מוצרים זמינים ב-dataIndicators:`, [...new Set(dataIndicators.map(i => i.mozar))]);
+                // נפילה לשיטה הישנה
+                const foundRamatsikon = findRamatsikonByName(maslulType);
+                return getRiskLevel(foundRamatsikon || 'לא ידוע');
+            }
+            
+            // שלב 2: חישוב הסטייה המשוקללת של המסלול
+            const stiya36 = parseFloat(maslulData.stiya36 || 0);
+            const stiya60 = parseFloat(maslulData.stiya60 || 0);
+            
+            let calculatedStiya;
+            
+            // לפי הלוגיקה שהמשתמש ביקש:
+            if (stiya36 > 0 && stiya60 > 0) {
+                // אם יש גם 3 שנים וגם 5 שנים: 60% ל-5 שנים ו-40% ל-3 שנים
+                calculatedStiya = (stiya60 * 0.6) + (stiya36 * 0.4);
+                console.log(`📊 ${maslulType}: stiya36=${stiya36}, stiya60=${stiya60} → משוקלל=${calculatedStiya.toFixed(2)}`);
+            } else if (stiya36 > 0) {
+                // אם יש רק 3 שנים
+                calculatedStiya = stiya36;
+                console.log(`📊 ${maslulType}: רק stiya36=${stiya36}`);
+            } else if (stiya60 > 0) {
+                // אם יש רק 5 שנים (מקרה לא צפוי אבל נטפל בו)
+                calculatedStiya = stiya60;
+                console.log(`📊 ${maslulType}: רק stiya60=${stiya60}`);
+            } else {
+                // אין נתוני סטייה - נופל לשיטה הישנה (SIKON מהמסלול עצמו)
+                console.log(`⚠️ ${maslulType}: אין נתוני סטייה - נופל ל-SIKON מקורי`);
+                const foundRamatsikon = findRamatsikonByName(maslulType);
+                return getRiskLevel(foundRamatsikon || 'לא ידוע');
+            }
+            
+            // שלב 3: חיפוש טווחי הסיכון של המוצר
+            const productSikonData = dataIndicatorsSikon.find(item => item.mozar === productName);
+            
+            if (!productSikonData) {
+                console.warn(`⚠️ לא נמצא מוצר "${productName}" ב-dataIndicatorsSikon`);
+                console.log(`   📋 מוצרים זמינים ב-dataIndicatorsSikon:`, dataIndicatorsSikon.map(i => i.mozar));
+                // נפילה לשיטה הישנה
+                const foundRamatsikon = findRamatsikonByName(maslulType);
+                return getRiskLevel(foundRamatsikon || 'לא ידוע');
+            }
+            
+            const stiyaCombinedMin = parseFloat(productSikonData.stiyaCombinedMin || 0);
+            const stiyaCombinedMax = parseFloat(productSikonData.stiyaCombinedMax || 0);
+            
+            console.log(`   📊 טווחי המוצר "${productName}": Min=${stiyaCombinedMin.toFixed(2)}, Max=${stiyaCombinedMax.toFixed(2)}`);
+            
+            // שלב 4: קביעת רמת הסיכון לפי הטווחים
+            let riskLevel;
+            if (calculatedStiya < stiyaCombinedMin) {
+                riskLevel = 'נמוך';
+            } else if (calculatedStiya <= stiyaCombinedMax) {
+                riskLevel = 'בינוני';
+            } else {
+                riskLevel = 'גבוה';
+            }
+            
+            console.log(`   🎯 תוצאה: ${maslulType} במוצר ${productName} → סטייה=${calculatedStiya.toFixed(2)} → ${riskLevel}`);
+            
+            return riskLevel;
         }
         
         // פונקציה לבדיקת התאמה
@@ -3241,6 +3472,7 @@
                             shemTochnit: heshbon.shemTochnit,
                             shemMaasik: heshbon.shemMaasik,
                             sugMutzar: heshbon.sugMutzar,
+                            mozarType: getMozarType(heshbon.sugMutzar), // סוג המוצר הממופה
                             isPension: isPensionFund,
                             maslulim: {}
                         };
@@ -3279,9 +3511,10 @@
                 // בדיקת התאמות סיכון
                 for (const [tochnitKey, tochnitData] of Object.entries(tochnitMap)) {
                     for (const [maslulKey, maslulData] of Object.entries(tochnitData.maslulim)) {
-                        const foundRamatsikon = findRamatsikonByName(maslulData.maslulType);
-                        const ramatsikon = foundRamatsikon || 'לא ידוע';
-                        const pathwayRisk = getRiskLevel(ramatsikon);
+                        // שימוש בפונקציה המתקדמת לחישוב סיכון לפי סטיות סטטיסטיות
+                        // מעבירים את סוג המוצר (mozarType) ולא את שם התוכנית
+                        const mozarForCalc = tochnitData.mozarType || tochnitData.shemTochnit;
+                        const pathwayRisk = calculateRiskByStandardDeviation(mozarForCalc, maslulData.maslulType);
                         const match = checkRiskMatch(clientRisk, pathwayRisk);
                         
                         // אם לא מתאים - הוסף לרשימת פערים (רק אי-התאמות!)
