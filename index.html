@@ -3542,9 +3542,7 @@
 <div class="comparison-modal" id="comparisonModal">
    	<div class="comparison-card">
         <i onclick="closeComparisonModal()" class="fas fa-times" style="font-size: 2rem; cursor: pointer; color: #dc3545; margin-bottom: 2rem;"></i>
-
-		<h2>קופת גמל להשקעה או פוליסת חיסכון – במה לבחור?</h2>
-		
+		<h2>קופת גמל להשקעה או פוליסת חיסכון – במה לבחור?</h2
 		<p>
 			עולם ההשקעות הפרטיות מציע שתי אפשרויות מרכזיות לחיסכון נזיל ולטווח ארוך:
 			<strong>קופת גמל להשקעה</strong> ו־<strong>פוליסת חיסכון</strong>.
@@ -4147,32 +4145,24 @@
             e.stopPropagation();
             // Reset file input to allow selecting same files again
             fileInput.value = '';
-            console.log('🔄 File input reset before selection');
             fileInput.click();
             
         });
 
          // שמירת הקבצים ב אוסף uploadedFiles
         function handleFiles(files) {
-            console.log('📁 handleFiles called with', files.length, 'files');
-            console.log('📂 Current uploadedFiles count BEFORE reset:', uploadedFiles.length);
-            
             // ⚡ RESET uploadedFiles - don't accumulate from previous uploads
             uploadedFiles = [];
-            console.log('🔄 uploadedFiles reset to empty array');
             
             Array.from(files).forEach(file => {
                 if (isValidFile(file)) {
                     uploadedFiles.push(file);
-                    console.log('✅ Added file:', file.name);
                 }
             });
             
-            console.log('📊 Total uploaded files after adding:', uploadedFiles.length);
             displayUploadedFiles();
             
             if(uploadedFiles.length > 0) {
-                console.log('⏳ Scheduling processFilesBtn click in 3.5s');
                 setTimeout(() => {
                     processFilesBtn.click();
                 }, 3500);
@@ -4259,10 +4249,6 @@
 
         // Process files button
         processFilesBtn.addEventListener('click', async () => {
-            console.log('🚀 processFiles started');
-            console.log('📁 uploadedFiles count:', uploadedFiles.length);
-            console.log('📅 taarichLeyda BEFORE reset:', taarichLeyda);
-            
             // ⚡ RESET ALL GLOBAL VARIABLES BEFORE PROCESSING
             taarichLeyda = '';
             dataMislaka = null;
@@ -4286,10 +4272,6 @@
                 myChart.destroy();
                 myChart = null;
             }
-            
-            console.log('✅ All variables RESET. taarichLeyda:', taarichLeyda);
-            console.log('✅ dataMislaka:', dataMislaka);
-            console.log('✅ myChart:', myChart);
             
             uploadedFilesTitle.style.display = 'none';
             filesList.style.display = 'none';
@@ -4354,22 +4336,16 @@
                         if(eMail===''){eMail = cleanVal(yeshutLakoach ? getElementText(yeshutLakoach, 'E-MAIL') : '') || ''};
                         if(misparZihuyLakoach===''){ misparZihuyLakoach = last9Digits(yeshutLakoach ? getElementText(yeshutLakoach, 'MISPAR-ZIHUY-LAKOACH') : '')};
                         
-                        console.log('🔍 Checking taarichLeyda. Current value:', taarichLeyda);
                         if(taarichLeyda===''){ 
-                            console.log('✅ taarichLeyda is empty, setting new value');
                             taarichLeyda = cleanVal(yeshutLakoach ? getElementText(yeshutLakoach, 'TAARICH-LEYDA') : '');
-                            console.log('📅 New taarichLeyda value:', taarichLeyda);
                             
                             const birthYear = parseInt(taarichLeyda.slice(0,4));
                             const currentYear = new Date().getFullYear();
                             gil = currentYear - birthYear;
-                            console.log('👤 Calculated age (gil):', gil);
                             
                             // שמירה ב-sessionStorage לשימוש בעמוד הניתוח המתקדם
                             sessionStorage.setItem('gilForAdvancedAnalysis', gil);
                             sessionStorage.setItem('ageToRetirementForAdvancedAnalysis', 67-Number(gil));
-                        } else {
-                            console.log('⚠️ taarichLeyda already has value, skipping:', taarichLeyda);
                         };
                         
                         pratimIshim={shemPrati,shemMishpacha,misparCellulari,eMail,misparZihuyLakoach,taarichLeyda,gil};
@@ -5386,8 +5362,6 @@
                 sessionStorage.removeItem('riskSource');
                 sessionStorage.removeItem('advancedAnalysisData');
                 
-                console.log('🔄 Reloading page from closeAndDeleteBtn');
-                
                 // רענון הדף
                 window.location.reload();
         });
@@ -5431,7 +5405,6 @@
             sessionStorage.removeItem('riskProfile');
             sessionStorage.removeItem('riskScore');
             sessionStorage.removeItem('riskSource');
-            console.log('🧹 ניקוי רמת סיכון לפני מעבר לניתוח מתקדם');
            
             window.location.href = 'advancedAnalysis.html';
         });
@@ -5481,8 +5454,6 @@
                     sessionStorage.removeItem('riskScore');
                     sessionStorage.removeItem('riskSource');
                     sessionStorage.removeItem('advancedAnalysisData');
-                    
-                    console.log('🔄 Reloading page to reset all data');
                     
                     // רענון הדף - הדרך הכי נקייה לאפס הכל!
                     window.location.reload();
@@ -5644,18 +5615,12 @@
         }
 
         function analyzeRetirement() {
-            console.log('Starting retirement analysis...');
-            console.log('dataMislaka:', dataMislaka);
-            
             const retirementData = calculateRetirementAnalysis();
-            console.log('Retirement data calculated:', retirementData);
             
             displayRetirementAccumulation(retirementData);
             displayRetirementPensions(retirementData);
             displayRetirementAgeCalculation(retirementData);
             displayRetirementRecommendations(retirementData);
-            
-            console.log('Retirement analysis completed');
         }
 
         function calculateRetirementAnalysis() {
@@ -7384,26 +7349,6 @@
                        item.erechPidionPitzuimLeHonMaavidimKodmim > 0 ||
                        item.yitratPitzuimLeLoHitchashbenot > 0;
                 
-                // Debug: בדיקה אם זה חשבון 17220896 בשלב הראשון
-                if (String(item.misparPolisaOHeshbon).includes('17220896')) {
-                    console.log('🔍 Debug שלב 1 - חשבון 17220896 בפילטר הראשוני:', {
-                        misparPolisaOHeshbon: item.misparPolisaOHeshbon,
-                        sugMutzar: item.sugMutzar,
-                        hasAnyValue: hasAnyValue,
-                        allValues: {
-                            pitzuimPturimMaavidimKodmim: item.pitzuimPturimMaavidimKodmim,
-                            erechPidionPitzuimLeKitzbaMaavidimKodmim: item.erechPidionPitzuimLeKitzbaMaavidimKodmim,
-                            tzviratPitzuimMaavidimKodmimBeretzefKitzba: item.tzviratPitzuimMaavidimKodmimBeretzefKitzba,
-                            tzviratPitzuimMaavidimKodmimBeretzefZechuyot: item.tzviratPitzuimMaavidimKodmimBeretzefZechuyot,
-                            tzviratPitzuim31121999LeKitzba: item.tzviratPitzuim31121999LeKitzba,
-                            erechPidionPitzuimMaasikNochechi: item.erechPidionPitzuimMaasikNochechi,
-                            erechPidionMarkivPitzuimLemasNochechi: item.erechPidionMarkivPitzuimLemasNochechi,
-                            erechPidionPitzuimMaavidimKodmimRetzefZehuyut: item.erechPidionPitzuimMaavidimKodmimRetzefZehuyut,
-                            erechPidionPitzuimLeHonMaavidimKodmim: item.erechPidionPitzuimLeHonMaavidimKodmim,
-                            yitratPitzuimLeLoHitchashbenot: item.yitratPitzuimLeLoHitchashbenot
-                        }
-                    });
-                }
                 
                 return hasAnyValue;
             });
@@ -7472,26 +7417,6 @@
                        item.erechPidionPitzuimLeHonMaavidimKodmim > 0 ||
                        item.yitratPitzuimLeLoHitchashbenot > 0;
                 
-                // Debug: אם זה חשבון 17220896, נדפיס את הערכים
-                if (String(item.misparPolisaOHeshbon).includes('17220896')) {
-                    console.log('🔍 Debug חשבון 17220896:', {
-                        misparPolisaOHeshbon: item.misparPolisaOHeshbon,
-                        sugMutzar: item.sugMutzar,
-                        pitzuimPturimMaavidimKodmim: item.pitzuimPturimMaavidimKodmim,
-                        erechPidionPitzuimLeKitzbaMaavidimKodmim: item.erechPidionPitzuimLeKitzbaMaavidimKodmim,
-                        tzviratPitzuimMaavidimKodmimBeretzefKitzba: item.tzviratPitzuimMaavidimKodmimBeretzefKitzba,
-                        tzviratPitzuimMaavidimKodmimBeretzefZechuyot: item.tzviratPitzuimMaavidimKodmimBeretzefZechuyot,
-                        tzviratPitzuim31121999LeKitzba: item.tzviratPitzuim31121999LeKitzba,
-                        erechPidionPitzuimMaasikNochechi: item.erechPidionPitzuimMaasikNochechi,
-                        erechPidionMarkivPitzuimLemasNochechi: item.erechPidionMarkivPitzuimLemasNochechi,
-                        erechPidionPitzuimMaavidimKodmimRetzefZehuyut: item.erechPidionPitzuimMaavidimKodmimRetzefZehuyut,
-                        erechPidionPitzuimLeHonMaavidimKodmim: item.erechPidionPitzuimLeHonMaavidimKodmim,
-                        yitratPitzuimLeLoHitchashbenot: item.yitratPitzuimLeLoHitchashbenot,
-                        kayamRetzefPitzuimKitzba: item.kayamRetzefPitzuimKitzba,
-                        kayamRetzefPitzuimZechuyot: item.kayamRetzefPitzuimZechuyot,
-                        hasValue: hasValue
-                    });
-                }
                 
                 return hasValue;
             });

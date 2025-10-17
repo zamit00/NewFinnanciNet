@@ -1590,8 +1590,6 @@
             // טעינת כל הנתונים הגלובליים (dataIndicators)
             if (typeof loadalldata === 'function') {
                 loadalldata().then(() => {
-                   // console.log('✅ dataIndicators זמין:', typeof dataIndicators !== 'undefined');
-                   // console.log('📊 מספר רשומות:', dataIndicators?.length || 0);
                 });
             }
             
@@ -1636,9 +1634,6 @@
                     
                     // שמירת הנתונים המפורטים
                     clientAnalysisData.detailedData = importedData.detailedData;
-                    //console.log('💾 נתונים מפורטים נשמרו ב-clientAnalysisData:', clientAnalysisData.detailedData);
-                    //console.log('  יש pirteiHeshbon?', clientAnalysisData.detailedData?.pirteiHeshbon?.length || 0);
-                    //console.log('  יש masluleiHashkaa?', clientAnalysisData.detailedData?.masluleiHashkaa?.length || 0);
                     
                     // טעינת רמת סיכון אם קיימת
                     if (importedData.riskProfile) {
@@ -1685,14 +1680,10 @@
                                 }
                             }, 100);
                         }
-                        
-                        console.log('✅ רמת סיכון נטענה:', importedData.riskProfile);
                     }
                     
                     AnalysisStorage.save();
                     
-                    //console.log('✅ נתוני לקוח נטענו:', clientAnalysisData.profile);
-                    //console.log('✅ נתוני תיק נטענו:', clientAnalysisData.portfolio);
                     
                     // עדכון התצוגה
                     updateStep1Display();
@@ -1703,12 +1694,6 @@
                         const riskBtnLow = document.getElementById('riskBtnLow');
                         const riskBtnMedium = document.getElementById('riskBtnMedium');
                         const riskBtnHigh = document.getElementById('riskBtnHigh');
-                        
-                        console.log('🔍 בדיקת נראות כפתורי סיכון:');
-                        console.log('  manualRiskDiv:', manualRiskDiv ? 'קיים' : 'לא קיים', manualRiskDiv?.style.display);
-                        console.log('  riskBtnLow:', riskBtnLow ? 'קיים' : 'לא קיים');
-                        console.log('  riskBtnMedium:', riskBtnMedium ? 'קיים' : 'לא קיים');
-                        console.log('  riskBtnHigh:', riskBtnHigh ? 'קיים' : 'לא קיים');
                         
                         // ודא שהם מוצגים
                         if (manualRiskDiv && clientAnalysisData.profile.riskSource !== 'questionnaire') {
@@ -1819,8 +1804,6 @@
                 }
             }
             
-            console.log('✅ רמת סיכון נקבעה ידנית:', riskLevel);
-            
             // הודעת הצלחה
             Swal.fire({
                 title: 'נשמר!',
@@ -1893,7 +1876,6 @@
                             }
                         }
                         
-                        //console.log('✅ רמת סיכון נשמרה:', riskLevel);
                     }
                 }, { once: true });
             } else {
@@ -1942,11 +1924,9 @@
                 employmentStatus
             });
             
-            //console.log('✅ נתוני לקוח נשמרו:', clientAnalysisData.profile);
             
             // החזרת רמת סיכון (אם קיימת)
             const riskLevel = clientAnalysisData.profile.riskProfile || "";
-            console.log('🎲 רמת סיכון:', riskLevel);
             
             // מעבר לשלב הבא
             goToStep(2);
@@ -2000,20 +1980,10 @@
             const pirteiHeshbon = detailedData.pirteiHeshbon;
             const clientRisk = clientAnalysisData.profile.riskProfile;
             
-            console.log('🔍 DEBUG Step 2 - analyzeQuality:');
-            console.log('  pirteiHeshbon:', pirteiHeshbon);
-            console.log('  מספר חשבונות:', pirteiHeshbon?.length || 0);
-            console.log('  sikonData זמין?', typeof sikonData !== 'undefined' && sikonData?.length > 0);
-            console.log('  sikonData length:', typeof sikonData !== 'undefined' ? sikonData?.length : 'undefined');
             if (pirteiHeshbon && pirteiHeshbon[0]) {
-                //console.log('  דוגמה לחשבון ראשון:', pirteiHeshbon[0]);
-                //console.log('  מסלולים בחשבון ראשון:', pirteiHeshbon[0].mafyenMaslulim);
                 if (pirteiHeshbon[0].mafyenMaslulim && pirteiHeshbon[0].mafyenMaslulim[0]) {
-                    //console.log('  שם מסלול ראשון:', pirteiHeshbon[0].mafyenMaslulim[0].shemMaslul);
-                    //console.log('  ramatsikon במסלול:', pirteiHeshbon[0].mafyenMaslulim[0].ramatsikon);
                 }
             }
-            //console.log('  clientRisk:', clientRisk);
             
             // יצירת כותרת עם כפתורי ניתוח
             let html = `
@@ -2067,13 +2037,11 @@
             `;
             
             // הרץ את כל 3 הניתוחים מיד (אסינכרוני)
-            console.log('🔄 מריץ את כל הניתוחים מחדש...');
             Promise.all([
                 showRiskAnalysis(),
                 showFeesAnalysis(),
                 showReturnsAnalysis()
             ]).then(() => {
-                console.log('✅ כל הניתוחים הושלמו!');
                 // גם להריץ את ניתוח הפערים אוטומטית
                 analyzeGaps();
             }).catch(error => {
@@ -2363,7 +2331,6 @@
             // שלב 3: הצגת הנתונים המרוכזים
             const sortedEntries = Object.values(productMaslulMap).sort((a, b) => b.totalAmount - a.totalAmount);
             
-            //console.log(`📊 נמצאו ${sortedEntries.length} קומבינציות מוצר+מסלול`);
             
             sortedEntries.forEach((entry) => {
                 // שימוש בפונקציה המתקדמת לחישוב סיכון לפי סטיות סטטיסטיות
@@ -3266,7 +3233,6 @@
             );
             
             if (sikonItem && sikonItem.risk) {
-                //console.log(`✅ נמצא סיכון "${sikonItem.risk}" עבור "${shemMaslul}" (התאמה ישירה)`);
                 return sikonItem.risk;
             }
             
@@ -3276,7 +3242,6 @@
             );
             
             if (sikonItem && sikonItem.risk) {
-                console.log(`✅ נמצא סיכון "${sikonItem.risk}" עבור "${shemMaslul}" (התאמה חלקית: ${sikonItem.name})`);
                 return sikonItem.risk;
             }
             
@@ -3289,12 +3254,10 @@
                 );
                 
                 if (sikonItem && sikonItem.risk) {
-                    console.log(`✅ נמצא סיכון "${sikonItem.risk}" עבור "${shemMaslul}" (לפי סוג: ${maslulType})`);
                     return sikonItem.risk;
                 }
             }
             
-            console.log(`⚠️ לא נמצאה רמת סיכון ב-sikonData עבור: ${shemMaslul}`);
             return null;
         }
         
@@ -3322,11 +3285,8 @@
         
         // פונקציה מתקדמת לחישוב רמת סיכון לפי סטיות סטטיסטיות
         function calculateRiskByStandardDeviation(productName, maslulType) {
-            console.log(`🔍 מחשב סיכון: מוצר="${productName}", מסלול="${maslulType}"`);
-
             // מקרה מיוחד: קרן ותיקה - לא נבדק כלל
             if (productName === 'קרן ותיקה') {
-                console.log(`⏭️ קרן ותיקה - לא מבוצעת בדיקת סיכון`);
                 return 'לא ידוע';
             }
             
@@ -3334,7 +3294,6 @@
             let productToCheck = productName;
             if (productName === 'ביטוח חיים עם חסכון') {
                 productToCheck = 'פוליסות חסכון';
-                console.log(`🔄 ביטוח חיים עם חסכון - נבדק מול "${productToCheck}"`);
             }
             
             // בדיקה שיש גישה ל-dataIndicators ו-dataIndicatorsSikon
@@ -3358,7 +3317,6 @@
             
             if (!maslulData) {
                 console.warn(`⚠️ לא נמצא מסלול "${maslulType}" במוצר "${productToCheck}" ב-dataIndicators`);
-                console.log(`   📋 מוצרים זמינים ב-dataIndicators:`, [...new Set(dataIndicators.map(i => i.mozar))]);
                 // נפילה לשיטה הישנה
                 const foundRamatsikon = findRamatsikonByName(maslulType);
                 return getRiskLevel(foundRamatsikon || 'לא ידוע');
@@ -3374,18 +3332,14 @@
             if (stiya36 > 0 && stiya60 > 0) {
                 // אם יש גם 3 שנים וגם 5 שנים: 60% ל-5 שנים ו-40% ל-3 שנים
                 calculatedStiya = (stiya60 * 0.6) + (stiya36 * 0.4);
-                console.log(`📊 ${maslulType}: stiya36=${stiya36}, stiya60=${stiya60} → משוקלל=${calculatedStiya.toFixed(2)}`);
             } else if (stiya36 > 0) {
                 // אם יש רק 3 שנים
                 calculatedStiya = stiya36;
-                console.log(`📊 ${maslulType}: רק stiya36=${stiya36}`);
             } else if (stiya60 > 0) {
                 // אם יש רק 5 שנים (מקרה לא צפוי אבל נטפל בו)
                 calculatedStiya = stiya60;
-                console.log(`📊 ${maslulType}: רק stiya60=${stiya60}`);
             } else {
                 // אין נתוני סטייה - נופל לשיטה הישנה (SIKON מהמסלול עצמו)
-                console.log(`⚠️ ${maslulType}: אין נתוני סטייה - נופל ל-SIKON מקורי`);
                 const foundRamatsikon = findRamatsikonByName(maslulType);
                 return getRiskLevel(foundRamatsikon || 'לא ידוע');
             }
@@ -3395,7 +3349,6 @@
             
             if (!productSikonData) {
                 console.warn(`⚠️ לא נמצא מוצר "${productToCheck}" ב-dataIndicatorsSikon`);
-                console.log(`   📋 מוצרים זמינים ב-dataIndicatorsSikon:`, dataIndicatorsSikon.map(i => i.mozar));
                 // נפילה לשיטה הישנה
                 const foundRamatsikon = findRamatsikonByName(maslulType);
                 return getRiskLevel(foundRamatsikon || 'לא ידוע');
@@ -3403,11 +3356,6 @@
             
             const stiyaCombinedMin = parseFloat(productSikonData.stiyaCombinedMin || 0);
             const stiyaCombinedMax = parseFloat(productSikonData.stiyaCombinedMax || 0);
-            
-            console.log(`   📊 טווחי המוצר "${productToCheck}": Min=${stiyaCombinedMin.toFixed(2)}, Max=${stiyaCombinedMax.toFixed(2)}`);
-            if (productName !== productToCheck) {
-                console.log(`   ℹ️ מוצר מקורי: "${productName}" → נבדק מול: "${productToCheck}"`);
-            }
             
             // שלב 4: קביעת רמת הסיכון לפי הטווחים
             let riskLevel;
@@ -3418,8 +3366,6 @@
             } else {
                 riskLevel = 'גבוה';
             }
-            
-            console.log(`   🎯 תוצאה: ${maslulType} במוצר ${productName} → סטייה=${calculatedStiya.toFixed(2)} → ${riskLevel}`);
             
             return riskLevel;
         }
@@ -3563,7 +3509,6 @@
         // דוח פערים - איסוף כל הבעיות מ-3 הטאבים
         // ========================================
         async function analyzeGaps() {
-            console.log('🔍 מתחיל ניתוח פערים...');
             
             const gapsContainer = document.getElementById('gapAnalysis');
             if (!gapsContainer) return;
@@ -4184,11 +4129,6 @@
             }
             
             gapsContainer.innerHTML = html;
-            
-            console.log(`✅ דוח פערים הושלם: ${totalGaps} פערים נמצאו`);
-            console.log(`   - פערי סיכון: ${riskGaps.length}`);
-            console.log(`   - דמי ניהול: ${feeGaps.length}`);
-            console.log(`   - תשואות: ${returnGaps.length}`);
         }
         
         // ========================================

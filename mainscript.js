@@ -48,27 +48,23 @@ const gufmosdiA = gufmosdixA.sort((a, b) => a.localeCompare(b, 'he'));
 // Function to load all data (can be called from other pages)
 async function loadalldata() {
   try {
-        //console.log('🔄 מתחיל לטעון קבצי נתונים...');
+        
         await Promise.all([
             fetchdataJasonB(),
             fetchdataJasonP(),
              fetchdataJasonM(),
         ]);
-        //console.log('✅ כל הנתונים נטענו בהצלחה');
-        //console.log('📊 מעבד ממוצעים...');
+        
         await indications();
         await fetchInvestmentData();
         
-        //console.log(`📈 נוצרו ${dataIndicators.length} רשומות ממוצע`);
         const tkofaItem = datanetunimKlaliXM.filter(item=>item.mh==='579')[0].tesua12
         ;
         if (tkofaItem) {
            tkofa = tkofaItem.split('=')[1].slice(4,6) +"/"+tkofaItem.split('=')[1].slice(0,4)
-           //console.log(`📅 תקופת נתונים: ${tkofa}`);
         } else {
            //console.error('לא נמצא פריט עם mh=579');
         }
-        //console.log('🎉 המערכת מוכנה לשימוש!');
   } catch (error) {
         console.error("❌ שגיאה בטעינת הנתונים:", error);
   }
@@ -105,13 +101,11 @@ async function fetchInvestmentData() {
     
     if (name && risk) {
       sikonData.push({ name, risk });
-      //console.log(`✅ נטען: ${name} → ${risk}`);
     } else if (name) {
       console.warn(`⚠️ חסר SIKON עבור: ${name}`);
     }
   }
 
- // console.log(`📊 נטענו ${sikonData.length} מסלולים מ-ofihashkaa.xml`);
   return sikonData;
 }
 
@@ -121,7 +115,6 @@ async function fetchInvestmentData() {
 
 async function fetchdataJasonM() {
     try {
-        //console.log('  ⏳ טוען dataJasonM.json...');
         const response = await fetch('dataJasonM.json'); 
         if (!response.ok) {
             throw new Error(`שגיאה: ${response.status} ${response.statusText}`);
@@ -129,7 +122,6 @@ async function fetchdataJasonM() {
         const data = await response.json(); 
         datanetunimKlaliXM = data;
 	    datanetunimKlaliXM= datanetunimKlaliXM.filter(item=>!item.menahelet.includes('סלייס'));    
-        //console.log(`  ✅ נטען dataJasonM.json (${datanetunimKlaliXM.length} רשומות)`);    
 
         //let tkofa = document.getElementById('tkufatdivuach');
         //var tkf = data.filter(item => item.mh === '579');
@@ -146,14 +138,12 @@ async function fetchdataJasonM() {
 }
 async function fetchdataJasonB() {
     try {
-        //console.log('  ⏳ טוען dataJasonB.json...');
         const response = await fetch('dataJasonB.json'); 
         if (!response.ok) {
             throw new Error(`שגיאה: ${response.status} ${response.statusText}`);
         }
         const data = await response.json(); 
         datanetunimKlaliXB = data; 
-        //console.log(`  ✅ נטען dataJasonB.json (${datanetunimKlaliXB.length} רשומות)`);
         return data;  // החזרת הנתונים כדי ש-`await` יעבוד נכון
     } catch (error) {
         console.error('❌ שגיאה בשליפת dataJasonB.json:', error);
@@ -162,14 +152,12 @@ async function fetchdataJasonB() {
 }
 async function fetchdataJasonP() {
     try {
-        //console.log('  ⏳ טוען dataJasonP.json...');
         const response = await fetch('dataJasonP.json'); 
         if (!response.ok) {
             throw new Error(`שגיאה: ${response.status} ${response.statusText}`);
         }
         const data = await response.json(); 
         datanetunimKlaliXP = data; 
-        //console.log(`  ✅ נטען dataJasonP.json (${datanetunimKlaliXP.length} רשומות)`);
         return data;  // מחזיר את הנתונים כדי שהפונקציה תהיה באמת אסינכרונית
     } catch (error) {
         console.error('❌ שגיאה בשליפת dataJasonP.json:', error);
@@ -292,7 +280,6 @@ async function indications(){
     
     }
     
-    console.log(dataIndicatorsSikon)
   }
   
 
