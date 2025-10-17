@@ -3607,10 +3607,14 @@
     <!-- מידע מקצועי על המוצרים -->
     <section class="features" id="professional-info" style="background: white; padding: 4rem 0;">
         <div class="containerCards" style="margin: 0 25px;">
-            <div class="choose-us-title">
+            <div class="choose-us-title" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
                 <h2 class="choose-us-title-text">📚 מידע מקצועי על המוצרים</h2>
+                <button class="cta-button" id="toggleProfessionalInfo" onclick="toggleProfessionalInfoSection()" 
+                    style="max-width: 200px; font-size: 1.1rem;">
+                    <i class="fas fa-chevron-down"></i> פתח
+                </button>
             </div>
-            <div class="flex-container-row feature-card-container" style="margin-bottom: 30px;">
+            <div id="professionalInfoCards" class="flex-container-row feature-card-container" style="margin-bottom: 30px; display: none;">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-piggy-bank" style="font-size: 4rem;"></i></div>
                     <h3 class="feature-title">קרן פנסיה</h3>
@@ -3630,7 +3634,7 @@
                     <button class="cta-button smallfont" onclick="openProfessionalInfoModal('hishtalmut')">למד עוד</button>
                 </div>
             </div>
-            <div class="flex-container-row feature-card-container">
+            <div id="professionalInfoCards2" class="flex-container-row feature-card-container" style="display: none;">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-coins" style="font-size: 4rem;"></i></div>
                     <h3 class="feature-title">קופת גמל</h3>
@@ -4011,6 +4015,43 @@
         window.addEventListener('beforeunload', function() {
             window.scrollTo(0, 0);
         });
+        
+        // פונקציה לפתיחה/סגירה של סעקשן מידע מקצועי
+        function toggleProfessionalInfoSection() {
+            const cards1 = document.getElementById('professionalInfoCards');
+            const cards2 = document.getElementById('professionalInfoCards2');
+            const button = document.getElementById('toggleProfessionalInfo');
+            
+            if (cards1.style.display === 'none') {
+                // פתיחה
+                cards1.style.display = 'flex';
+                cards2.style.display = 'flex';
+                button.innerHTML = '<i class="fas fa-chevron-up"></i> סגור';
+                
+                // אנימציית פתיחה חלקה
+                cards1.style.opacity = '0';
+                cards2.style.opacity = '0';
+                setTimeout(() => {
+                    cards1.style.transition = 'opacity 0.5s ease';
+                    cards2.style.transition = 'opacity 0.5s ease';
+                    cards1.style.opacity = '1';
+                    cards2.style.opacity = '1';
+                }, 10);
+            } else {
+                // סגירה
+                cards1.style.transition = 'opacity 0.3s ease';
+                cards2.style.transition = 'opacity 0.3s ease';
+                cards1.style.opacity = '0';
+                cards2.style.opacity = '0';
+                
+                setTimeout(() => {
+                    cards1.style.display = 'none';
+                    cards2.style.display = 'none';
+                }, 300);
+                
+                button.innerHTML = '<i class="fas fa-chevron-down"></i> פתח';
+            }
+        }
         
         // וידוא שהדף תמיד בחלק העליון כשמרעננים
         if (window.history.scrollRestoration) {
