@@ -771,6 +771,49 @@
                 width: 100%;
                 justify-content: center;
             }
+            
+            /* כפתורי בחירת סיכון למובייל */
+            #manualRiskSelection {
+                padding: 15px !important;
+            }
+            
+            #manualRiskSelection > div {
+                flex-direction: column !important;
+                gap: 12px !important;
+            }
+            
+            #riskBtnLow,
+            #riskBtnMedium,
+            #riskBtnHigh {
+                width: 100% !important;
+                min-width: 100% !important;
+                flex: none !important;
+                padding: 20px 15px !important;
+                font-size: 1.2rem !important;
+                justify-content: center !important;
+                display: flex !important;
+                align-items: center !important;
+            }
+            
+            #manualRiskSelection label {
+                font-size: 1rem !important;
+            }
+        }
+        
+        /* מסכים ממש קטנים - 480px ומטה */
+        @media screen and (max-width: 480px) {
+            #riskBtnLow,
+            #riskBtnMedium,
+            #riskBtnHigh {
+                padding: 18px 10px !important;
+                font-size: 1.1rem !important;
+            }
+            
+            #riskBtnLow i,
+            #riskBtnMedium i,
+            #riskBtnHigh i {
+                margin-left: 5px;
+            }
         }
         
         /* Analysis Tab Buttons */
