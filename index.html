@@ -2895,6 +2895,7 @@
     <link rel="stylesheet" href="terms-modal.css">
     <link rel="stylesheet" href="terms-consent.css">
     <link rel="stylesheet" href="risk-quest-modal.css">
+    <link rel="stylesheet" href="professional-info-modal.css">
     
     <!-- Accessibility and Footer -->
     <link rel="stylesheet" href="mainStyle.css">
@@ -3602,6 +3603,55 @@
 </div>
 
  
+
+    <!-- מידע מקצועי על המוצרים -->
+    <section class="features" id="professional-info" style="background: white; padding: 4rem 0;">
+        <div class="containerCards" style="margin: 0 25px;">
+            <div class="choose-us-title">
+                <h2 class="choose-us-title-text">📚 מידע מקצועי על המוצרים</h2>
+            </div>
+            <div class="flex-container-row feature-card-container" style="margin-bottom: 30px;">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-piggy-bank" style="font-size: 4rem;"></i></div>
+                    <h3 class="feature-title">קרן פנסיה</h3>
+                    <p class="feature-description">למד על קרן פנסיה, מרכיביה, הטבות המס וכללי המשיכה</p>
+                    <button class="cta-button smallfont" onclick="openProfessionalInfoModal('pensia')">למד עוד</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-line" style="font-size: 4rem;"></i></div>
+                    <h3 class="feature-title">קופת גמל להשקעה</h3>
+                    <p class="feature-description">מידע מקיף על קופת גמל להשקעה, יתרונות והטבות מס</p>
+                    <button class="cta-button smallfont" onclick="openProfessionalInfoModal('hashkaa')">למד עוד</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-graduation-cap" style="font-size: 4rem;"></i></div>
+                    <h3 class="feature-title">קרן השתלמות</h3>
+                    <p class="feature-description">הבן את היתרונות של קרן השתלמות ומיסוי רבינוביץ</p>
+                    <button class="cta-button smallfont" onclick="openProfessionalInfoModal('hishtalmut')">למד עוד</button>
+                </div>
+            </div>
+            <div class="flex-container-row feature-card-container">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-coins" style="font-size: 4rem;"></i></div>
+                    <h3 class="feature-title">קופת גמל</h3>
+                    <p class="feature-description">כל מה שצריך לדעת על קופת גמל לעמית שכיר ועצמאי</p>
+                    <button class="cta-button smallfont" onclick="openProfessionalInfoModal('gemel')">למד עוד</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-file-invoice-dollar" style="font-size: 4rem;"></i></div>
+                    <h3 class="feature-title">פוליסת חסכון</h3>
+                    <p class="feature-description">גלה את היתרונות של פוליסת חסכון ומסלולי ההשקעה</p>
+                    <button class="cta-button smallfont" onclick="openProfessionalInfoModal('polisa')">למד עוד</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-child" style="font-size: 4rem;"></i></div>
+                    <h3 class="feature-title">חסכון לכל ילד</h3>
+                    <p class="feature-description">מידע על חסכון לכל ילד והיתרונות המיוחדים של התכנית</p>
+                    <button class="cta-button smallfont" onclick="openProfessionalInfoModal('yeled')">למד עוד</button>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section class="cta-section">
         <div class="container">
@@ -7877,6 +7927,7 @@
     <script src="terms-modal.js"></script>
     <script src="risk-quest-modal.js"></script>
     <script src="terms-consent.js"></script>
+    <script src="professional-info-modal.js"></script>
     <script>
         // Load Modal HTML files
         fetch('about-modal.html')
@@ -7913,6 +7964,13 @@
                 document.body.insertAdjacentHTML('afterbegin', html);
             })
             .catch(err => console.error('Error loading terms consent:', err));
+        
+        fetch('professional-info-modal.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modals-container').innerHTML += html;
+            })
+            .catch(err => console.error('Error loading professional info modal:', err));
         
         // Load Footer
         fetch('footer.html')
