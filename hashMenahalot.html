@@ -1418,7 +1418,6 @@ function createChart(ctx, label, data) {
     
 }
 function updateCharts(selectedData,selectedProduct) {
-    console.log('updateCharts called with:', selectedData.length, 'items');
     
     // הצגת מכל הגרפים - שימוש במשתנה הגלובלי
     if (!charts) {
@@ -1431,9 +1430,6 @@ function updateCharts(selectedData,selectedProduct) {
     charts.style.removeProperty('visibility');
     charts.classList.add('show-charts');
     
-    console.log('Charts container should be visible now');
-    console.log('Current display:', window.getComputedStyle(charts).display);
-    console.log('Current visibility:', window.getComputedStyle(charts).visibility);
     
     var labels;
     if(selectedProduct!=='פוליסות חסכון'){
@@ -1447,7 +1443,6 @@ function updateCharts(selectedData,selectedProduct) {
     const threeYearData = selectedData.map(item => item.tesuam36);
     const fiveYearData = selectedData.map(item => item.tesuam60);
     
-    console.log('Chart data prepared - Year:', yearData.length, 'items');
     
     // השמדת גרפים קודמים אם קיימים
     if (yearChart) yearChart.destroy();
@@ -1469,14 +1464,12 @@ function updateCharts(selectedData,selectedProduct) {
     threeYearChart = createChart(threeYearCanvas.getContext('2d'), 'תשואה 3 שנים', { labels, values: threeYearData });
     fiveYearChart = createChart(fiveYearCanvas.getContext('2d'), 'תשואה 5 שנים', { labels, values: fiveYearData });
     
-    console.log('Charts created successfully');
     
     // ודא שהגרף הראשון מוצג
     document.querySelectorAll('.chart-wrapper').forEach(wrapper => wrapper.classList.remove('active'));
     const yearWrapper = document.getElementById('yearChartWrapper');
     if (yearWrapper) {
         yearWrapper.classList.add('active');
-        console.log('yearChartWrapper set to active');
     }
     
     // ודא שהכפתור הראשון פעיל
@@ -1484,7 +1477,6 @@ function updateCharts(selectedData,selectedProduct) {
     const firstBtn = document.querySelectorAll('.chart-btn')[0];
     if (firstBtn) {
         firstBtn.classList.add('active');
-        console.log('First button set to active');
     }
 }
 async function filterMaslulXa(mas, moza){

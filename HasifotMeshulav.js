@@ -48,12 +48,10 @@ function notfind(x){
       cancelButtonColor: "#d33"
   }).then((result) => {
       if (result.isConfirmed) {
-          console.log("המשתמש אישר");
           Array.from(expo).forEach(exp=>{
             exp.style.display='flex';
           })
       } else {
-          console.log("המשתמש ביטל");
           Array.from(expo).forEach(exp=>{
             exp.style.display='flex';
           })
@@ -61,7 +59,6 @@ function notfind(x){
   });
   */
     //do {
-    //  console.log(currencyValue.value);
    //   count++;
  // } while (count < 5);
 }
@@ -227,7 +224,6 @@ function doTheCircle(x) {
       exp.style.display='flex'
     })
   const selectedValue = x.value; // הערך שנבחר
-  console.log('selected:'+selectedValue)
   const progressBar = document.querySelector(`#${x.id}circle`); // מוצא את המעגל המתאים
   const progressValue = progressBar.querySelector(".percentage");
   var progressColor = "green";

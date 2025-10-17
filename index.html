@@ -5424,11 +5424,9 @@
 
         // Close file upload section button
         closeFileUploadSectionBtn.addEventListener('click', () => {
-            //console.log('כפתור סגירה נלחץ');
             closeDataDisplay();
         });
         function closeDataDisplay(){ 
-            //console.log('closeDataDisplay נקרא');
             Swal.fire({
                 title: '<span style="color: #333; font-size: 1.5rem;">האם אתה בטוח?</span>',
                 html: '<p style="color: #666; font-size: 1.1rem;">הדף ירוענן וכל הנתונים יימחקו</p>',
@@ -6600,7 +6598,6 @@
                     btn.style.cursor = 'pointer';
                 }
             });
-            console.log('✅ כפתור ניתוח מתקדם הופעל');
         }
 
         // פונקציה ליצירת גרף עוגה תלת מימד
@@ -7010,7 +7007,6 @@
                 if (isMobile) {
                     // קריאה מכרטיסיות במובייל
                     const cards = tableDiv.querySelectorAll('.product-card-mobile');
-                    console.log(`📱 מצב מובייל - ${cards.length} כרטיסים`);
                     
                     cards.forEach((card, index) => {
                         const productName = card.querySelector('h4').textContent.trim();
@@ -7026,10 +7022,8 @@
                         
                         if (isEquity) {
                             sumHon += amount;
-                            console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → הוני`);
                         } else if (isPension) {
                             sumKitzva += amount;
-                            console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → קצבה`);
                         }
                     });
                 } else {
@@ -7041,7 +7035,6 @@
                     }
                     
                     const rows = table.querySelectorAll('tr');
-                    //console.log(`💻 מצב דסקטופ - ${rows.length} שורות`);
                     
                     for (let i = 0; i < rows.length; i++) {
                         const cells = rows[i].children;
@@ -7063,18 +7056,13 @@
                         
                         if (isEquity) {
                             sumHon += amount;
-                           // console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → הוני`);
                         } else if (isPension) {
                             sumKitzva += amount;
-                           // console.log(`  ✅ ${productName}: ₪${amount.toLocaleString('he-IL')} → קצבה`);
                         }
                     }
                 }
                 
-                //console.log('━━━━━━━━━━━━━━━━━━━━━━');
-                //console.log(`💰 סך הוני: ₪${sumHon.toLocaleString('he-IL')}`);
-                //console.log(`🏦 סך קצבה: ₪${sumKitzva.toLocaleString('he-IL')}`);
-                
+              
                 // שמירת סכומים בסיסיים
                 sessionStorage.setItem('sumHonForAdvancedAnalysis', sumHon);
                 sessionStorage.setItem('sumKitzvaForAdvancedAnalysis', sumKitzva);
@@ -7089,7 +7077,6 @@
                 };
                 
                 sessionStorage.setItem('advancedAnalysisData', JSON.stringify(advancedAnalysisData));
-                console.log('💾 כל הנתונים לניתוח מתקדם נשמרו ב-sessionStorage');
             }, 100);
         }
 

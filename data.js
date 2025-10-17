@@ -266,7 +266,6 @@ function filterIncludes(text, includes = [], excludes = []) {
 // פונקציית עזר לבדיקת זיהוי מסלולים
 function testMaslulType(shemkupa) {
     const result = getMaslulType(shemkupa);
-    console.log(`שם המסלול: "${shemkupa}" → סוג: "${result}"`);
     return result;
 }
 
