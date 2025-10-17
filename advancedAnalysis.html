@@ -1002,14 +1002,14 @@
           </li>
           <li><a href="#" onclick="openAboutModal(); return false;">אודות</a></li>
           <li><a href="index.html#contact">צור קשר</a></li>
-          <li class="whatsapp-desktop"><a href="https://wa.me/972545287184?text=שלום, אני מעוניין בייעוץ פנסיוני" target="_blank" title="צור קשר בוואטסאפ"><i class="fab fa-whatsapp" style="font-size:2rem; color:#25D366;"></i></a></li>
+          <li class="whatsapp-desktop"><a href="https://wa.me/972545287184?text=שלום, אני מעוניין בייעוץ פנסיוני" target="_blank" title="צור קשר בוואטסאפ"><i class="fab fa-whatsapp" style="font-size:2rem; color:#25D366;display:none;"></i></a></li>
         </nav>
         <div class="whatsapp-mobile">
             <a href="https://wa.me/972545287184?text=שלום, אני מעוניין בייעוץ פנסיוני" target="_blank" title="צור קשר בוואטסאפ">
-                <i class="fab fa-whatsapp" style="font-size:2rem; color:#25D366;"></i>
+                <i class="fab fa-whatsapp" style="font-size:2rem; color:#25D366;display: none;"></i>
             </a>
         </div>
-        <div class="logo"> <img class="logoimg" src="logoxnew.png" onclick="navigateToHome();" style="cursor: pointer;"/></div>
+        <div class="logo"> <img class="logoimg" src="logoxnew.png" onclick="navigateToHome();" style="cursor: pointer;" title="מעבר לדף הבית"/></div>
         <div class="hamburger" id="hamburger" style="padding: 10px;">
           <span></span>
           <span></span>
@@ -3178,6 +3178,11 @@
         function getMozarType(sugMutzar) {
             const sugMutzarStr = String(sugMutzar || '');
             
+            // קרנות ותיקות - לא נבדק כלל
+            if (sugMutzarStr === '1' || sugMutzarStr.includes('ותיק')) {
+                return 'קרן ותיקה';
+            }
+            
             // קרנות פנסיה
             if (sugMutzarStr === '2' || sugMutzarStr === '2_1' || sugMutzarStr === '2_2') {
                 return 'קרנות חדשות';
@@ -3193,6 +3198,16 @@
                 return 'תגמולים ואישית לפיצויים';
             }
             
+            // ביטוח חיים עם חסכון - נבדק מול פוליסות חסכון
+            if (sugMutzarStr === '4' || sugMutzarStr.includes('ביטוח חיים') || sugMutzarStr.includes('ביטוח מנהלים')) {
+                return 'ביטוח חיים עם חסכון';
+            }
+            
+            // פוליסות חסכון
+            if (sugMutzarStr === '7' || sugMutzarStr.includes('פוליס')) {
+                return 'פוליסות חסכון';
+            }
+            
             // קופת גמל להשקעה
             if (sugMutzarStr === '8' || sugMutzarStr.includes('גמל להשקעה')) {
                 return 'קופת גמל להשקעה';
@@ -3201,11 +3216,6 @@
             // חסכון לילד
             if (sugMutzarStr.includes('לכל ילד') || sugMutzarStr.includes('חסכון לילד')) {
                 return 'קופת גמל להשקעה - חסכון לילד';
-            }
-            
-            // פוליסות חסכון
-            if (sugMutzarStr === '7' || sugMutzarStr.includes('פוליס')) {
-                return 'פוליסות חסכון';
             }
             
             // מרכזית לפיצויים
@@ -3293,6 +3303,19 @@
         function calculateRiskByStandardDeviation(productName, maslulType) {
             console.log(`🔍 מחשב סיכון: מוצר="${productName}", מסלול="${maslulType}"`);
             
+            // מקרה מיוחד: קרן ותיקה - לא נבדק כלל
+            if (productName === 'קרן ותיקה') {
+                console.log(`⏭️ קרן ותיקה - לא מבוצעת בדיקת סיכון`);
+                return 'לא ידוע';
+            }
+            
+            // מקרה מיוחד: ביטוח חיים עם חסכון - נבדק מול פוליסות חסכון
+            let productToCheck = productName;
+            if (productName === 'ביטוח חיים עם חסכון') {
+                productToCheck = 'פוליסות חסכון';
+                console.log(`🔄 ביטוח חיים עם חסכון - נבדק מול "${productToCheck}"`);
+            }
+            
             // בדיקה שיש גישה ל-dataIndicators ו-dataIndicatorsSikon
             if (typeof dataIndicators === 'undefined' || !Array.isArray(dataIndicators) || dataIndicators.length === 0) {
                 console.warn('⚠️ dataIndicators לא זמין - נופל לשיטה הישנה');
@@ -3307,13 +3330,13 @@
                 return getRiskLevel(foundRamatsikon || 'לא ידוע');
             }
             
-            // שלב 1: חיפוש המסלול ב-dataIndicators
+            // שלב 1: חיפוש המסלול ב-dataIndicators (עם המוצר הנכון לבדיקה)
             const maslulData = dataIndicators.find(item => 
-                item.mozar === productName && item.maslul === maslulType
+                item.mozar === productToCheck && item.maslul === maslulType
             );
             
             if (!maslulData) {
-                console.warn(`⚠️ לא נמצא מסלול "${maslulType}" במוצר "${productName}" ב-dataIndicators`);
+                console.warn(`⚠️ לא נמצא מסלול "${maslulType}" במוצר "${productToCheck}" ב-dataIndicators`);
                 console.log(`   📋 מוצרים זמינים ב-dataIndicators:`, [...new Set(dataIndicators.map(i => i.mozar))]);
                 // נפילה לשיטה הישנה
                 const foundRamatsikon = findRamatsikonByName(maslulType);
@@ -3346,11 +3369,11 @@
                 return getRiskLevel(foundRamatsikon || 'לא ידוע');
             }
             
-            // שלב 3: חיפוש טווחי הסיכון של המוצר
-            const productSikonData = dataIndicatorsSikon.find(item => item.mozar === productName);
+            // שלב 3: חיפוש טווחי הסיכון של המוצר (משתמש ב-productToCheck)
+            const productSikonData = dataIndicatorsSikon.find(item => item.mozar === productToCheck);
             
             if (!productSikonData) {
-                console.warn(`⚠️ לא נמצא מוצר "${productName}" ב-dataIndicatorsSikon`);
+                console.warn(`⚠️ לא נמצא מוצר "${productToCheck}" ב-dataIndicatorsSikon`);
                 console.log(`   📋 מוצרים זמינים ב-dataIndicatorsSikon:`, dataIndicatorsSikon.map(i => i.mozar));
                 // נפילה לשיטה הישנה
                 const foundRamatsikon = findRamatsikonByName(maslulType);
@@ -3360,7 +3383,10 @@
             const stiyaCombinedMin = parseFloat(productSikonData.stiyaCombinedMin || 0);
             const stiyaCombinedMax = parseFloat(productSikonData.stiyaCombinedMax || 0);
             
-            console.log(`   📊 טווחי המוצר "${productName}": Min=${stiyaCombinedMin.toFixed(2)}, Max=${stiyaCombinedMax.toFixed(2)}`);
+            console.log(`   📊 טווחי המוצר "${productToCheck}": Min=${stiyaCombinedMin.toFixed(2)}, Max=${stiyaCombinedMax.toFixed(2)}`);
+            if (productName !== productToCheck) {
+                console.log(`   ℹ️ מוצר מקורי: "${productName}" → נבדק מול: "${productToCheck}"`);
+            }
             
             // שלב 4: קביעת רמת הסיכון לפי הטווחים
             let riskLevel;
