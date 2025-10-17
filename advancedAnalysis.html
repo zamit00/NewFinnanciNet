@@ -3177,52 +3177,73 @@
         // פונקציה לזיהוי סוג מוצר לפי sugMutzar
         function getMozarType(sugMutzar) {
             const sugMutzarStr = String(sugMutzar || '');
-            
-            // קרנות ותיקות - לא נבדק כלל
-            if (sugMutzarStr === '1' || sugMutzarStr.includes('ותיק')) {
-                return 'קרן ותיקה';
-            }
-            
-            // קרנות פנסיה
-            if (sugMutzarStr === '2' || sugMutzarStr === '2_1' || sugMutzarStr === '2_2') {
-                return 'קרנות חדשות';
-            }
-            
-            // קרנות השתלמות
-            if (sugMutzarStr === '3' || sugMutzarStr.includes('השתלמות')) {
-                return 'קרנות השתלמות';
-            }
-            
-            // תגמולים ואישית לפיצויים
-            if (sugMutzarStr === '5' || sugMutzarStr === '6' || sugMutzarStr.includes('תגמולים') || sugMutzarStr.includes('פיצויים')) {
-                return 'תגמולים ואישית לפיצויים';
-            }
-            
-            // ביטוח חיים עם חסכון - נבדק מול פוליסות חסכון
-            if (sugMutzarStr === '4' || sugMutzarStr.includes('ביטוח חיים') || sugMutzarStr.includes('ביטוח מנהלים')) {
+
+            // 1 = פוליסת ביטוח חיים משולב חיסכון - נבדק מול פוליסות חסכון
+            if (sugMutzarStr === '1' || sugMutzarStr.includes('ביטוח חיים') || sugMutzarStr.includes('ביטוח מנהלים')) {
                 return 'ביטוח חיים עם חסכון';
             }
-            
-            // פוליסות חסכון
-            if (sugMutzarStr === '7' || sugMutzarStr.includes('פוליס')) {
-                return 'פוליסות חסכון';
+
+            // 2 = קרן פנסיה
+            // 2_1 = קרנות ותיקות
+            if (sugMutzarStr === '2_1' || sugMutzarStr.includes('קרן פנסיה ותיקה')) {
+                return 'קרן ותיקה';
             }
-            
-            // קופת גמל להשקעה
-            if (sugMutzarStr === '8' || sugMutzarStr.includes('גמל להשקעה')) {
+            // 2_2 = קרנות חדשות
+            if (sugMutzarStr === '2_2' || sugMutzarStr.includes('קרן פנסיה חדשה')) {
+                return 'קרנות חדשות';
+            }
+            // 2 = קרן פנסיה (כללי)
+            if (sugMutzarStr === '2') {
+                return 'קרנות חדשות'; // ברירת מחדל
+            }
+
+            // 3 = קופת גמל
+            if (sugMutzarStr === '3' || sugMutzarStr.includes('קופת גמל') || sugMutzarStr.includes('גמל')) {
                 return 'קופת גמל להשקעה';
             }
-            
-            // חסכון לילד
-            if (sugMutzarStr.includes('לכל ילד') || sugMutzarStr.includes('חסכון לילד')) {
+
+            // 4 = קרן השתלמות
+            if (sugMutzarStr === '4' || sugMutzarStr.includes('השתלמות')) {
+                return 'קרנות השתלמות';
+            }
+
+            // 5 = פוליסת חסכון טהור
+            if (sugMutzarStr === '5' || sugMutzarStr.includes('פוליס')) {
+                return 'פוליסות חסכון';
+            }
+
+            // 9 = קופת גמל להשקעה
+            if (sugMutzarStr === '9' || sugMutzarStr.includes('גמל להשקעה')) {
+                return 'קופת גמל להשקעה';
+            }
+
+            // 10 = חסכון לכל ילד
+            if (sugMutzarStr === '10' || sugMutzarStr.includes('לכל ילד') || sugMutzarStr.includes('חסכון לילד')) {
                 return 'קופת גמל להשקעה - חסכון לילד';
             }
-            
+
+            // קרנות ותיקות - לא נבדק כלל (רק לפי שם)
+            if (sugMutzarStr.includes('ותיק')) {
+                return 'קרן ותיקה';
+            }
+
+            // תגמולים ואישית לפיצויים
+            if (sugMutzarStr.includes('תגמולים') || sugMutzarStr.includes('פיצויים')) {
+                return 'תגמולים ואישית לפיצויים';
+            }
+
             // מרכזית לפיצויים
             if (sugMutzarStr.includes('מרכזית')) {
                 return 'מרכזית לפיצויים';
             }
-            
+
+            // פוליסות סיכון - לא מטופלות בשלב זה
+            if (sugMutzarStr === '6' || sugMutzarStr === '7' || sugMutzarStr === '8' || 
+                sugMutzarStr.includes('סיכון') || sugMutzarStr.includes('ריסק') || 
+                sugMutzarStr.includes('משכנתא') || sugMutzarStr.includes('קולקטיב')) {
+                return null;
+            }
+
             return null;
         }
         
@@ -3302,7 +3323,7 @@
         // פונקציה מתקדמת לחישוב רמת סיכון לפי סטיות סטטיסטיות
         function calculateRiskByStandardDeviation(productName, maslulType) {
             console.log(`🔍 מחשב סיכון: מוצר="${productName}", מסלול="${maslulType}"`);
-            
+
             // מקרה מיוחד: קרן ותיקה - לא נבדק כלל
             if (productName === 'קרן ותיקה') {
                 console.log(`⏭️ קרן ותיקה - לא מבוצעת בדיקת סיכון`);
