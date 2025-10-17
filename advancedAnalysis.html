@@ -773,13 +773,23 @@
             }
             
             /* כפתורי בחירת סיכון למובייל */
+            /* ודא שכרטיסיית הסיכון מוצגת */
+            .analysis-card {
+                display: block !important;
+            }
+            
             #manualRiskSelection {
                 padding: 15px !important;
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                margin-bottom: 20px !important;
             }
             
             #manualRiskSelection > div {
                 flex-direction: column !important;
                 gap: 12px !important;
+                display: flex !important;
             }
             
             #riskBtnLow,
@@ -787,16 +797,22 @@
             #riskBtnHigh {
                 width: 100% !important;
                 min-width: 100% !important;
-                flex: none !important;
+                max-width: 100% !important;
+                flex: 0 0 100% !important;
                 padding: 20px 15px !important;
                 font-size: 1.2rem !important;
                 justify-content: center !important;
                 display: flex !important;
                 align-items: center !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                box-sizing: border-box !important;
             }
             
             #manualRiskSelection label {
                 font-size: 1rem !important;
+                display: block !important;
+                visibility: visible !important;
             }
         }
         
@@ -1680,6 +1696,27 @@
                     
                     // עדכון התצוגה
                     updateStep1Display();
+                    
+                    // ודא שכפתורי הסיכון מוצגים (במיוחד במובייל)
+                    setTimeout(() => {
+                        const manualRiskDiv = document.getElementById('manualRiskSelection');
+                        const riskBtnLow = document.getElementById('riskBtnLow');
+                        const riskBtnMedium = document.getElementById('riskBtnMedium');
+                        const riskBtnHigh = document.getElementById('riskBtnHigh');
+                        
+                        console.log('🔍 בדיקת נראות כפתורי סיכון:');
+                        console.log('  manualRiskDiv:', manualRiskDiv ? 'קיים' : 'לא קיים', manualRiskDiv?.style.display);
+                        console.log('  riskBtnLow:', riskBtnLow ? 'קיים' : 'לא קיים');
+                        console.log('  riskBtnMedium:', riskBtnMedium ? 'קיים' : 'לא קיים');
+                        console.log('  riskBtnHigh:', riskBtnHigh ? 'קיים' : 'לא קיים');
+                        
+                        // ודא שהם מוצגים
+                        if (manualRiskDiv && clientAnalysisData.profile.riskSource !== 'questionnaire') {
+                            manualRiskDiv.style.display = 'block';
+                            manualRiskDiv.style.visibility = 'visible';
+                            manualRiskDiv.style.opacity = '1';
+                        }
+                    }, 100);
                 } else {
                     console.log('ℹ️ לא נמצאו נתונים - נא להעלות קבצי מסלקה בדף הבית');
                 }
