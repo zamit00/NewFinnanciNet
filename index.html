@@ -4464,28 +4464,27 @@
                             var PirteiHafkadaAchrona=[]
                             var pirteiHaasaka=[]
                             for (const p of prtTakziv) {
-                                if (statusPolisaOCheshbon!='1'){continue;}
-                                const pirteiHafkadaHarona=p.getElementsByTagName('PirteiHafkadaAchrona')[0] || null;
-                                if(!pirteiHafkadaHarona){continue;}
-                                const PerutPirteiHafkadaAchronaElements=pirteiHafkadaHarona.getElementsByTagName('PerutPirteiHafkadaAchrona');
-                                const PerutPirteiHafkadaAchrona=Array.from(PerutPirteiHafkadaAchronaElements);
-                                const blockItrot = p.getElementsByTagName('BlockItrot')[0];
+
+                                                               const blockItrot = p.getElementsByTagName('BlockItrot')[0];
                                 const yitrotElement = blockItrot ? blockItrot.getElementsByTagName('Yitrot')[0] : null;
                                 const perutYitrotElements = yitrotElement ? yitrotElement.getElementsByTagName('PerutYitrot') : [];
                                 const yitrot = Array.from(perutYitrotElements);
-                               
-                                for (const hafkadaAchrona of PerutPirteiHafkadaAchrona) {
-                                    const taarichHafkadHachrona=cleanVal(getElementText(hafkadaAchrona,'TAARICH-ERECH-HAFKADA'));
-                                    const sugHafkada=cleanVal(getElementText(hafkadaAchrona,'SUG-HAFKADA'));
-                                    const totalHafkadaHachrona=cleanVal(getElementText(hafkadaAchrona,'TOTAL-HAFKADA'))
-                                    
-                                    PirteiHafkadaAchrona.push({
-                                        taarichHafkadHachrona:taarichHafkadHachrona,
-                                        sugHafkada:sugHafkada,
-                                        totalHafkadaHachrona:totalHafkadaHachrona   
-                                    })
+                                const pirteiHafkadaHarona=p.getElementsByTagName('PirteiHafkadaAchrona')[0] || null;
+                                if (statusPolisaOCheshbon==='1' && pirteiHafkadaHarona){
+                                    const PerutPirteiHafkadaAchronaElements=pirteiHafkadaHarona.getElementsByTagName('PerutPirteiHafkadaAchrona');
+                                    const PerutPirteiHafkadaAchrona=Array.from(PerutPirteiHafkadaAchronaElements);
+                                    for (const hafkadaAchrona of PerutPirteiHafkadaAchrona) {
+                                        const taarichHafkadHachrona=cleanVal(getElementText(hafkadaAchrona,'TAARICH-ERECH-HAFKADA'));
+                                        const sugHafkada=cleanVal(getElementText(hafkadaAchrona,'SUG-HAFKADA'));
+                                        const totalHafkadaHachrona=cleanVal(getElementText(hafkadaAchrona,'TOTAL-HAFKADA'))
+                                        
+                                        PirteiHafkadaAchrona.push({
+                                            taarichHafkadHachrona:taarichHafkadHachrona,
+                                            sugHafkada:sugHafkada,
+                                            totalHafkadaHachrona:totalHafkadaHachrona   
+                                        })
+                                    }
                                 }
-                               
                             
                                 for (const yitra of yitrot) {
                                     const totalChisachonMtzbr = cleanVal(getElementText(yitra, 'TOTAL-CHISACHON-MTZBR')) || 0;
@@ -4768,7 +4767,6 @@
                              
                                 
                                 const mafyenMaslulim='maslulim-'+misparPolisaOHeshbon;
-                                
                                 // בניית אובייקט עם רק מאפיינים שיש להם ערך
                                 const heshbonObj = {
                                   misparPolisaOHeshbon:misparPolisaOHeshbon,
@@ -7624,4 +7622,3 @@
 
 </body>
 </html>
-
