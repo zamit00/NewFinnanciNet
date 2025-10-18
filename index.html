@@ -4003,18 +4003,29 @@
     
         function letStart(){
             console.log('letStart called');
+            
+            // Scroll to file upload section first
+            const fileUploadSection = document.getElementById('fileUpload');
+            if (fileUploadSection) {
+                fileUploadSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            
             // Check if user already accepted
             const consentAccepted = localStorage.getItem('privacyConsentAccepted');
             console.log('Consent accepted:', consentAccepted);
-            if (consentAccepted === 'true') {
-                // Show file upload section directly
-                console.log('Showing file upload section directly');
-                showFileUploadSection();
-            } else {
-                // Show privacy consent modal first
-                console.log('Showing privacy consent modal');
-                showPrivacyConsentModal();
-            }
+            
+            // Wait a bit for scroll to complete, then show modal or file section
+            setTimeout(() => {
+                if (consentAccepted === 'true') {
+                    // Show file upload section directly
+                    console.log('Showing file upload section directly');
+                    showFileUploadSection();
+                } else {
+                    // Show privacy consent modal first
+                    console.log('Showing privacy consent modal');
+                    showPrivacyConsentModal();
+                }
+            }, 300);
         }
         
         function showFileUploadSection() {
