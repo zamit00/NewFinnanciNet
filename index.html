@@ -4461,28 +4461,29 @@
                             const prtTakzivElements = heshbon.getElementsByTagName('PirteiTaktziv');
                             const prtTakziv = Array.from(prtTakzivElements);
                             const ksafimPturim = cleanVal(getElementText(heshbon,'TIKUN-190'))
-                            var pirteiHafrashotLePolisa=[]
+                            var PirteiHafkadaAchrona=[]
                             var pirteiHaasaka=[]
                             for (const p of prtTakziv) {
-                                const PerutHafrashotLePolisaElements=p.getElementsByTagName('PerutHafrashotLePolisa');
-                                const PerutHafrashotLePolisa=Array.from(PerutHafrashotLePolisaElements);
+                                if (statusPolisaOCheshbon!='1'){continue;}
+                                const pirteiHafkadaHarona=p.getElementsByTagName('PirteiHafkadaAchrona')[0] || null;
+                                if(!pirteiHafkadaHarona){continue;}
+                                const PerutPirteiHafkadaAchronaElements=pirteiHafkadaHarona.getElementsByTagName('PerutPirteiHafkadaAchrona');
+                                const PerutPirteiHafkadaAchrona=Array.from(PerutPirteiHafkadaAchronaElements);
                                 const blockItrot = p.getElementsByTagName('BlockItrot')[0];
                                 const yitrotElement = blockItrot ? blockItrot.getElementsByTagName('Yitrot')[0] : null;
                                 const perutYitrotElements = yitrotElement ? yitrotElement.getElementsByTagName('PerutYitrot') : [];
                                 const yitrot = Array.from(perutYitrotElements);
                                
-                                for (const hafrashot of PerutHafrashotLePolisa) {
-                                    const sugHamafkid=cleanVal(getElementText(hafrashot,'SUG-HAMAFKID'));
-                                    const sugHafrasha=cleanVal(getElementText(hafrashot,'SUG-HAFRASHA'))
-                                    const ahuzHafrasha=cleanVal(getElementText(hafrashot,'ACHUZ-HAFRASHA'))
-                                    const schumHafrasha=cleanVal(getElementText(hafrashot,'SCHUM-HAFRASHA'))
-                                    pirteiHafrashotLePolisa.push({
-                                        sugHamafkid:sugHamafkid,
-                                        sugHafrasha:sugHafrasha,
-                                        ahuzHafrasha:ahuzHafrasha,
-                                        schumHafrasha:schumHafrasha
-                                    })
+                                for (const hafkadaAchrona of PerutPirteiHafkadaAchrona) {
+                                    const taarichHafkadHachrona=cleanVal(getElementText(hafkadaAchrona,'TAARICH-ERECH-HAFKADA'));
+                                    const sugHafkada=cleanVal(getElementText(hafkadaAchrona,'SUG-HAFKADA'));
+                                    const totalHafkadaHachrona=cleanVal(getElementText(hafkadaAchrona,'TOTAL-HAFKADA'))
                                     
+                                    PirteiHafkadaAchrona.push({
+                                        taarichHafkadHachrona:taarichHafkadHachrona,
+                                        sugHafkada:sugHafkada,
+                                        totalHafkadaHachrona:totalHafkadaHachrona   
+                                    })
                                 }
                                
                             
@@ -4767,29 +4768,40 @@
                              
                                 
                                 const mafyenMaslulim='maslulim-'+misparPolisaOHeshbon;
-                                pirteiHeshbon.push(
-                                 {
+                                
+                                // בניית אובייקט עם רק מאפיינים שיש להם ערך
+                                const heshbonObj = {
                                   misparPolisaOHeshbon:misparPolisaOHeshbon,
                                   statusPolisaOCheshbon:statusPolisaOCheshbon,
-                                  ksafimPturim:ksafimPturim,
-                                  sugPolisa:sugPolisa,
-                                  mekademGilPrishaTzafuy:mekademGilPrishaTzafuy,
                                   sugMutzar:sugMutzar,
                                   shemTochnit:shemTochnit,
-                                  taarichHitztarfutMutzar:taarichHitztarfutMutzar,
-                                  shemMaslulHabituah:shemMaslulHabituah,
-                                  shemMaasik:shemMaasik,
                                   totalChisachon:totalChisachon.toLocaleString('he-IL', {maximumFractionDigits: 0})+""+"שח",
                                   totalChisachonV:parseFloat(totalChisachon),
-                                  yitratKaspeyTagmulimValue:yitratKaspeyTagmulimValue?Math.round(yitratKaspeyTagmulimValue):0,
-                                  mafyenMaslulim:maslulDetails,
-                                  yitrotKaspeyPizoyim:yitrotKaspeyPizoyim?yitrotKaspeyPizoyim:0,
-                                  pirteiHafrashotLePolisa:pirteiHafrashotLePolisa,
-                                  pirteiHaasaka:pirteiHaasaka
+                                  mafyenMaslulim:maslulDetails
+                                };
+                                
+                                // הוספת מאפיינים אופציונליים רק אם יש להם ערך
+                                if (ksafimPturim) heshbonObj.ksafimPturim = ksafimPturim;
+                                if (sugPolisa) heshbonObj.sugPolisa = sugPolisa;
+                                if (mekademGilPrishaTzafuy) heshbonObj.mekademGilPrishaTzafuy = mekademGilPrishaTzafuy;
+                                if (taarichHitztarfutMutzar) heshbonObj.taarichHitztarfutMutzar = taarichHitztarfutMutzar;
+                                if (shemMaslulHabituah) heshbonObj.shemMaslulHabituah = shemMaslulHabituah;
+                                if (shemMaasik) heshbonObj.shemMaasik = shemMaasik;
+                                if (yitratKaspeyTagmulimValue && yitratKaspeyTagmulimValue > 0) {
+                                    heshbonObj.yitratKaspeyTagmulimValue = Math.round(yitratKaspeyTagmulimValue);
+                                }
+                                if (yitrotKaspeyPizoyim && Array.isArray(yitrotKaspeyPizoyim) && yitrotKaspeyPizoyim.length > 0) {
+                                    heshbonObj.yitrotKaspeyPizoyim = yitrotKaspeyPizoyim;
+                                }
+                                if (PirteiHafkadaAchrona && Array.isArray(PirteiHafkadaAchrona) && PirteiHafkadaAchrona.length > 0) {
+                                    heshbonObj.PirteiHafkadaAchrona = PirteiHafkadaAchrona;
+                                }
+                                if (pirteiHaasaka && Array.isArray(pirteiHaasaka) && pirteiHaasaka.length > 0) {
+                                    heshbonObj.pirteiHaasaka = pirteiHaasaka;
                                 }
                                 
-                               );
-                               pirteiHafrashotLePolisa=[];
+                                pirteiHeshbon.push(heshbonObj);
+                               PirtPirteiHafkadaAchrona=[];
                                 pirteiHaasaka=[];
                                yitrotKaspeyPizoyim=[];
                                
