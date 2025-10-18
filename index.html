@@ -3415,7 +3415,7 @@
 			<h1 class="feature-description"> כל מה שלא סיפרו לך על הכסף הפנסיוני שלך – עכשיו נחשף.
             בניתי פלטפורמה שמרכזת עבורך את כל המידע, ההשוואות והניתוחים החשובים – בצורה חכמה, פשוטה ושקופה.
             כך תוכל להבין באמת איפה אתה עומד, לקבל החלטות טובות יותר ולגרום לכסף שלך לעבוד בשבילך.</h1>           
-            <a href="#fileUpload" class="cta-button bigscreen smallfont" style="margin-left: auto;margin-right: auto;"
+            <a href="javascript:void(0)" class="cta-button bigscreen smallfont" style="margin-left: auto;margin-right: auto;"
             onclick="letStart()">לתהליך - חינם*</a>
             <div style="font-size: 20px;font-weight: bold;text-align: right;color: #666; margin-top: 15px;">
                 *נדרש להעלות קובצי xml של 
@@ -3959,9 +3959,13 @@
     // Privacy Consent Functions
     function showPrivacyConsentModal() {
         const modal = document.getElementById('privacyConsentModal');
+        console.log('Trying to show modal:', modal);
         if (modal) {
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
+            console.log('Modal should be visible now');
+        } else {
+            console.error('Modal element not found!');
         }
     }
     
@@ -3991,13 +3995,17 @@
     });
     
         function letStart(){
+            console.log('letStart called');
             // Check if user already accepted
             const consentAccepted = localStorage.getItem('privacyConsentAccepted');
+            console.log('Consent accepted:', consentAccepted);
             if (consentAccepted === 'true') {
                 // Show file upload section directly
+                console.log('Showing file upload section directly');
                 showFileUploadSection();
             } else {
                 // Show privacy consent modal first
+                console.log('Showing privacy consent modal');
                 showPrivacyConsentModal();
             }
         }
