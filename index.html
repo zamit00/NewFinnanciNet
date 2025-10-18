@@ -4461,8 +4461,8 @@
                             const prtTakzivElements = heshbon.getElementsByTagName('PirteiTaktziv');
                             const prtTakziv = Array.from(prtTakzivElements);
                             const ksafimPturim = cleanVal(getElementText(heshbon,'TIKUN-190'))
+                            var pirteiHafrashotLePolisa=[]
                             for (const p of prtTakziv) {
-                                let pirteiHafrashotLePolisa=[]
                                 const PerutHafrashotLePolisaElements=p.getElementsByTagName('PerutHafrashotLePolisa');
                                 const PerutHafrashotLePolisa=Array.from(PerutHafrashotLePolisaElements);
                                 const blockItrot = p.getElementsByTagName('BlockItrot')[0];
@@ -4472,15 +4472,16 @@
                                
                                 for (const hafrashot of PerutHafrashotLePolisa) {
                                     const sugHamafkid=cleanVal(getElementText(hafrashot,'SUG-HAMAFKID'));
-                                    const sugHafrasha=cleanVal(getElementText(hafrashotElement,'SUG-HAFRASHA'))
-                                    const ahuzHafrasha=cleanVal(getElementText(hafrashotElement,'ACHUZ-HAFRASHA'))
-                                    const schumHafrasha=cleanVal(getElementText(hafrashotElement,'SCHUM-HAFRASHA'))
+                                    const sugHafrasha=cleanVal(getElementText(hafrashot,'SUG-HAFRASHA'))
+                                    const ahuzHafrasha=cleanVal(getElementText(hafrashot,'ACHUZ-HAFRASHA'))
+                                    const schumHafrasha=cleanVal(getElementText(hafrashot,'SCHUM-HAFRASHA'))
                                     pirteiHafrashotLePolisa.push({
                                         sugHamafkid:sugHamafkid,
                                         sugHafrasha:sugHafrasha,
                                         ahuzHafrasha:ahuzHafrasha,
                                         schumHafrasha:schumHafrasha
                                     })
+                                    
                                 }
                                
                             
@@ -4576,14 +4577,13 @@
                                 const haasaka= p.getElementsByTagName('PirteiHaasaka')[0]
                                 kodChisuvSacharHeshbon = cleanVal(getElementText(haasaka, 'KOD-CHISHUV-SACHAR-POLISA-O-HESHBON')) || 0;
                                 sacharPolisa=cleanVal(getElementText(haasaka,'SACHAR-POLISA')) || 0;
-                                haasaka.push({
+                                pirteiHaasaka.push({
                                     kodChisuvSacharHeshbon:kodChisuvSacharHeshbon,
                                     sacharPolisa:sacharPolisa
                                 }
                                 )
-
-
                                 
+   
                                 const blockItrot = p.getElementsByTagName('BlockItrot')[0];
                                 const yitrotElement = blockItrot ? blockItrot.getElementsByTagName('Yitrot')[0] : null;
                                 const perutYitrot =yitrotElement? yitrotElement.getElementsByTagName('PerutYitrot') : "";
@@ -4779,19 +4779,20 @@
                                   taarichHitztarfutMutzar:taarichHitztarfutMutzar,
                                   shemMaslulHabituah:shemMaslulHabituah,
                                   shemMaasik:shemMaasik,
-                                  pirteiHaasaka:pirteiHaasaka,
                                   totalChisachon:totalChisachon.toLocaleString('he-IL', {maximumFractionDigits: 0})+""+"שח",
                                   totalChisachonV:parseFloat(totalChisachon),
                                   yitratKaspeyTagmulimValue:yitratKaspeyTagmulimValue?Math.round(yitratKaspeyTagmulimValue):0,
                                   mafyenMaslulim:maslulDetails,
                                   yitrotKaspeyPizoyim:yitrotKaspeyPizoyim?yitrotKaspeyPizoyim:0,
                                   pirteiHafrashotLePolisa:pirteiHafrashotLePolisa,
+                                  pirteiHaasaka:pirteiHaasaka
                                 }
                                 
                                );
-                               pirteiHaasaka=[];
-                               yitrotKaspeyPizoyim=[];
                                pirteiHafrashotLePolisa=[];
+                                pirteiHaasaka=[];
+                               yitrotKaspeyPizoyim=[];
+                               
                             }
                            
                         }
