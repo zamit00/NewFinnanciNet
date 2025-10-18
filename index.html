@@ -4471,7 +4471,7 @@
                             var pirteiHaasaka=[]
                             for (const p of prtTakziv) {
 
-                                                               const blockItrot = p.getElementsByTagName('BlockItrot')[0];
+                                const blockItrot = p.getElementsByTagName('BlockItrot')[0];
                                 const yitrotElement = blockItrot ? blockItrot.getElementsByTagName('Yitrot')[0] : null;
                                 const perutYitrotElements = yitrotElement ? yitrotElement.getElementsByTagName('PerutYitrot') : [];
                                 const yitrot = Array.from(perutYitrotElements);
@@ -4483,12 +4483,25 @@
                                         const taarichHafkadHachrona=cleanVal(getElementText(hafkadaAchrona,'TAARICH-ERECH-HAFKADA'));
                                         const sugHafkada=cleanVal(getElementText(hafkadaAchrona,'SUG-HAFKADA'));
                                         const totalHafkadaHachrona=cleanVal(getElementText(hafkadaAchrona,'TOTAL-HAFKADA'))
+                                        if(PirteiHafkadaAchrona.length===0){
+                                            PirteiHafkadaAchrona.push({
+                                                taarichHafkadHachrona:taarichHafkadHachrona,
+                                                sugHafkada:sugHafkada,
+                                                totalHafkadaHachrona:totalHafkadaHachrona   
+                                            })
+                                        }
+                                        else{
+                                            
+                                            if(Number(PirteiHafkadaAchrona[0].taarichHafkadHachrona)<Number(taarichHafkadHachrona)){
+                                                PirteiHafkadaAchrona=[];
+                                                PirteiHafkadaAchrona.push({
+                                                    taarichHafkadHachrona:taarichHafkadHachrona,
+                                                    sugHafkada:sugHafkada,
+                                                    totalHafkadaHachrona:totalHafkadaHachrona   
+                                                })
+                                            }
+                                        }
                                         
-                                        PirteiHafkadaAchrona.push({
-                                            taarichHafkadHachrona:taarichHafkadHachrona,
-                                            sugHafkada:sugHafkada,
-                                            totalHafkadaHachrona:totalHafkadaHachrona   
-                                        })
                                     }
                                 }
                             
@@ -4864,7 +4877,7 @@
                 
                 // הצגת הנתונים על המסך
                 displayDataOnScreen(pratimIshim, sumSugMutzar, result, sheabudIkulHalvaa, DataAll[3]);
-                
+                console.log(DataAll)
                 // הדפסת סיכום הנתונים שנאספו מכל הקבצים
             
 
