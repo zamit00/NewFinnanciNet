@@ -4462,6 +4462,7 @@
                             const prtTakziv = Array.from(prtTakzivElements);
                             const ksafimPturim = cleanVal(getElementText(heshbon,'TIKUN-190'))
                             var pirteiHafrashotLePolisa=[]
+                            var pirteiHaasaka=[]
                             for (const p of prtTakziv) {
                                 const PerutHafrashotLePolisaElements=p.getElementsByTagName('PerutHafrashotLePolisa');
                                 const PerutHafrashotLePolisa=Array.from(PerutHafrashotLePolisaElements);
@@ -4573,7 +4574,6 @@
                             
 
                             for (const p of prtTakziv) {
-                                let pirteiHaasaka=[]
                                 const haasaka= p.getElementsByTagName('PirteiHaasaka')[0]
                                 kodChisuvSacharHeshbon = cleanVal(getElementText(haasaka, 'KOD-CHISHUV-SACHAR-POLISA-O-HESHBON')) || 0;
                                 sacharPolisa=cleanVal(getElementText(haasaka,'SACHAR-POLISA')) || 0;
