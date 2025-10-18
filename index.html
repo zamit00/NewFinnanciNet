@@ -4858,7 +4858,6 @@
                 });
                 
                 // הצגת הנתונים על המסך
-               console.log('DataAll',DataAll);
                 displayDataOnScreen(pratimIshim, sumSugMutzar, result, sheabudIkulHalvaa, DataAll[3]);
                 
                 // הדפסת סיכום הנתונים שנאספו מכל הקבצים
@@ -5280,7 +5279,6 @@
 
         function calculateRetirementAnalysis() {
             if (!dataMislaka || !dataMislaka.data) {
-                console.log('No dataMislaka or data found');
                 return {
                     currentAge: 0,
                     retirementAge: 0,
@@ -5293,8 +5291,6 @@
                 };
             }
 
-            console.log('dataMislaka found:', dataMislaka);
-            console.log('dataMislaka.data:', dataMislaka.data);
 
             // Extract participant info from all files
             let participantInfo = null;
@@ -5303,14 +5299,9 @@
             
             // Search through all files for participant info
             for (const fileData of dataMislaka.data) {
-                console.log('Processing file:', fileData.fileName);
-                console.log('File data:', fileData.data);
-                
                 if (fileData.data && fileData.data.participantInfo) {
                     participantInfo = fileData.data.participantInfo;
                     birthDate = participantInfo.taarichLeyda;
-                    console.log('Found participant info:', participantInfo);
-                    console.log('Found birth date:', birthDate);
                     if (birthDate) break; // Found birth date, stop searching
                 }
             }
@@ -5327,9 +5318,6 @@
                     (today.getMonth() === birthDateObj.getMonth() && today.getDate() < birthDateObj.getDate())) {
                     currentAge--;
                 }
-                console.log('Calculated age from birth date:', currentAge);
-            } else {
-                console.log('No birth date found, using default age:', currentAge);
             }
 
             // Default retirement age (67 for men, 62 for women - simplified)
@@ -5338,7 +5326,6 @@
 
             // Calculate current balance
             const currentBalance = dataMislaka.summary ? dataMislaka.summary.totalBalance : 0;
-            console.log('Current balance:', currentBalance);
 
             // Project future balance based on product types
             let projectedBalanceWithContributions = 0;
@@ -5350,22 +5337,15 @@
             let productDetails = [];
             
             if (dataMislaka.data && dataMislaka.data.length > 0) {
-                console.log('Processing financial data...');
-                
                 // Group by product type
                 let productGroups = {};
                 
                 for (const fileData of dataMislaka.data) {
-                    console.log('Processing file for retirement:', fileData.fileName);
-                    
                     if (fileData.data && fileData.data.accounts && fileData.data.accounts.length > 0) {
-                        console.log('Found accounts:', fileData.data.accounts.length);
                         
                         for (const account of fileData.data.accounts) {
                             const sugMutzar = account.sugMutzar;
                             const sugMutzarDescription = account.sugMutzarDescription;
-                            
-                            console.log('Processing account:', sugMutzarDescription);
                             
                             // Calculate current balance for this account
                             let accountBalance = 0;
@@ -5374,8 +5354,6 @@
                                     accountBalance += balance.totalErkeiPidion || 0;
                                 });
                             }
-                            
-                            console.log('Account balance:', accountBalance);
                             
                             // Group by product type
                             if (!productGroups[sugMutzarDescription]) {
@@ -5402,11 +5380,6 @@
                                 hasYitraBlock = true;
                                 yitraData = account.yitraLefiGilPrisha;
                                 productGroups[sugMutzarDescription].hasYitraLefiGilPrisha = true;
-                                console.log('Found YitraLefiGilPrisha data:', yitraData);
-                                console.log('TOTAL-CHISACHON-MITZTABER-TZAFUY:', yitraData.totalChisachonMitztaberTzafuy);
-                                console.log('TZVIRAT-CHISACHON-CHAZUYA-LELO-PREMIYOT:', yitraData.tzviratChisachonChzuyaLeloPremiyot);
-                                console.log('Type of totalChisachonMitztaberTzafuy:', typeof yitraData.totalChisachonMitztaberTzafuy);
-                                console.log('Type of tzviratChisachonChzuyaLeloPremiyot:', typeof yitraData.tzviratChisachonChzuyaLeloPremiyot);
                             }
                             
                             // Calculate projections based on product type and Yitra block
@@ -5415,10 +5388,6 @@
                                     // Use data from YitraLefiGilPrisha block
                                     const totalChisachonMitztaberTzafuy = yitraData.totalChisachonMitztaberTzafuy || 0;
                                     const tzviratChisachonChzuyaLeloPremiyot = yitraData.tzviratChisachonChzuyaLeloPremiyot || 0;
-                                    
-                                    console.log('Using Yitra data for קרן פנסיה ותיקה:');
-                                    console.log('totalChisachonMitztaberTzafuy:', totalChisachonMitztaberTzafuy);
-                                    console.log('tzviratChisachonChzuyaLeloPremiyot:', tzviratChisachonChzuyaLeloPremiyot);
                                     
                                     productGroups[sugMutzarDescription].projectedWithContributions += totalChisachonMitztaberTzafuy;
                                     productGroups[sugMutzarDescription].projectedWithoutContributions += tzviratChisachonChzuyaLeloPremiyot;
@@ -5443,10 +5412,6 @@
                                     // Use data from YitraLefiGilPrisha block
                                     const totalChisachonMitztaberTzafuy = yitraData.totalChisachonMitztaberTzafuy || 0;
                                     const tzviratChisachonChzuyaLeloPremiyot = yitraData.tzviratChisachonChzuyaLeloPremiyot || 0;
-                                    
-                                    console.log('Using Yitra data for קרן פנסיה חדשה:');
-                                    console.log('totalChisachonMitztaberTzafuy:', totalChisachonMitztaberTzafuy);
-                                    console.log('tzviratChisachonChzuyaLeloPremiyot:', tzviratChisachonChzuyaLeloPremiyot);
                                     
                                     productGroups[sugMutzarDescription].projectedWithContributions += totalChisachonMitztaberTzafuy;
                                     productGroups[sugMutzarDescription].projectedWithoutContributions += tzviratChisachonChzuyaLeloPremiyot;
@@ -5527,8 +5492,6 @@
                                 productGroups[sugMutzarDescription].monthlyPensionWithoutContributions += accountBalance * 0.004;
                             }
                         }
-                    } else {
-                        console.log('No accounts found in file:', fileData.fileName);
                     }
                 }
                 
@@ -5543,14 +5506,7 @@
                     monthlyPensionWithoutContributions += product.monthlyPensionWithoutContributions;
                 }
                 
-            } else {
-                console.log('No data found for retirement calculation');
             }
-            
-            console.log('Projected balance with contributions:', projectedBalanceWithContributions);
-            console.log('Projected balance without contributions:', projectedBalanceWithoutContributions);
-            console.log('Monthly pension with contributions:', monthlyPensionWithContributions);
-            console.log('Monthly pension without contributions:', monthlyPensionWithoutContributions);
             
             // Use the higher value (with contributions) as the main projection
             const projectedBalance = Math.max(projectedBalanceWithContributions, projectedBalanceWithoutContributions);
@@ -5582,7 +5538,6 @@
 
         function displayRetirementAccumulation(data) {
             const container = document.getElementById('retirementAccumulation');
-            console.log('Retirement accumulation data:', data);
             
             let html = '<div class="retirement-summary">';
             html += '<h4>סיכום כללי</h4>';
@@ -6029,7 +5984,6 @@
         
         window.clearDataMislaka = function() {
             dataMislaka = null;
-            console.log('נתוני המסלקה נוקו ידנית');
         };
 
         // פונקציות לטופס ייעוץ פנסיוני
@@ -6156,13 +6110,6 @@
                     const message = document.getElementById('message').value;
                     
                     // כאן תוכל להוסיף לוגיקה לשליחת הנתונים לשרת
-                    console.log('פרטי ייעוץ פנסיוני:', {
-                        fullName: fullName,
-                        phoneNumber: phoneNumber,
-                        email: email,
-                        message: message,
-                        timestamp: new Date().toISOString()
-                    });
                     
                     // הודעת הצלחה
                     alert('תודה! פרטיך נשלחו בהצלחה. נחזור אליך תוך 24 שעות.');
@@ -7364,11 +7311,6 @@
                 // בדיקה יותר גמישה - כל ערך שאינו '2' או 2 נחשב כבעיה
                 Number(item.hutalSHiabud) !== 2 || Number(item.hutalIkul) !== 2 || 
                 Number(item.yeshHalvaaBamutzar) !== 2 || Number(item.yeshTvia) !== 2)
-              
-                console.log(filteredStatusData)
-               
-            
-            
 
             // יצירת אלמנט חדש לטבלה
             const statusTableDiv = document.createElement('div');
