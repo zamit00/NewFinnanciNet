@@ -3986,6 +3986,13 @@
         location.reload();
     }
     
+    // Function to reset consent (for testing/development)
+    function resetPrivacyConsent() {
+        localStorage.removeItem('privacyConsentAccepted');
+        console.log('Privacy consent reset!');
+        alert('הסכמת הפרטיות אופסה! עכשיו תוכל לראות את ה-modal שוב.');
+    }
+    
     // Check if user has already accepted on page load
     window.addEventListener('DOMContentLoaded', function() {
         const consentAccepted = localStorage.getItem('privacyConsentAccepted');
