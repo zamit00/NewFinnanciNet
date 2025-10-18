@@ -4449,21 +4449,41 @@
                         const heshbonotElements = heshbonotOPolisot ? heshbonotOPolisot.getElementsByTagName('HeshbonOPolisa') : [];
                         const heshbonot = Array.from(heshbonotElements);
                         for (const heshbon of heshbonot) {
+
                             let mekademGilPrishaTzafuy = '';
                             if(taarichNechnut==='') {taarichNechnut = sliceDate8(cleanVal(getElementText(heshbon, 'TAARICH-NECHONUT')))};
                             if(sugMutzar==='2') {pensiaVatikaOHadasha = cleanVal(getElementText(heshbon, 'PENSIA-VATIKA-O-HADASHA'))};
-                            
+                            const statusPolisaOCheshbon=cleanVal(getElementText(heshbon,'STATUS-POLISA-O-CHESHBON'))
                             const taarichHitztarfutMutzar = cleanVal(getElementText(heshbon, 'TAARICH-HITZTARFUT-MUTZAR'));
                             const maslulBituach = heshbon.getElementsByTagName('MaslulBituach')[0];
                             const shemMaslulHabituah = cleanVal(maslulBituach ? getElementText(maslulBituach, 'SHEM-MASLUL-HABITUAH') : '') || '';
-
+                            const sugPolisa=cleanVal(getElementText(heshbon,'SUG-POLISA'))
                             const prtTakzivElements = heshbon.getElementsByTagName('PirteiTaktziv');
                             const prtTakziv = Array.from(prtTakzivElements);
+                            const ksafimPturim = cleanVal(getElementText(heshbon,'TIKUN-190'))
                             for (const p of prtTakziv) {
+                                let pirteiHafrashotLePolisa=[]
+                                const PerutHafrashotLePolisaElements=p.getElementsByTagName('PerutHafrashotLePolisa');
+                                const PerutHafrashotLePolisa=Array.from(PerutHafrashotLePolisaElements);
                                 const blockItrot = p.getElementsByTagName('BlockItrot')[0];
                                 const yitrotElement = blockItrot ? blockItrot.getElementsByTagName('Yitrot')[0] : null;
                                 const perutYitrotElements = yitrotElement ? yitrotElement.getElementsByTagName('PerutYitrot') : [];
                                 const yitrot = Array.from(perutYitrotElements);
+                               
+                                for (const hafrashot of PerutHafrashotLePolisa) {
+                                    const sugHamafkid=cleanVal(getElementText(hafrashot,'SUG-HAMAFKID'));
+                                    const sugHafrasha=cleanVal(getElementText(hafrashotElement,'SUG-HAFRASHA'))
+                                    const ahuzHafrasha=cleanVal(getElementText(hafrashotElement,'ACHUZ-HAFRASHA'))
+                                    const schumHafrasha=cleanVal(getElementText(hafrashotElement,'SCHUM-HAFRASHA'))
+                                    pirteiHafrashotLePolisa.push({
+                                        sugHamafkid:sugHamafkid,
+                                        sugHafrasha:sugHafrasha,
+                                        ahuzHafrasha:ahuzHafrasha,
+                                        schumHafrasha:schumHafrasha
+                                    })
+                                }
+                               
+                            
                                 for (const yitra of yitrot) {
                                     const totalChisachonMtzbr = cleanVal(getElementText(yitra, 'TOTAL-CHISACHON-MTZBR')) || 0;
                                     const totalErkeiPidion = cleanVal(getElementText(yitra, 'TOTAL-ERKEI-PIDION')) || 0;
@@ -4552,6 +4572,18 @@
                             
 
                             for (const p of prtTakziv) {
+                                let pirteiHaasaka=[]
+                                const haasaka= p.getElementsByTagName('PirteiHaasaka')[0]
+                                kodChisuvSacharHeshbon = cleanVal(getElementText(haasaka, 'KOD-CHISHUV-SACHAR-POLISA-O-HESHBON')) || 0;
+                                sacharPolisa=cleanVal(getElementText(haasaka,'SACHAR-POLISA')) || 0;
+                                haasaka.push({
+                                    kodChisuvSacharHeshbon:kodChisuvSacharHeshbon,
+                                    sacharPolisa:sacharPolisa
+                                }
+                                )
+
+
+                                
                                 const blockItrot = p.getElementsByTagName('BlockItrot')[0];
                                 const yitrotElement = blockItrot ? blockItrot.getElementsByTagName('Yitrot')[0] : null;
                                 const perutYitrot =yitrotElement? yitrotElement.getElementsByTagName('PerutYitrot') : "";
@@ -4738,22 +4770,28 @@
                                 pirteiHeshbon.push(
                                  {
                                   misparPolisaOHeshbon:misparPolisaOHeshbon,
+                                  statusPolisaOCheshbon:statusPolisaOCheshbon,
+                                  ksafimPturim:ksafimPturim,
+                                  sugPolisa:sugPolisa,
                                   mekademGilPrishaTzafuy:mekademGilPrishaTzafuy,
                                   sugMutzar:sugMutzar,
                                   shemTochnit:shemTochnit,
                                   taarichHitztarfutMutzar:taarichHitztarfutMutzar,
                                   shemMaslulHabituah:shemMaslulHabituah,
                                   shemMaasik:shemMaasik,
+                                  pirteiHaasaka:pirteiHaasaka,
                                   totalChisachon:totalChisachon.toLocaleString('he-IL', {maximumFractionDigits: 0})+""+"שח",
                                   totalChisachonV:parseFloat(totalChisachon),
                                   yitratKaspeyTagmulimValue:yitratKaspeyTagmulimValue?Math.round(yitratKaspeyTagmulimValue):0,
                                   mafyenMaslulim:maslulDetails,
                                   yitrotKaspeyPizoyim:yitrotKaspeyPizoyim?yitrotKaspeyPizoyim:0,
+                                  pirteiHafrashotLePolisa:pirteiHafrashotLePolisa,
                                 }
                                 
                                );
-                               
+                               pirteiHaasaka=[];
                                yitrotKaspeyPizoyim=[];
+                               pirteiHafrashotLePolisa=[];
                             }
                            
                         }
@@ -4783,14 +4821,7 @@
                     } 
                  });
                  
-                
-                
-                
-
-                 
-               
-                
-                
+                         
                 const kodMaslulDetails=DataAll[2]
                 let summary = {};
                 kodMaslulDetails.forEach(product => {
@@ -4815,6 +4846,7 @@
                 });
                 
                 // הצגת הנתונים על המסך
+               console.log('DataAll',DataAll);
                 displayDataOnScreen(pratimIshim, sumSugMutzar, result, sheabudIkulHalvaa, DataAll[3]);
                 
                 // הדפסת סיכום הנתונים שנאספו מכל הקבצים
@@ -4827,487 +4859,6 @@
                 </div>`;
             }
         });
-
-        /*
-                        // ----- דמי ניהול (ריבוי רשומות) -----
-                        const perutHotzaot = p.getElementsByTagName('PerutHotzaot')[0];
-                        const mivneDmeiNihul = perutHotzaot ? perutHotzaot.getElementsByTagName('MivneDmeiNihul')[0] : null;
-                        const dmeyElements = mivneDmeiNihul ? mivneDmeiNihul.getElementsByTagName('PerutMivneDmeiNihul') : [];
-                        const dmey = Array.from(dmeyElements);
-                        for (const d of dmey) {
-                            const sugHotzaa = cleanVal(getElementText(d, 'SUG-HOTZAA')) || 0;
-                            const sheurDmeiNihul = cleanVal(getElementText(d, 'SHEUR-DMEI-NIHUL')) || '';
-                            const dmeiNihulAchidim = cleanVal(getElementText(d, 'DMEI-NIHUL-ACHIDIM'));
-                            const kayemetHatava = cleanVal(getElementText(d, 'KAYEMET-HATAVA')) || '';
-                            const sugHatava = cleanVal(getElementText(d, 'SUG-HATAVA')) || '';
-                            const achozHatava = cleanVal(getElementText(d, 'ACHOZ-HATAVA')) || '';
-                        }
-
-                              
-                        const perutYitrotElements = yitrotElement ? yitrotElement.getElementsByTagName('PerutYitrot') : [];
-                        const yitrot = Array.from(perutYitrotElements);
-                        
-                        
-                        
-                            
-                    }
-                        
-
-
-                       
-                        const koteret = mimshak.getElementsByTagName('KoteretKovetz')[0];
-                        const kodMezaheYatzran = getElementText(yeshutYatzran, 'KOD-MEZAHE-YATZRAN');
-                        const shemYatzran = getElementText(yeshutYatzran, 'SHEM-YATZRAN');
-                        const taarichBitzua = sliceDate8(getElementText(koteret, 'TAARICH-BITZUA'));
-                        const sugMezaheLakoach = yeshutLakoach ? getElementText(yeshutLakoach, 'SUG-MEZAHE-LAKOACH') : '';
-                        
-                        const taarichLeyda = cleanVal(yeshutLakoach ? getElementText(yeshutLakoach, 'TAARICH-LEYDA') : '');
-                        const min = cleanVal(yeshutLakoach ? getElementText(yeshutLakoach, 'MIN') : '');
-
-                        
-            
-                        // לכל חשבון יכולים להיות כמה מסלולים/יתרות/דמי ניהול
-                        
-
-                        for (const heshbon of heshbonot) {
-                            // ----- שורת חשבון אחת -----
-                            
-                            const kidodAchid = cleanVal(getElementText(heshbon, 'KIDOD-ACHID'));
-                            const taarichNechnut = cleanVal(getElementText(heshbon, 'TAARICH-NECHONUT'));
-                            const sugKerenPensia = cleanVal(getElementText(heshbon, 'SUG-KEREN-PENSIA'));
-                            const pensiaVatikaOHadasha = cleanVal(getElementText(heshbon, 'PENSIA-VATIKA-O-HADASHA'));
-                            const statusPolisaOCheshbon = cleanVal(getElementText(heshbon, 'STATUS-POLISA-O-CHESHBON'));
-                            const taarichHitztarfutMutzar = cleanVal(getElementText(heshbon, 'TAARICH-HITZTARFUT-MUTZAR'));
-                            const maslulBituach = heshbon.getElementsByTagName('MaslulBituach')[0];
-                            const shemMaslulHabituah = cleanVal(maslulBituach ? getElementText(maslulBituach, 'SHEM-MASLUL-HABITUAH') : '') || '';
-                            
-                            
-                            
-                                            
-                            const yitraLefiGilPrisha = heshbon.getElementsByTagName('YitraLefiGilPrisha')[0];
-                            const tzviratChisachonChzuyaLeloPremiyot = cleanVal(yitraLefiGilPrisha ? getElementText(yitraLefiGilPrisha, 'TZVIRAT-CHISACHON-CHAZUYA-LELO-PREMIYOT') : '','') || '';
-                            const totalChisachonMitztaberTzafuy = cleanVal(yitraLefiGilPrisha ? getElementText(yitraLefiGilPrisha, 'TOTAL-CHISACHON-MITZTABER-TZAFUY') : '', '') || '';
-                            const gilPrisha = cleanVal(yitraLefiGilPrisha ? getElementText(yitraLefiGilPrisha, 'GIL-PRISHA') : '', '') || '';
-                
-                        
-                            heshbonotColl.push({
-                                misparZihuyLakoach:misparZihuyLakoach,sugMezaheLakoach:sugMezaheLakoach,
-                                misparPolisaOHeshbon:misparPolisaOHeshbon,shemSugTochnit:shemSugTochnit,
-                                shemTochnit:shemTochnit,kidodAchid:kidodAchid,taarichNechnut:taarichNechnut,
-                                taarichHitztarfutMutzar:taarichHitztarfutMutzar, sugKerenPensia:sugKerenPensia,
-                                pensiaVatikaOHadasha:pensiaVatikaOHadasha,statusPolisaOCheshbon:statusPolisaOCheshbon,
-                                shemMaslulHabituah:shemMaslulHabituah,hutalSHiabud:hutalSHiabud,hutalIkul:hutalIkul,
-                                yeshHalvaaBamutzar:yeshHalvaaBamutzar,yeshTvia:yeshTvia,sheurTesuaNetoH:sheurTesuaNetoH,
-                                tzviratChisachonChzuyaLeloPremiyot:tzviratChisachonChzuyaLeloPremiyot,
-                                totalChisachonMitztaberTzafuy:totalChisachonMitztaberTzafuy,gilPrisha:gilPrisha
-                            }) 
-            
-            
-            
-                
-                            // ----- מסלולים (ריבוי רשומות) -----
-                            const prtTakzivElements = heshbon.getElementsByTagName('PirteiTaktziv');
-                            const prtTakziv = Array.from(prtTakzivElements);
-
-                
-                            for (const p of prtTakziv) {
-                                                                const statusMaasik = cleanVal(pirteiOved ? getElementText(pirteiOved, 'STATUS-MAASIK') : '');
-                                netuneimutzarmaasikColl.push({
-                                    misparPolisaOHeshbon:misparPolisaOHeshbon,misparZihuyLakoach:misparZihuyLakoach,
-                                    sugMutzar:sugMutzar,sugTochnitOhHeshbon:sugTochnitOhHeshbon,
-                                    mprMaasikBeYatzran:mprMaasikBeYatzran, statusMaasik:statusMaasik 
-                                }) 
-                                heshbonotColl.push({netuneimutzarmaasik:netuneimutzarmaasikColl[0]});netuneimutzarmaasikColl=[];  
-                        
-                                const perutMasluleiHashkaaElements = p.getElementsByTagName('PerutMasluleiHashkaa');
-                                const maslulim = Array.from(perutMasluleiHashkaaElements);
-                        
-                                for (const maslul of maslulim) {
-                                    const kodMaslulHafrash = cleanVal(getElementText(maslul, 'KOD-SUG-HAFRASHA')) || '';
-                                    const kodSugMaslul = cleanVal(getElementText(maslul, 'KOD-SUG-MASLUL')) || '';
-                                    const schumTzviraBamaslul = cleanVal(getElementText(maslul, 'SCHUM-TZVIRA-BAMASLUL')) || '';
-                                    const shemMaslulHashkaa = cleanVal(getElementText(maslul, 'SHEM-MASLUL-HASHKAA')) || '';
-                                    const sheurDmeyNihulHafkadMivne = cleanVal(getElementText(maslul, 'SHEUR-DMEI-NIHUL-HAFKADA-MIVNE')) || '';
-                                    const sheurDmeyNihulHisachonMivne = cleanVal(getElementText(maslul, 'SHEUR-DMEI-NIHUL-HISACHON-MIVNE')) || '';
-                                    const tesuaNeto = cleanVal(getElementText(maslul, 'TSUA-NETO')) || '';
-                                    const shiurAlotShnatitZpuiaLmslulHashkah = cleanVal(getElementText(maslul, 'SHIUR-ALUT-SHNATIT-ZPUIA-LMSLUL-HASHKAH')) || '';
- 
-                                    maslulimColl.push({
-                                        misparPolisaOHeshbon:misparPolisaOHeshbon,misparZihuyLakoach:misparZihuyLakoach,
-                                        sugMutzar:sugMutzar,kodMaslulHafrash:kodMaslulHafrash,kodSugMaslul:kodSugMaslul,
-                                        schumTzviraBamaslul:schumTzviraBamaslul,shemMaslulHashkaa:shemMaslulHashkaa,
-                                        sheurDmeyNihulHafkadMivne:sheurDmeyNihulHafkadMivne,
-                                        sheurDmeyNihulHisachonMivne:sheurDmeyNihulHisachonMivne,tesuaNeto:tesuaNeto,
-                                        shiurAlotShnatitZpuiaLmslulHashkah:shiurAlotShnatitZpuiaLmslulHashkah
-                                    })
-                                    heshbonotColl.push({maslul:maslulimColl[0]});
-                                }
-
-                                // ----- דמי ניהול (ריבוי רשומות) -----
-                                const perutHotzaot = p.getElementsByTagName('PerutHotzaot')[0];
-                                const mivneDmeiNihul = perutHotzaot ? perutHotzaot.getElementsByTagName('MivneDmeiNihul')[0] : null;
-                                const dmeyElements = mivneDmeiNihul ? mivneDmeiNihul.getElementsByTagName('PerutMivneDmeiNihul') : [];
-                                const dmey = Array.from(dmeyElements);
-                                for (const d of dmey) {
-                                    const sugHotzaa = cleanVal(getElementText(d, 'SUG-HOTZAA')) || 0;
-                                    const sheurDmeiNihul = cleanVal(getElementText(d, 'SHEUR-DMEI-NIHUL')) || '';
-                                    const dmeiNihulAchidim = cleanVal(getElementText(d, 'DMEI-NIHUL-ACHIDIM'));
-                                    const kayemetHatava = cleanVal(getElementText(d, 'KAYEMET-HATAVA')) || '';
-                                    const sugHatava = cleanVal(getElementText(d, 'SUG-HATAVA')) || '';
-                                    const achozHatava = cleanVal(getElementText(d, 'ACHOZ-HATAVA')) || '';
-                                    dmeinihulColl.push({
-                                        misparPolisaOHeshbon:misparPolisaOHeshbon,misparZihuyLakoach:misparZihuyLakoach,
-                                        sugMutzar:sugMutzar,sugHotzaa:sugHotzaa,sheurDmeiNihul:sheurDmeiNihul,
-                                        dmeiNihulAchidim:dmeiNihulAchidim,kayemetHatava:kayemetHatava,sugHatava:sugHatava,
-                                        achozHatava:achozHatava
-
-                                    })
-
-                                    heshbonotColl.push({dmeinihul:dmeinihulColl[0]});dmeinihulColl=[];
-                                }
-                            
-                                //const sheurTesuaNeto=heshbon.Tesua['SHEUR-TESUA-NETO'];
-                                //heshbonotColl.push(sheurTesuaNeto);
-                                const blockItrot = p.getElementsByTagName('BlockItrot')[0];
-                                const yitrotElement = blockItrot ? blockItrot.getElementsByTagName('Yitrot')[0] : null;
-                                const taarichErechTzvirot = cleanVal(yitrotElement ? getElementText(yitrotElement, 'TAARICH-ERECH-TZVIROT') : '');
-
-                                // ----- יתרות (ריבוי רשומות) -----
-                                const perutYitrotElements = yitrotElement ? yitrotElement.getElementsByTagName('PerutYitrot') : [];
-                                const yitrot = Array.from(perutYitrotElements);
-                                for (const yitra of yitrot) {
-                                    const kodSugItra = cleanVal(getElementText(yitra, 'KOD-SUG-ITRA'));
-                                    const totalChisachonMtzbr = cleanVal(getElementText(yitra, 'TOTAL-CHISACHON-MTZBR')) || '';
-                                    const totalErkeiPidion = cleanVal(getElementText(yitra, 'TOTAL-ERKEI-PIDION'));
-                                    
-                                    const nesilutTag = yitrotElement ? yitrotElement.getElementsByTagName('NesilutTag')[0] : null;
-                                    const moedNezilutTagmulim = cleanVal(nesilutTag ? getElementText(nesilutTag, 'MOED-NEZILUT-TAGMULIM') : '') || '';
-                                    const yitratKaspeyTagmulim = cleanVal(nesilutTag ? getElementText(nesilutTag, 'YITRAT-KASPEY-TAGMULIM') : '') || '';
-                                     
-                                    yitrotColl.push({
-                                        taarichErechTzvirot:taarichErechTzvirot,
-                                        misparPolisaOHeshbon:misparPolisaOHeshbon,misparZihuyLakoach:misparZihuyLakoach,
-                                        sugMutzar:sugMutzar,kodSugItra:kodSugItra,totalChisachonMtzbr:totalChisachonMtzbr,
-                                        totalErkeiPidion:totalErkeiPidion,moedNezilutTagmulim:moedNezilutTagmulim,
-                                        yitratKaspeyTagmulim:yitratKaspeyTagmulim
-                                    })
-                                    heshbonotColl.push({yitrot:yitrotColl[0]});yitrotColl=[];
-                                }
-                            }                            
-                        };
-                        */
-                       
-                        
-
-
-        
-
-
-
-        function parseXML(content) {
-            try {
-                const parser = new DOMParser();
-                const result = parser.parseFromString(content, 'text/xml');
-                
-                // Check for parsing errors
-                const parserError = result.querySelector('parsererror');
-                if (parserError) {
-                    throw new Error('שגיאה בניתוח קובץ ה-XML: ' + parserError.textContent);
-                }
-                
-                // Extract pension fund data
-                const pensionData = extractPensionData(result);
-                
-                return {
-                    type: 'xml',
-                    data: pensionData,
-                    rawContent: content.substring(0, 1000) + (content.length > 1000 ? '...' : '')
-                };
-            } catch (error) {
-                return {
-                    type: 'xml',
-                    error: error.message,
-                    rawContent: content.substring(0, 500) + '...'
-                };
-            }
-        }
-
-        function extractPensionData(result) {
-            const data = {
-                participantInfo: {},
-                accounts: [],
-                summary: {}
-            };
-
-            // Extract Mimshak root
-            const mimshak = result.getElementsByTagName('Mimshak')[0];
-            if (!mimshak) return data;
-
-            // Extract YeshutYatzran info
-            const yeshutYatzran = mimshak.getElementsByTagName('YeshutYatzran')[0];
-            if (yeshutYatzran) {
-                data.participantInfo = {
-                    kodMezaheYatzran: getElementText(yeshutYatzran, 'KOD-MEZAHE-YATZRAN'),
-                    shemYatzran: getElementText(yeshutYatzran, 'SHEM-YATZRAN')
-                };
-            }
-
-            // Extract Mutzarim
-            const mutzarim = yeshutYatzran ? yeshutYatzran.getElementsByTagName('Mutzarim')[0] : null;
-            if (!mutzarim) return data;
-
-            const mutzarElements = mutzarim.getElementsByTagName('Mutzar');
-            
-            for (let i = 0; i < mutzarElements.length; i++) {
-                const mutzar = mutzarElements[i];
-                
-                // Extract NetuneiMutzar
-                const netuneiMutzar = mutzar.getElementsByTagName('NetuneiMutzar')[0];
-                if (!netuneiMutzar) continue;
-
-                const sugMutzar = getElementText(netuneiMutzar, 'SUG-MUTZAR');
-                const misparZihuyLakoach = getElementText(netuneiMutzar, 'MISPAR-ZIHUY-LAKOACH');
-                
-                // Extract YeshutLakoach
-                const yeshutLakoach = netuneiMutzar.getElementsByTagName('YeshutLakoach')[0];
-                if (yeshutLakoach) {
-                    data.participantInfo = {
-                        ...data.participantInfo,
-                        misparZihuyLakoach: misparZihuyLakoach,
-                        shemPrati: getElementText(yeshutLakoach, 'SHEM-PRATI'),
-                        shemMishpacha: getElementText(yeshutLakoach, 'SHEM-MISHPACHA'),
-                        misparCellulari: getElementText(yeshutLakoach, 'MISPAR-CELLULARI'),
-                        eMail: getElementText(yeshutLakoach, 'E-MAIL'),
-                        taarichLeyda: getElementText(yeshutLakoach, 'TAARICH-LEYDA')
-                    };
-                }
-
-                // Extract YeshutMaasik (Employer Information)
-                const yeshutMaasikElements = netuneiMutzar.getElementsByTagName('YeshutMaasik');
-                const employers = [];
-                
-                for (let empIndex = 0; empIndex < yeshutMaasikElements.length; empIndex++) {
-                    const yeshutMaasik = yeshutMaasikElements[empIndex];
-                    const employerData = {
-                        mprMaasikBeYatzran: getElementText(yeshutMaasik, 'MPR-MAASIK-BE-YATZRAN'),
-                        shemMaasik: getElementText(yeshutMaasik, 'SHEM-MAASIK'),
-                        misparMezaheMaasik: getElementText(yeshutMaasik, 'MISPAR-MEZAHE-MAASIK'),
-                        sugMezaheMaasik: getElementText(yeshutMaasik, 'SUG-MEZAHE-MAASIK')
-                    };
-                    employers.push(employerData);
-                }
-                
-                // Add employers to participant info
-                if (employers.length > 0) {
-                    data.participantInfo.employers = employers;
-                }
-
-                // Extract HeshbonotOPolisot
-                const heshbonotOPolisot = mutzar.getElementsByTagName('HeshbonotOPolisot')[0];
-                if (!heshbonotOPolisot) continue;
-
-                const heshbonOPolisaElements = heshbonotOPolisot.getElementsByTagName('HeshbonOPolisa');
-                
-                for (let j = 0; j < heshbonOPolisaElements.length; j++) {
-                    const heshbonOPolisa = heshbonOPolisaElements[j];
-                    
-                    const accountData = {
-                        // Account basic info
-                        misparPolisaOHeshbon: getElementText(heshbonOPolisa, 'MISPAR-POLISA-O-HESHBON'),
-                        shemTochnit: getElementText(heshbonOPolisa, 'SHEM-TOCHNIT'),
-                        kidodAchid: getElementText(heshbonOPolisa, 'KIDOD-ACHID'),
-                        taarichNechnut: sliceDate8(getElementText(heshbonOPolisa, 'TAARICH-NECHONUT')),
-                        taarichHitztarfutMutzar: getElementText(heshbonOPolisa, 'TAARICH-HITZTARFUT-MUTZAR'),
-                        sugKerenPensia: getElementText(heshbonOPolisa, 'SUG-KEREN-PENSIA'),
-                        pensiaVatikaOHadasha: getElementText(heshbonOPolisa, 'PENSIA-VATIKA-O-HADASHA'),
-                        statusPolisaOCheshbon: getElementText(heshbonOPolisa, 'STATUS-POLISA-O-CHESHBON'),
-                        
-                        // Product type info
-                        sugMutzar: sugMutzar,
-                        sugMutzarDescription: sugMutzarDescriptions[sugMutzar] || 'לא ידוע',
-                        
-                        // Financial details
-                        pathways: [],
-                        balances: [],
-                        managementFees: []
-                    };
-
-                    // Extract PirteiTaktziv (Pathways and Fees)
-                    const pirteiTaktzivElements = heshbonOPolisa.getElementsByTagName('PirteiTaktziv');
-                    
-                    for (let k = 0; k < pirteiTaktzivElements.length; k++) {
-                        const pirteiTaktziv = pirteiTaktzivElements[k];
-                        
-                        // Extract PerutMasluleiHashkaa (Investment Pathways)
-                        const perutMasluleiHashkaa = pirteiTaktziv.getElementsByTagName('PerutMasluleiHashkaa')[0];
-                        if (perutMasluleiHashkaa) {
-                            const maslulElements = perutMasluleiHashkaa.getElementsByTagName('Maslul');
-                            
-                            for (let l = 0; l < maslulElements.length; l++) {
-                                const maslul = maslulElements[l];
-                                const pathwayData = {
-                                    kodMaslulHafrash: getElementText(maslul, 'KOD-SUG-HAFRASHA'),
-                                    kodSugMaslul: getElementText(maslul, 'KOD-SUG-MASLUL'),
-                                    schumTzviraBamaslul: parseFloat(getElementText(maslul, 'SCHUM-TZVIRA-BAMASLUL')) || 0,
-                                    shemMaslulHashkaa: getElementText(maslul, 'SHEM-MASLUL-HASHKAA'),
-                                    sheurDmeyNihulHafkadMivne: parseFloat(getElementText(maslul, 'SHEUR-DMEI-NIHUL-HAFKADA-MIVNE')) || 0,
-                                    sheurDmeyNihulHisachonMivne: parseFloat(getElementText(maslul, 'SHEUR-DMEI-NIHUL-HISACHON-MIVNE')) || 0,
-                                    tesuaNeto: parseFloat(getElementText(maslul, 'TSUA-NETO')) || 0,
-                                    shiurAlotShnatitZpuiaLmslulHashkah: parseFloat(getElementText(maslul, 'SHIUR-ALUT-SHNATIT-ZPUIA-LMSLUL-HASHKAH')) || 0
-                                };
-                                accountData.pathways.push(pathwayData);
-                            }
-                        }
-
-                        // Extract PerutHotzaot (Management Fees)
-                        const perutHotzaot = pirteiTaktziv.getElementsByTagName('PerutHotzaot')[0];
-                        if (perutHotzaot) {
-                            const mivneDmeiNihul = perutHotzaot.getElementsByTagName('MivneDmeiNihul')[0];
-                            if (mivneDmeiNihul) {
-                                const perutMivneDmeiNihulElements = mivneDmeiNihul.getElementsByTagName('PerutMivneDmeiNihul');
-                                
-                                for (let m = 0; m < perutMivneDmeiNihulElements.length; m++) {
-                                    const perutMivneDmeiNihul = perutMivneDmeiNihulElements[m];
-                                    const feeData = {
-                                        sugHotzaa: getElementText(perutMivneDmeiNihul, 'SUG-HOTZAA'),
-                                        sheurDmeiNihul: parseFloat(getElementText(perutMivneDmeiNihul, 'SHEUR-DMEI-NIHUL')) || 0,
-                                        dmeiNihulAchidim: parseFloat(getElementText(perutMivneDmeiNihul, 'DMEI-NIHUL-ACHIDIM')) || 0,
-                                        kayemetHatava: getElementText(perutMivneDmeiNihul, 'KAYEMET-HATAVA'),
-                                        sugHatava: getElementText(perutMivneDmeiNihul, 'SUG-HATAVA'),
-                                        achozHatava: getElementText(perutMivneDmeiNihul, 'ACHOZ-HATAVA')
-                                    };
-                                    accountData.managementFees.push(feeData);
-                                }
-                            }
-                        }
-
-                        // Extract BlockItrot (Balances)
-                        const blockItrot = pirteiTaktziv.getElementsByTagName('BlockItrot')[0];
-                        if (blockItrot) {
-                            const yitrot = blockItrot.getElementsByTagName('Yitrot')[0];
-                            if (yitrot) {
-                                const perutYitrotElements = yitrot.getElementsByTagName('PerutYitrot');
-                                
-                                for (let n = 0; n < perutYitrotElements.length; n++) {
-                                    const perutYitrot = perutYitrotElements[n];
-                                    const balanceData = {
-                                        taarichErechTzvirot: getElementText(yitrot, 'TAARICH-ERECH-TZVIROT'),
-                                        kodSugItra: getElementText(perutYitrot, 'KOD-SUG-ITRA'),
-                                        totalChisachonMtzbr: parseFloat(getElementText(perutYitrot, 'TOTAL-CHISACHON-MTZBR')) || 0,
-                                        totalErkeiPidion: parseFloat(getElementText(perutYitrot, 'TOTAL-ERKEI-PIDION')) || 0,
-                                        moedNezilutTagmulim: getElementText(yitrot, 'MOED-NEZILUT-TAGMULIM'),
-                                        yitratKaspeyTagmulim: parseFloat(getElementText(yitrot, 'YITRAT-KASPEY-TAGMULIM')) || 0
-                                    };
-                                    accountData.balances.push(balanceData);
-                                }
-                            }
-                        }
-                        
-                        // Extract YitraLefiGilPrisha (Retirement Projections)
-                        const yitraLefiGilPrisha = pirteiTaktziv.getElementsByTagName('YitraLefiGilPrisha')[0];
-                        if (yitraLefiGilPrisha) {
-                            const yitraData = {
-                                gilPrisha: getElementText(yitraLefiGilPrisha, 'GIL-PRISHA'),
-                                totalChisachonMitztaberTzafuy: parseFloat(getElementText(yitraLefiGilPrisha, 'TOTAL-CHISACHON-MITZTABER-TZAFUY')) || 0,
-                                tzviratChisachonChzuyaLeloPremiyot: parseFloat(getElementText(yitraLefiGilPrisha, 'TZVIRAT-CHISACHON-CHAZUYA-LELO-PREMIYOT')) || 0,
-                                mekademMovtachLeprisha: getElementText(yitraLefiGilPrisha, 'MEKADEM-MOVTACH-LEPRISHA'),
-                                mekademHavtachstTochelet: getElementText(yitraLefiGilPrisha, 'MEKADEM-HAVTACHST-TOCHELET'),
-                                mekademHavtachstTocheletprisha: getElementText(yitraLefiGilPrisha, 'MEKADEM-HAVTACHST-TOCHELETPRISHA'),
-                                shemMaslol: getElementText(yitraLefiGilPrisha, 'SHEM-MASLOL'),
-                                mekademHavtachatTsua: getElementText(yitraLefiGilPrisha, 'MEKADEM-HAVTACHAT-TSUA'),
-                                mekademHavtachatTsuatkufa: getElementText(yitraLefiGilPrisha, 'MEKADEM-HAVTACHAT-TSUATKUFA'),
-                                tkufatHagbalaBeshanim: getElementText(yitraLefiGilPrisha, 'TKUFAT-HAGBALA-BESHANIM'),
-                                tocheletMashpiaKitzba: getElementText(yitraLefiGilPrisha, 'TOCHELET-MASHPIA-KITZBA'),
-                                tsuaMashpiaKitzba: getElementText(yitraLefiGilPrisha, 'TSUA-MASHPIA-KITZBA'),
-                                sheurPnsZiknaTzfuya: getElementText(yitraLefiGilPrisha, 'SHEUR-PNS-ZIKNA-TZFUYA'),
-                                kupot: []
-                            };
-                            
-                            // Extract Kupot data
-                            const kupot = yitraLefiGilPrisha.getElementsByTagName('Kupot')[0];
-                            if (kupot) {
-                                const kupaElements = kupot.getElementsByTagName('Kupa');
-                                for (let k = 0; k < kupaElements.length; k++) {
-                                    const kupa = kupaElements[k];
-                                    const kupaData = {
-                                        sugKupa: getElementText(kupa, 'SUG-KUPA'),
-                                        schumKitzvatZikna: parseFloat(getElementText(kupa, 'SCHUM-KITZVAT-ZIKNA')) || 0,
-                                        kitzvatHodshitTzfuya: parseFloat(getElementText(kupa, 'KITZVAT-HODSHIT-TZFUYA')) || 0,
-                                        achuzTsuaBatachazit: parseFloat(getElementText(kupa, 'ACHUZ-TSUA-BATACHAZIT')) || 0,
-                                        totalItraTzfuyaMechushavLehonImPremiot: getElementText(kupa, 'TOTAL-ITRA-TZFUYA-MECHUSHAV-LEHON-IM-PREMIOT'),
-                                        tzviratChisachonTzfuyaLehonLeloPremiyot: parseFloat(getElementText(kupa, 'TZVIRAT-CHISACHON-TZFUYA-LEHON-LELO-PREMIYOT')) || 0,
-                                        totalSchumMtzbrTzafuyLegilPrishaMechushavLekitzbaImPremiyot: parseFloat(getElementText(kupa, 'TOTAL-SCHUM-MTZBR-TZAFUY-LEGIL-PRISHA-MECHUSHAV-LEKITZBA-IM-PREMIYOT')) || 0,
-                                        totalSchumMitzvtaberTzfuyLegilPrishaMechushavHameyoadLekitzbaLeloPremiyot: parseFloat(getElementText(kupa, 'TOTAL-SCHUM-MITZVTABER-TZFUY-LEGIL-PRISHA-MECHUSHAV-HAMEYOAD-LEKITZBA-LELO-PREMIYOT')) || 0
-                                    };
-                                    yitraData.kupot.push(kupaData);
-                                }
-                            }
-                            
-                            accountData.yitraLefiGilPrisha = yitraData;
-                        }
-                    }
-                    
-                    data.accounts.push(accountData);
-                }
-            }
-
-            // Calculate summary
-            data.summary = calculateSummaryAdvanced(data.accounts);
-
-            return data;
-        }
-
-        function getElementText(parent, tagName) {
-            const element = parent.getElementsByTagName(tagName)[0];
-            return element ? element.textContent.trim() : '';
-        }
-
-        function calculateSummaryAdvanced(accounts) {
-            let totalBalance = 0;
-            let totalContributions = 0;
-            let totalManagementFees = 0;
-            const productTypes = {};
-            const pathwayTypes = {};
-            const feeTypes = {};
-
-            accounts.forEach(account => {
-                // Calculate balances
-                account.balances.forEach(balance => {
-                    totalBalance += balance.totalErkeiPidion;
-                    totalContributions += balance.totalChisachonMtzbr;
-                });
-
-                // Count product types
-                const productType = account.sugMutzarDescription;
-                productTypes[productType] = (productTypes[productType] || 0) + 1;
-
-                // Count pathway types
-                account.pathways.forEach(pathway => {
-                    const pathwayType = pathway.shemMaslulHashkaa || 'לא ידוע';
-                    pathwayTypes[pathwayType] = (pathwayTypes[pathwayType] || 0) + 1;
-                });
-
-                // Calculate management fees
-                account.managementFees.forEach(fee => {
-                    totalManagementFees += fee.dmeiNihulAchidim;
-                    const feeType = fee.sugHotzaa || 'לא ידוע';
-                    feeTypes[feeType] = (feeTypes[feeType] || 0) + fee.sheurDmeiNihul;
-                });
-            });
-
-            return {
-                totalBalance,
-                totalContributions,
-                totalManagementFees,
-                accountsCount: accounts.length,
-                pathwaysCount: accounts.reduce((sum, acc) => sum + acc.pathways.length, 0),
-                balancesCount: accounts.reduce((sum, acc) => sum + acc.balances.length, 0),
-                feesCount: accounts.reduce((sum, acc) => sum + acc.managementFees.length, 0),
-                productTypes,
-                pathwayTypes,
-                feeTypes
-            };
-        }
 
         function calculateSummary(mutzarim) {
             let totalBalance = 0;
