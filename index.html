@@ -2900,231 +2900,6 @@
     <link rel="stylesheet" href="risk-quest-modal.css">
     <link rel="stylesheet" href="professional-info-modal.css">
     
-    <!-- Privacy Consent Modal Styles -->
-    <style>
-        .privacy-consent-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.4s ease;
-        }
-        
-        .privacy-consent-modal.show {
-            display: flex !important;
-        }
-        
-        .privacy-consent-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
-            padding: 0;
-            max-width: 600px;
-            width: 90%;
-            max-height: 85vh;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            animation: slideDown 0.5s ease;
-            position: relative;
-        }
-        
-        .privacy-consent-header {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            text-align: center;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .privacy-consent-header i {
-            font-size: 3.5rem;
-            color: #fff;
-            margin-bottom: 15px;
-            animation: pulse 2s infinite;
-        }
-        
-        .privacy-consent-header h2 {
-            color: #fff;
-            margin: 0 0 10px 0;
-            font-size: 2rem;
-            font-weight: bold;
-        }
-        
-        .privacy-consent-header p {
-            color: rgba(255, 255, 255, 0.95);
-            margin: 0;
-            font-size: 1.1rem;
-        }
-        
-        .privacy-consent-body {
-            padding: 30px;
-            background: white;
-            overflow-y: auto;
-            max-height: calc(85vh - 280px);
-        }
-        
-        .privacy-consent-body h3 {
-            color: #667eea;
-            margin: 20px 0 15px 0;
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .privacy-consent-body h3:first-child {
-            margin-top: 0;
-        }
-        
-        .privacy-consent-body p {
-            color: #555;
-            line-height: 1.8;
-            margin: 10px 0;
-            font-size: 1.05rem;
-        }
-        
-        .privacy-consent-body strong {
-            color: #764ba2;
-        }
-        
-        .privacy-highlight {
-            background: rgba(102, 126, 234, 0.1);
-            border-right: 4px solid #667eea;
-            padding: 15px 20px;
-            margin: 15px 0;
-            border-radius: 8px;
-        }
-        
-        .privacy-highlight i {
-            color: #667eea;
-            font-size: 1.2rem;
-            margin-left: 8px;
-        }
-        
-        .privacy-consent-footer {
-            background: white;
-            padding: 25px 30px;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            border-top: 2px solid #eee;
-        }
-        
-        .privacy-consent-btn {
-            flex: 1;
-            max-width: 200px;
-            padding: 15px 25px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .privacy-consent-btn.agree {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .privacy-consent-btn.agree:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
-        }
-        
-        .privacy-consent-btn.disagree {
-            background: #f5f5f5;
-            color: #666;
-            border: 2px solid #ddd;
-        }
-        
-        .privacy-consent-btn.disagree:hover {
-            background: #e74c3c;
-            color: white;
-            border-color: #e74c3c;
-            transform: translateY(-2px);
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .privacy-consent-content {
-                width: 95%;
-                max-height: 90vh;
-                border-radius: 15px;
-            }
-            
-            .privacy-consent-header {
-                padding: 20px;
-            }
-            
-            .privacy-consent-header i {
-                font-size: 2.5rem;
-            }
-            
-            .privacy-consent-header h2 {
-                font-size: 1.5rem;
-            }
-            
-            .privacy-consent-header p {
-                font-size: 1rem;
-            }
-            
-            .privacy-consent-body {
-                padding: 20px;
-                max-height: calc(90vh - 250px);
-            }
-            
-            .privacy-consent-body h3 {
-                font-size: 1.1rem;
-            }
-            
-            .privacy-consent-body p {
-                font-size: 0.95rem;
-            }
-            
-            .privacy-consent-footer {
-                flex-direction: column;
-                padding: 20px;
-            }
-            
-            .privacy-consent-btn {
-                max-width: 100%;
-            }
-        }
-    </style>
-    
     <!-- Accessibility and Footer -->
     <link rel="stylesheet" href="mainStyle.css">
     <link rel="stylesheet" href="footer.css">
@@ -3295,58 +3070,6 @@
 
 <body dir="rtl">
     
-    <!-- Privacy Consent Modal -->
-    <div class="privacy-consent-modal" id="privacyConsentModal">
-        <div class="privacy-consent-content">
-            <div class="privacy-consent-header">
-                <i class="fas fa-shield-alt"></i>
-                <h2>אבטחה ופרטיות מלאה</h2>
-                <p>הנתונים שלך מאובטחים לחלוטין</p>
-            </div>
-            
-            <div class="privacy-consent-body">
-                <div class="privacy-highlight">
-                    <i class="fas fa-lock"></i>
-                    <strong>הנתונים שלך לא נשמרים באתר!</strong>
-                </div>
-                
-                <h3><i class="fas fa-laptop"></i> עיבוד מקומי בלבד</h3>
-                <p>
-                    כל הקבצים והנתונים שלך מעובדים <strong>במחשב שלך בלבד</strong>.
-                    האתר לא שולח את המידע לשרתים חיצוניים ולא שומר אותו בשום מקום.
-                </p>
-                
-                <h3><i class="fas fa-trash-alt"></i> מחיקה אוטומטית</h3>
-                <p>
-                    בסיום התהליך או סגירת הדפדפן - <strong>כל הנתונים נמחקים אוטומטית</strong>.
-                    אין שמירה קבועה של מידע אישי או פיננסי.
-                </p>
-                
-                <h3><i class="fas fa-user-shield"></i> פרטיות מלאה</h3>
-                <p>
-                    אנחנו מכבדים את הפרטיות שלך ופועלים לפי תקני אבטחת המידע הגבוהים ביותר.
-                    המידע שלך נשאר <strong>אצלך בלבד</strong>.
-                </p>
-                
-                <div class="privacy-highlight">
-                    <i class="fas fa-check-circle"></i>
-                    ללא שרתים חיצוניים • ללא שמירת מידע • פרטיות מלאה
-                </div>
-            </div>
-            
-            <div class="privacy-consent-footer">
-                <button class="privacy-consent-btn agree" onclick="acceptPrivacyConsent()">
-                    <i class="fas fa-check"></i>
-                    מסכים/ה
-                </button>
-                <button class="privacy-consent-btn disagree" onclick="declinePrivacyConsent()">
-                    <i class="fas fa-times"></i>
-                    לא מסכים/ה
-                </button>
-            </div>
-        </div>
-    </div>
-    
     <!-- Scroll to Top Button (Mobile Only) -->
     <button id="scrollToTopBtn" onclick="scrollToTop()" title="חזור למעלה">
         <i class="fas fa-arrow-up"></i>
@@ -3447,9 +3170,25 @@
             <div class="file-upload-container">
 	
                 <div class="file-upload-area" id="fileUploadArea">
-                    <div class="upload-icon">
-                        <i class="fas fa-file-code"></i>
+                    <div style="display: flex; gap: 30px; align-items: center; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
+                        <!-- Upload Icon -->
+                        <div class="upload-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        
+                        <!-- Privacy Message -->
+                        <div style="flex: 1; min-width: 300px; max-width: 500px; background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); color: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                <i class="fas fa-shield-alt" style="font-size: 2rem;"></i>
+                                <h3 style="margin: 0; font-size: 1.3rem; color: white;">אבטחה ופרטיות מלאה</h3>
+                            </div>
+                            <p style="margin: 0; font-size: 1rem; line-height: 1.6;">
+                                <strong>הנתונים שלך מאובטחים ולא נשמרים!</strong><br>
+                                עיבוד מקומי בלבד • מחיקה אוטומטית • פרטיות מלאה
+                            </p>
+                        </div>
                     </div>
+                    
                     <h3 dir="rtl">גרור ושחרר קבצי מסלקה כאן או לחץ לבחירה</h3>
                     <p dir="rtl">העלה את קבצי המסלקה מסוג XML</p>
                     <input type="file" id="fileInput" multiple accept=".xml" style="display: none;">
@@ -3954,102 +3693,27 @@
 <script>
     // משתנים לניתוח מתקדם - נשמרים רק ב-sessionStorage
     var alreadyShown;
-    var privacyConsentAccepted = false;
     
-    // Privacy Consent Functions
-    function showPrivacyConsentModal() {
-        const modal = document.getElementById('privacyConsentModal');
-        console.log('Trying to show modal:', modal);
-        if (modal) {
-            modal.classList.add('show');
-            document.body.style.overflow = 'hidden';
-            console.log('Modal should be visible now');
-        } else {
-            console.error('Modal element not found!');
-        }
-    }
-    
-    function acceptPrivacyConsent() {
-        privacyConsentAccepted = true;
-        localStorage.setItem('privacyConsentAccepted', 'true');
-        const modal = document.getElementById('privacyConsentModal');
-        if (modal) {
-            modal.classList.remove('show');
-            document.body.style.overflow = 'auto';
-        }
-        // Show file upload section
-        showFileUploadSection();
-    }
-    
-    function declinePrivacyConsent() {
-        // Refresh the page
-        location.reload();
-    }
-    
-    // Function to reset consent (for testing/development)
-    function resetPrivacyConsent() {
-        localStorage.removeItem('privacyConsentAccepted');
-        console.log('Privacy consent reset!');
-        alert('הסכמת הפרטיות אופסה! עכשיו תוכל לראות את ה-modal שוב.');
-    }
-    
-    // Check if user has already accepted on page load
-    window.addEventListener('DOMContentLoaded', function() {
-        // Check for reset parameter in URL
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('reset') === 'true') {
-            localStorage.removeItem('privacyConsentAccepted');
-            console.log('Privacy consent reset via URL parameter!');
-            // Remove the parameter from URL
-            window.history.replaceState({}, document.title, window.location.pathname);
+    function letStart(){
+        const fileUploadSection = document.getElementById('fileUpload');
+        
+        // Show file upload section first
+        if(window.innerWidth>768){
+            fileUploadSection.style.display = 'flex';   
+        }else{
+            fileUploadSection.style.display = 'block';
         }
         
-        const consentAccepted = localStorage.getItem('privacyConsentAccepted');
-        if (consentAccepted === 'true') {
-            privacyConsentAccepted = true;
-        }
-    });
-    
-        function letStart(){
-            console.log('letStart called');
-            
-            // Check if user already accepted
-            const consentAccepted = localStorage.getItem('privacyConsentAccepted');
-            console.log('Consent accepted:', consentAccepted);
-            
-            if (consentAccepted === 'true') {
-                // User already accepted - scroll and show file upload section
-                console.log('Showing file upload section directly');
-                const fileUploadSection = document.getElementById('fileUpload');
-                if (fileUploadSection) {
-                    fileUploadSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-                setTimeout(() => {
-                    showFileUploadSection();
-                }, 500);
-            } else {
-                // First time - scroll and show modal
-                console.log('Showing privacy consent modal');
-                const fileUploadSection = document.getElementById('fileUpload');
-                if (fileUploadSection) {
-                    fileUploadSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-                setTimeout(() => {
-                    showPrivacyConsentModal();
-                }, 500);
-            }
-        }
+        document.getElementById('fileUploadArea').style.display = 'block';
+        document.getElementById('sectionHeader').style.display = 'flex';
         
-        function showFileUploadSection() {
-            if(window.innerWidth>768){
-                document.getElementById('fileUpload').style.display = 'flex';   
-            }else{
-                document.getElementById('fileUpload').style.display = 'block';
+        // Then scroll to it (after a tiny delay to let it render)
+        setTimeout(() => {
+            if (fileUploadSection) {
+                fileUploadSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-            
-            document.getElementById('fileUploadArea').style.display = 'block';
-            document.getElementById('sectionHeader').style.display = 'flex';
-        }
+        }, 100);
+    }
 
         // Function to show product tables
         async function showProductTables(productType) {
